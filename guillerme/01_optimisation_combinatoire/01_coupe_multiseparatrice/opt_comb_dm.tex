@@ -1,0 +1,147 @@
+\documentclass[a4paper, 11pt]{article}
+
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+%\usepackage[francais]{babel}
+\usepackage{graphicx}
+\usepackage{moreverb}
+\usepackage{subfig}
+\usepackage{pdfpages}
+\usepackage{eurosym}
+\usepackage{fullpage}
+\usepackage[fleqn]{amsmath}
+\usepackage{bbm}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{pgf}
+
+\usetikzlibrary{arrows,automata}
+
+\newtheorem{lemma}{Lemme}[subsection]
+\newtheorem{thrm}{Th\'{e}or\`{e}me}[section]
+\newtheorem{corol}{Corollaire}[subsection]
+\begin{document}
+
+\section*{Exercice d'approximation polynomiale}
+
+\subsection*{Recherche d'une coupe s\'{e}parant $C_j$ des autres terminaux}
+
+Soient un graphe non orient\'{e} $G = (V, E)$, une fonction de poids positive $w$ sur les ar\^{e}tes et un
+ensemble $S = \{s_1, s_2, \dots, s_k\}$ de sommets terminaux de $G$. Consid\'{e}rons un sommet terminal
+de $G$ appel\'{e} $s_j$ et $G' = (V', E')$ le graphe obtenu par fusion des sommets $s_i \in \{S
+\backslash s_j\}$, le sommet r\'{e}sultant sera appel\'{e} $s_r$, on remarque alors que $V' = V
+\backslash \{ (uv) \mbox{ tq } (u, v) \in \{S \backslash s_j\}$. Enfin consid\'{e}rons la fonction
+de poids $w'$ d\'{e}finie comme suit :$$
+\left \{ \begin{array}{rcll}
+        V' & \longrightarrow & \mathbb{R} & \\
+        w'(v) & = & w(v) & \quad \forall v \in V' \\
+\end{array} \right .
+$$
+
+\begin{lemma}
+Rechercher une coupe $C_j$ de poids minimum dans $G$ revient alors \`{a} chercher une $(s_r, s_j)-$coupe minimum
+dans $G'$.
+\end{lemma}
+
+\textbf{\underline{Preuve :}} \\
+
+Supposons qu'il existe une coupe $C_j$ de poids minimum s\'{e}parant $s_j$ des autres terminaux dans le
+graphe $G$ dont le poids est inf\'{e}rieur \`{a} celui de la coupe minimum $C_{G'}$ trouv\'{e}e dans le $G'$.
+Par construction, toute ar\^{e}te appartenant \`{a} $V'$ est pond\'{e}r\'{e}e de la m\^{e}me mani\`{e}re dans $G$ et dans
+$G'$, on en d\'{e}duit que pour que $C_j$ soit diff\'{e}rente de $C_{G'}$, alors $C_j \backslash \{V' \cap C_j \}
+\not = \emptyset$. Ceci est impossible puisque $C_j$ est une coupe s\'{e}parant $s_j$ de tous les autres
+terminaux. Donc $C_{G'}$ est une coupe de poids minimum s\'{e}parant $s_j$ des autres terminaux.
+
+La recherche d'une $(s,t)-$coupe dans un graphe s'apparente \`{a} une recherche de flot maximum dans le
+m\^{e}me graphe pour laquelle il existe des algorithmes polynomiaux\footnote{On peut par exemple citer
+les algorithmes de pr\'{e}flots, Dinic ou Edmonds-Karp.}. La transformation de $G$ vers $G'$ se faisant
+en temps lin\'{e}aire, l'algorithme est un algorithme s'ex\'{e}cutant en temps polynomial.
+
+\subsection*{Calcul des bornes}
+
+\subsubsection*{Somme des poids des ar\^{e}tes}
+
+Consid\'{e}rons une ar\^{e}te $(uv)$ telle que $u \in C_i^*$ et $v \in C_j^*$. Lorsque l'on somme le poids
+de l'ensemble des coupes extraites de $C^*$, le poids de l'ar\^{e}te est comptabilis\'{e} dans $w(C_i^*)$ et
+dans $w(C_j^*)$, donc le poids de chaque ar\^{e}te est comptabilis\'{e} deux fois. On en d\'{e}duit alors que :
+$$
+\sum_{i=1}^k w(C_i^*) = 2 w(C^*)
+$$
+
+\subsubsection*{Minorant de $w(C_m)$}
+
+Par d\'{e}finition, $C_m$ est la coupe de poids maximum parmis les $j$ coupes s\'{e}paratrices de poids
+minimum. On a donc : $$
+\begin{array}{rrcll}
+    & w(C_i) & \leq & w(C_m) & \quad \forall i \in \{1, \dots, k\} \\
+    \Rightarrow & \sum_{i = 1}^k w(C_i) & \leq & k * w(C_m) & \\
+    \Rightarrow & w(C_m) & \geq & \frac{1}{k} \sum_{i = 1} w(C_i) & \\
+\end{array}
+$$
+
+\subsubsection*{Une $2( 1 - \frac{1}{k})-$approximation}
+
+On sait que : $$
+\begin{array}{rrcll}
+    & w(C) + w(C_m) & \leq & \sum_{i=1}^k w(C_i) & \\
+    \Rightarrow & w(C) & \leq & \sum_{i=1}^k w(C_i) - w(C_m) & \\
+    \Rightarrow & w(C) & \leq & \sum_{i=1}^k w(C_i) - \frac{1}{k} \sum_{i=1}^k w(C_i) & \\
+    \Rightarrow & w(C) & \leq & (1 - \frac{1}{k}) \sum_{i=1}^k w(C_i) & \\
+\end{array} $$
+
+Or par d\'{e}finition, $C_i$ est une coupe minimale s\'{e}parant $s_i$ des autres sommets terminaux, on a
+donc : $w(C_i) \leq w(C_i^*)$. Ce qui nous donne : $$
+w(C) \leq (1 - \frac{1}{k}) \sum_{i=1}^k w(C_i^*) 
+$$
+
+Or nous avons vu que $\sum_{i=1}^k w(C_i^*) = 2w(C^*)$, on a alors : $$
+w(C) \leq 2(1 - \frac{1}{k}) w(C^*) $$
+
+\subsubsection*{Atteindre la borne}
+
+Consid\'{e}rons le graphe suivant :
+
+\begin{figure}[h!]
+    \begin{center}
+        \begin{tikzpicture}
+            \tikzset{noeud/.style={circle, draw=black, text centered, minimum size=26pt, inner sep=0pt}, fleche/.style={thick}};
+
+            \node[noeud] (s4) at (0, 0) {$s_4$};
+            \node[noeud] (s1) at (0, 4) {$s_1$};
+            \node[noeud] (s3) at (4, 0) {$s_3$};
+            \node[noeud] (s2) at (4, 4) {$s_4$};
+            \node[noeud] (a) at (1, 3) {$a$};
+            \node[noeud] (b) at (3, 3) {$b$};
+            \node[noeud] (c) at (3, 1) {$c$};
+            \node[noeud] (d) at (1, 1) {$d$};
+
+            \draw[fleche] (a) --node[above] {$1$} (b);
+            \draw[fleche] (b) --node[right] {$1$} (c);
+            \draw[fleche] (c) --node[below] {$1$} (d);
+            \draw[fleche] (d) --node[left] {$1$} (a);
+            \draw[fleche] (a) --node[above right] {$2 - \epsilon$} (s1);
+            \draw[fleche] (b) --node[above left] {$2 - \epsilon$} (s2);
+            \draw[fleche] (c) --node[below left] {$2 - \epsilon$} (s3);
+            \draw[fleche] (d) --node[below right] {$2 - \epsilon$} (s4);
+        \end{tikzpicture}
+    \end{center}
+\end{figure}
+
+En utilisant l'algorithme d'approximation donn\'{e}, il faut calculer pour chaque terminal la coupe
+minimale s\'{e}parant le terminal de tous les autres. Les coupes retourn\'{e}es sont donc les suivantes : $$
+C_1 = \{(s_1a)\}, C_2 = \{(s_2b)\}, C_3 = \{(s_3c)\} \mbox{ et } C_4 = \{(s_4d)\} $$
+Les coupes \'{e}tant \'{e}gales, on choisit de retirer $C_4$, on obtient alors : $$
+C = \{(s_1a), (s_2b), (s_3c)\} $$
+On a donc $w(C) = 6 - 3 \epsilon$.
+
+Il est facile de voir que la coupe multi s\'{e}paratrice minimale pour le graphe donn\'{e} est donn\'{e}e par :
+$$ C^* = \{(ab), (bc), (cd), (ad)\} $$
+Ce qui nous donne $w(C^*) = 4$.
+
+Or : $6 = 8 \times (1 - \frac{1}{k})$, donc lorsque $\epsilon$ tend vers $0$, l'instance donn\'{e}e tend
+vers la borne pr\'{e}c\'{e}demment calcul\'{e}e.
+
+\end{document}

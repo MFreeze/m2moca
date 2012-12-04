@@ -1,0 +1,272 @@
+\documentclass[a4paper,12pt]{thesis}
+
+\input{library.tex}
+\input{page_garde.tex}
+
+\author{}
+\title{}
+\location{Montpellier}\blurb{}
+\makeatother
+\title{Devoir à rendre}
+\author{Guillerme DUVILLIE}
+\location{Montpellier}
+\blurb{
+    Université Montpellier II\\
+    Master Informatique Modélisation, Optimisation Combinatoire et Algorithmique \\[1em]
+    Matière : Optimisation Combinatoire\\
+    Encadrant : Marin BOUGERET
+}
+
+\begin{document}
+
+\maketitle
+
+\section*{$\frac{3}{2}-$dual approximation pour $P||C_{max}$}
+
+L'objectif de cette partie est de présenter une $\frac{3}{2}-$dual approximation pour le problème
+d'ordonnancement $P||C_{max}$. Nous introduirons dans un premier temps le problème considéré, puis
+présenterons l'algorithme et dans un troisième temps nous nous consacrerons à l'analyse de ce
+dernier.
+
+\subsection*{Le problème $P||C_{max}$}
+
+Ce problème est un problème classique de l'ordonnancement. Il cherche à répartir un nombre $n$ de
+tâches sur un nombre $m$ de machines identiques. À chaque tâche est associé un temps d'exécution
+identique sur toutes les machines, on cherche alors à minimiser le temps total d'exécution.
+
+Définissons $P||C_{max}$ de manière plus formelle.
+
+\textbf{Entrée :} Un ensemble $T$ de $n$ tâches à ordonnancer, un ensemble $M$ de $m$ machines, une
+fonction de poids $p$ définie comme suit : \begin{displaymath}
+    p : \left \{
+        \begin{array}{rcl}
+            $E$ & \rightarrow & \mathbb{N} \\
+            i & \mapsto & p(i) = p_i
+    \end{array}
+    \right .
+\end{displaymath}
+
+\textbf{Sortie :} Un ordonnancement des $n$ tâches sur les $m$ machines minimisant le temps
+d'exécution.
+
+\subsection*{L'algorithme}
+
+Nous étudierons l'algorithme suivant :
+
+\begin{algorithm}[h!]
+    \caption{Une $\frac{3}{2}-$ dual approximation}
+    \label{dual_approx}
+    \begin{algorithmic}[1]
+        \Function{DivLS}{$\omega, I, m$}
+            \If{$\{ j | p_j > \omega \} \neq \emptyset $}
+                \State \Return FAIL
+            \EndIf
+            \State $\Bg \gets \{ j | p_j  > \frac{\omega}{2} \}$
+            \State $\Sml \gets \{ j | p_j \leq \frac{\omega}{2} \}$
+            \For{$i \in \{1, \dots, m \}$}
+                \State $x \gets \max(\Bg)$
+                \State Ordonnancer $x$ sur $i$
+                \State $\Bg \gets \Bg \backslash \{x\}$
+            \EndFor
+            \If{$\Bg \neq \emptyset$}
+                \State \Return FAIL
+            \EndIf
+            \State \Return Greedy$(\Sml)$
+        \EndFunction
+        \Function{Greedy}{$\Sml$}
+            \While{$\Sml \neq \emptyset ~ \&\& ~ \exists$ une machine $l$ finissant avant $\omega$}
+                \State Ordonnancer $x$ sur $l$
+                \State $\Sml \gets \Sml \backslash \{x\}$
+            \EndWhile
+            \If{$\Sml \neq \emptyset$}
+                \State \Return FAIL
+            \EndIf
+        \EndFunction
+    \end{algorithmic}
+\end{algorithm}
+
+Nous allons voir qu'il s'agit bien d'une $\rho-$dual approximation avec $\rho = \frac{3}{2}$.
+
+\subsection*{Analyse}
+
+Voici quelques remarques et propriétés concernant l'algorithme \ref{dual_approx}.
+
+\begin{nlemma}
+    \label{ordo}
+    Si l'algorithme n'échoue pas, alors il retourne un ordonnancement.
+\end{nlemma}
+
+\begin{proof}
+    Si l'algorithme n'échoue pas, alors les ensembles $\Bg$ et $\Sml$ sont vides. Par construction,
+    on sait que $\Bg \cup \Sml = I$, donc, dans ce cas, toutes les tâches on été affectées lors de
+    l'appel à la fonction DivLS. Il s'agit donc bien d'un ordonnancement.
+\end{proof}
+
+\begin{nlemma}
+    \label{borne_omega}
+    Si l'algorithme échoue, alors $\omega < OPT$.
+\end{nlemma}
+
+\begin{proof}
+    Pour démontrer le lemme \ref{borne_omega}, nous nous intéresserons à tous les passages de
+    l'algorithme pouvant conduire à un échec de ce dernier. Ils sont au nombre de trois.
+    \begin{enumerate}
+        \item ligne $3$ : l'algorithme échoue s'il existe une tâche dont le temps d'exécution est
+            supérieur à $\omega$. L'ordonnancement affectant toutes les tâches et les machines étant
+            identiques, il va de soit que : \begin{displaymath}
+                OPT \geq \max p_j \quad j \in E
+            \end{displaymath}
+            Donc s'il existe au moins une tâche $j$ telle que $p_j > \omega$, alors $\max p_j >
+            \omega \Rightarrow OPT > \omega$
+        \item ligne $11$ : l'échec est provoqué par le fait que le cardinal de $\Bg$ est supérieur
+            au nombre de machines $m$. Or, par construction, $\Bg$ contient toutes les tâches dont
+            le temps d'exécution est supérieur à $\omega / 2$. Donc, si $|\Bg| > m$, il faut alors
+            affecter au moins deux tâches de $\Bg$ à au moins une machine. 
+
+            Soient $a = \min(\Bg)$ et $b = \min(\Bg \backslash \{a\})$, on a alors :
+            \begin{displaymath}
+                OPT \geq a + b \quad \Rightarrow \quad OPT > 2 \left ( \frac{\omega}{2} \right )
+                \quad \Rightarrow \quad OPT > \omega
+            \end{displaymath}
+        \item ligne $18$ : l'algorithme échoue ici lors du traitement des petites tâches\footnote{C'est
+            à dire l'ensemble des tâches appartenant à $\Sml$.}. L'algorithme glouton est alors
+            incapable de trouver une machine dont le temps de travail est inférieur à $\omega$, ce
+            qui nous indique : \begin{displaymath}
+                \frac{1}{m} \sum_{i \in E} i > \omega
+            \end{displaymath}
+            Or on connaît la borne sur $OPT$ suivante :
+            \begin{displaymath}
+                OPT \geq \frac{1}{m} \sum_{i \in E} i
+            \end{displaymath}
+            On a donc $OPT > \omega$.
+    \end{enumerate}
+\end{proof}
+
+\begin{nthrm}
+    \label{th}
+    L'algorithme \ref{dual_approx} est une $\rho-$dual approximation et $\rho = \frac{3}{2}$.
+\end{nthrm}
+
+\begin{proof}
+    On s'intéresse à la valeur de la solution retournée par rapport à $\omega$.
+
+    L'algorithme procède en deux étapes, le traitement des grosses tâches\footnote{Il s'agit des
+    tâches appartenant à $\Bg$.}, puis le traitement des petites. 
+    
+    Lors de la première étape, une seule tâche, au plus, a été affectée par machine, le temps
+    d'exécution de cette dernière étant majorée par $\omega$\footnote{Puisque le contraire
+    validerait la condition de la ligne $2$, forçant l'algorithme à signaler un échec.}. 
+
+    Lors de la seconde étape, des tâches, dont le temps d'exécution est borné par $\omega / 2$ sont
+    rajoutées\footnote{Dans la limite des stocks disponibles...} aux machines dont le temps de
+    travail est inférieur à $\omega$. Considérons une machine $l$ dont le temps de travail est égal
+    à $\omega - 1$ avant ordonnancement d'une tâche $j$ de pois $\omega / 2$. Après ordonnancement
+    de $j$, la machine $l$ aura un temps de travail égal à $(3 \omega/2) - 1$, elle ne pourra donc
+    plus être candidate à l'ordonnancement d'une nouvelle tâche, ceci étant vrai quelque soit la
+    machine considérée, le makespan retourné est inférieur à $3 \omega/2$.
+
+    De plus les lemmes \ref{ordo} et \ref{borne_omega} complètent la preuve du théorème \ref{th}.
+\end{proof}
+
+\section*{Non existence d'un \textbf{FPTAS} pour MKP}
+
+L'objectif de cette partie est de démontrer qu'il n'existe aucun \textbf{FPTAS} pour le problème du
+sac à dos multiple. Pour ce faire nous démontrerons que ceci est vrai pour deux sacs à dos, et nous
+admettrons que ce résultat se généralise à des instances à $m$ sacs à dos, $m \in \mathbb{N}
+\backslash \{0, 1\}$.
+
+\subsection*{Le problème du sac à dos multiple}
+
+Étant donné un ensemble $E$ de $n$ d'objets, caractérisés par leur volume et leur utilité, et un
+ensemble $S$ de $m$ sacs à dos, caractérisés par leur contenance maximale, ce problème cherche à
+déterminer des sous ensembles d'objets associés à chacun des sacs, de manière à ce que le volume
+total d'aucun des sous ensembles ne soit supérieur à la contenance maximale du sac qui lui est
+associée et de manière à maximiser l'utilité des objets sélectionnés.
+
+Autrement dit, on cherche à prendre les objets les plus utiles possibles tout en ayant encore la
+possibilité de fermer tous les sacs.
+
+On peut décrire ce problème de manière plus formelle.
+
+\textbf{Entrée :} un ensemble $E$ de $n$ objets, un ensemble $S$ de $m$ sacs à dos, une fonction de
+poids\footnote{On assimilera l'utilité d'un objet à son poids.} définie comme suit : 
+\begin{displaymath}
+    p : \left \{ \begin{array}{rcl}
+        E & \rightarrow & \mathbb{N} \\
+        i & \mapsto & p(i) = p_i
+    \end{array} \right .
+\end{displaymath}
+
+une fonction de volume définie comme suit :
+\begin{displaymath}
+    v : \left \{ \begin{array}{rcl}
+        E & \rightarrow & \mathbb{N} \\
+        i & \mapsto & v(i) = v_i
+    \end{array} \right .
+\end{displaymath}
+
+et une fonction de capacité définie comme suit :
+\begin{displaymath}
+    c : \left \{ \begin{array}{rcl}
+        S & \rightarrow & \mathbb{N} \\
+        l & \mapsto & c(l) = c_l
+    \end{array} \right .
+\end{displaymath}
+
+\textbf{Sortie :} Un ensemble de $m$ sous-ensembles disjoints de $E$\footnote{On notera $E_l$ le
+sous ensemble associé au sac à dos $l$.}, tels que : \begin{displaymath}
+    \sum_{i \in E_l} v_i \leq c_l \quad \forall l \in S
+\end{displaymath}
+et maximisant la fonction objectif suivante : \begin{displaymath}
+    \sum_{l \in S} \sum_{i \in E_l} p_i
+\end{displaymath}
+
+\subsection*{La réduction gap}
+
+Nous utiliserons une réduction gap de MKP vers $2-$partition pour montrer qu'il n'existe aucun
+\textbf{FPTAS} pour MKP.
+
+\begin{nthrm}
+    \label{no_approx}
+    Il n'existe aucun algorithme \textbf{FPTAS} pour MKP sauf si $P = NP$.
+\end{nthrm}
+
+\begin{proof}
+    Considérons une instance de $2-$partition\footnote{Il sera considéré que le lecteur connaît ce
+    problème.} à $2n$ éléments et de fonction de poids $f$.
+
+    Appelons $A$ le poids des sous-ensemble de la $2-$partition recherchée, on a alors :
+    \begin{displaymath}
+        A = \frac{1}{2} \sum_{i = 1}^{2n} f_i
+    \end{displaymath}
+
+    On cherche à construire une instance de MKP avec deux sacs à dos à partir de l'instance définie
+    de $2-$partitions. Pour ce faire, on fait correspondre à chaque élément $i$ de l'ensemble de
+    départ de $2-$partition un objet $j$ de volume $v_j = f_i$ et de poids $p_j = 1$. De plus on
+    fixe la capacité de chaque sac à dos ainsi : $c_1 = c_2 = A$.
+
+    Supposons à présent l'existence d'un algorithme $(1 - \epsilon)-$approché pour MKP s'exécutant en
+    temps polynomial. Si l'algorithme réussit à affecter un sac à chacun des objets, l'optimal sera
+    alors défini par : \begin{displaymath}
+        OPT = \sum_{i = 1}^{2n} p_i = 2n
+    \end{displaymath}
+    Dans ce cas, l'affectation de chaque objet à un sac définirait une $2-$partition valide.
+    Sinon l'optimal sera borné par au plus $2n -1$. En sélectionnant $\epsilon$ inférieur à
+    $\frac{1}{2n}$, il sera possible de différencier ces deux cas, et donc dans le cas ou $OPT =
+    2n$, on pourrait répondre OUI au problème de $2-$partition associé, sinon, la réponse à
+    $2-$partition serait NON.
+
+    \begin{displaymath}
+        \begin{array}{rrcl}
+            & (1 - \epsilon) OPT & > & 2n - 1 \\
+            \Rightarrow & - \epsilon & > & \displaystyle \frac{2n - 1 - OPT}{OPT} \quad \mbox{or} \quad OPT \geq 2n\\
+            \Rightarrow & - \epsilon & > & \displaystyle \frac{-1}{2n} \\
+            \Rightarrow & \epsilon & < & \displaystyle \frac{1}{2n}
+        \end{array}
+    \end{displaymath}
+
+    L'existence d'un \textbf{FPTAS} pour MKP permet la résolution de $2-$partition en temps
+    polynomial, ce dernier étant $NP-$complet, ceci l'hypothèse de départ n'est vraie que si $P=NP$.
+\end{proof}
+\end{document}
+

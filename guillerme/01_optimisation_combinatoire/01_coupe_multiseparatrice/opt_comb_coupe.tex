@@ -1,0 +1,132 @@
+\documentclass[a4paper, 11pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+%\usepackage[francais]{babel}
+\usepackage{graphicx}
+\usepackage{moreverb}
+\usepackage{subfig}
+\usepackage{pdfpages}
+\usepackage{eurosym}
+\usepackage{fullpage}
+\usepackage[fleqn]{amsmath}
+\usepackage{bbm}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{pgf}
+
+\usetikzlibrary{arrows,automata}
+
+\newtheorem{lemma}{Lemme}[subsection]
+\newtheorem{thrm}{Théorème}[section]
+\newtheorem{corol}{Corollaire}[subsection]
+\begin{document}
+
+\section*{Exercice d'approximation polynomiale}
+
+\subsection*{Recherche d'une coupe separant $C_j$ des autres terminaux}
+
+Soient un graphe non orienté $G = (V, E)$, une fonction de poids positive $w$ sur les arêtes et un
+ensemble $S = \{s_1, s_2, \dots, s_k\}$ de sommets terminaux de $G$. Considérons un sommet terminal
+de $G$ appelé $s_j$ et $G' = (V', E')$ le graphe obtenu par fusion des sommets $s_i \in \{S \\
+s_j\}$, le sommet résultant sera appelé $s_r$, on remarque alors que $V' = V \\ \{ (uv) \mbox{ tq }
+(u, v) \in \{S \\ s_j\}$. Enfin considérons la fonction de poids $w'$ définie comme suit :$$
+\left \{ \begin{array}{rcll}
+        V' & \longrightarrow & \mathbb{R} & \\
+        w'(v) & = & w(v) & \quad \forall v \in V' \\
+\end{array} \right .
+$$
+
+\begin{lemma}
+Rechercher une coupe $C_j$ de poids minimum dans $G$ revient alors à chercher une $(s_r, s_j)-$coupe minimum
+dans $G'$.
+\end{lemma}
+
+\textbf{\underline{Preuve :}} \\
+
+Supposons qu'il existe une coupe $C_j$ de poids minimum séparant $s_j$ des autres terminaux dans le
+graphe $G$ dont le poids est inférieur à celui de la coupe minimum $C_{G'}$ trouvée dans le $G'$.
+Par construction, toute arête appartenant à $V'$ est pondérée de la même manière dans $G$ et dans
+$G'$, on en déduit que pour que $C_j$ soit différente de $C_{G'}$, alors $C_j \\ \{V' \cap C_j \}
+\not = \emptyset$. Ceci est impossible puisque $C_j$ est une coupe séparant $s_j$ de tous les autres
+terminaux. Donc $C_{G'}$ est une coupe de poids minimum séparant $s_j$ des autres terminaux.
+
+La recherche d'une $(s,t)-$coupe dans un graphe s'apparente à une recherche de flot maximum dans le
+même graphe pour laquelle il existe des algorithmes polynomiaux\footnote{On peut par exemple citer
+les algorithmes de préflots, Dinic ou Edmonds-Karp.}. La transformation de $G$ vers $G'$ se faisant
+en temps linéaire, l'algorithme est un algorithme s'exécutant en temps polynomial.
+
+\subsection*{Calcul des bornes}
+
+\subsubsection*{Somme des poids des arêtes}
+
+Considérons une arête $(uv)$ telle que $u \in C_i^*$ et $v \in C_j^*$. Lorsque l'on somme le poids
+de l'ensemble des coupes extraites de $C^*$, le poids de l'arête est comptabilisé dans $w(C_i^*)$ et
+dans $w(C_j^*)$, donc le poids de chaque arête est comptabilisé deux fois. On en déduit alors que :
+$$
+\sum_{i=1}^k w(C_i^*) = 2 w(C^*)
+$$
+
+\subsubsection{Minorant de $w(C_m)$}
+
+Par définition, $C_m$ est la coupe de poids maximum parmis les $j$ coupes séparatrices de poids
+minimum. On a donc : $$
+\begin{array}{rrcll}
+    & w(C_i) & \leq & w(C_m) & \quad \forall i \in \{1, \dots, k\} \\
+    \Rightarrow & \sum_{i = 1}^k w(C_i) & \leq & k * w(C_m) & \\
+    \Rightarrow & w(C_m) & \geq & \frac{1}{k} \sum_{i = 1} w(C_i) & \\
+\end{array}
+$$
+
+\subsubsection*{$2( 1 - \frac{1}{k})-$approximation}
+
+On sait que : $$
+\begin{array}{rrcll}
+    & w(C) + w(C_m) & \leq & \sum_{i=1}^k w(C_i) & \\
+    \Rightarrow & w(C) & \leq & \sum_{i=1}^k w(C_i) - w(C_m) & \\
+    \Rightarrow & w(C) & \leq & \sum_{i=1}^k w(C_i) - \frac{1}{k} \sum_{i=1}^k w(C_i) & \\
+    \Rightarrow & w(C) & \leq & (1 - \frac{1}{k}) \sum_{i=1}^k w(C_i) & \\
+\end{array} $$
+
+Or par définition, $C_i$ est une coupe minimale séparant $s_i$ des autres sommets terminaux, on a
+donc : $w(C_i) \leq w(C_i^*)$. Ce qui nous donne : $$
+w(C) \leq (1 - \frac{1}{k}) \sum_{i=1}^k w(C_i^*) 
+$$
+
+Or nous avons vu que $\sum_{i=1}^k w(C_i^*) = 2w(C^*)$, on a alors : $$
+w(C) \leq 2(1 - \frac{1}{k}) w(C^*) $$
+
+\subsubsection*{Atteindre la borne}
+
+Considérons le graphe suivant :
+
+\begin{figure}[h!]
+    \begin{center}
+        \begin{tikzpicture}
+            \tikset{noeud/.style={circle, draw=black, text centered, minimum size=26pt, inner
+            sep=0pt}, fleche/.style={thick}};
+
+            \node[noeud] (s4) at (0, 0) {$s_4$};
+            \node[noeud] (s1) at (0, 4) {$s_1$};
+            \node[noeud] (s3) at (4, 0) {$s_3$};
+            \node[noeud] (s2) at (4, 4) {$s_4$};
+            \node[noeud] (a) at (1, 3) {$a$};
+            \node[noeud] (b) at (3, 3) {$b$};
+            \node[noeud] (c) at (3, 1) {$c$};
+            \node[noeud] (d) at (1, 1) {$d$};
+
+            \draw[fleche] (a) --node[above] {$1$} (b);
+            \draw[fleche] (b) --node[right] {$1$} (c);
+            \draw[fleche] (c) --node[below] {$1$} (d);
+            \draw[fleche] (d) --node[left] {$1$} (a);
+            \draw[fleche] (a) --node[above right] {$1 - \epsilon$} (s1);
+            \draw[fleche] (b) --node[above left] {$1 - \epsilon$} (s2);
+            \draw[fleche] (c) --node[below left] {$1 - \epsilon$} (s3);
+            \draw[fleche] (d) --node[below right] {$1 - \epsilon$} (s4);
+        \end{tikzpicture}
+    \end{center}
+\end{figure}
+\end{document}

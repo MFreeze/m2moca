@@ -1,0 +1,78 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+Add	AES.c	/^void Add(unsigned char out[], unsigned char in1[],unsigned char in2[])$/;"	f
+AddRoundKey	AES.c	/^void AddRoundKey(unsigned char *out, unsigned char *in,unsigned char RoundKey[], int round) $/;"	f
+Affecte	AES.c	/^void Affecte(unsigned char out[], unsigned char in[])$/;"	f
+CM	crypt.h	31;"	d
+Cipher	AES.c	/^void Cipher(unsigned char *C, unsigned char M[], unsigned char Key[], int Nr)$/;"	f
+Couple	crypt.h	/^typedef struct Couple {$/;"	s
+Couple_Mot	crypt.h	/^typedef struct Couple_Mot {$/;"	s
+Decipher	AES.c	/^void Decipher(unsigned char *out, unsigned char in[], unsigned char Key[], int Nr)$/;"	f
+ExpandKeyInv	AES.c	/^void ExpandKeyInv(unsigned char *res, unsigned char *rKey) {$/;"	f
+InvMixColumns	AES.c	/^void InvMixColumns(unsigned char *out, unsigned char *in)$/;"	f
+InvShiftRows	AES.c	/^void InvShiftRows(unsigned char *out, unsigned char *in)$/;"	f
+InvSubBytes	AES.c	/^void InvSubBytes(unsigned char *out, unsigned char *in)$/;"	f
+K1	crypt.h	26;"	d
+K2	crypt.h	27;"	d
+K3	crypt.h	28;"	d
+KeyExpansion	AES.c	/^void KeyExpansion( unsigned char *RoundKey, unsigned char Key[], int Nr)$/;"	f
+MAX	crypt.h	24;"	d
+MixColumns	AES.c	/^void MixColumns(unsigned char *out, unsigned char *in)$/;"	f
+Mot	crypt.h	/^typedef struct Mot {$/;"	s
+Mul9	AES.c	/^int Mul9[256] = {$/;"	v
+MulB	AES.c	/^int MulB[256] = {$/;"	v
+MulD	AES.c	/^int MulD[256] = {$/;"	v
+MulE	AES.c	/^int MulE[256] = {$/;"	v
+NB_ITER	crypt.h	25;"	d
+Nk	AES.c	26;"	d	file:
+P	crypt.c	/^void P(mot_t *W, mot_t *V) {$/;"	f
+PInverse	crypt.c	/^void PInverse(mot_t *W, mot_t *V) {$/;"	f
+PRINTCOUPLE	crypt.h	23;"	d
+Rcon	AES.c	/^int Rcon[255] = {$/;"	v
+S	crypt.h	/^unsigned int S[MAX]       ={14, 2, 1, 3,13, 9, 0, 6,15, 4, 5,10, 8,12, 7,11};$/;"	v
+SBoite	crypt.c	/^void SBoite(mot_t *V, mot_t *U) {$/;"	f
+SBoiteInverse	crypt.c	/^void SBoiteInverse(mot_t *V, mot_t *U) {$/;"	f
+SUM	crypt.h	21;"	d
+SUM4	AES.c	21;"	d	file:
+ShiftRows	AES.c	/^void ShiftRows(unsigned char *out, unsigned char *in)$/;"	f
+Sinverse	crypt.h	/^unsigned int Sinverse[MAX]={ 6, 2, 1, 3, 9,10, 7,14,12, 5,11,15,13, 4, 0, 8};$/;"	v
+SubBytes	AES.c	/^void SubBytes(unsigned char *out, unsigned char *in)$/;"	f
+UINT	AES.c	/^typedef unsigned int UINT;$/;"	t	file:
+XOR	crypt.c	/^void XOR(mot_t *V, mot_t *A, mot_t *B) {$/;"	f
+addKey	crypt.c	/^void addKey(mot_t *U, mot_t *W, mot_t* K) {$/;"	f
+affichage_binaire	AES.c	/^void affichage_binaire(unsigned char *in)$/;"	f
+affichage_tableau4par4	AES.c	/^void affichage_tableau4par4(unsigned char *in)$/;"	f
+afficheBit	crypt.c	/^void afficheBit(mot_t m) {$/;"	f
+afficheTable	crypt.c	/^void afficheTable(unsigned int *table) {$/;"	f
+aleaMot	crypt.c	/^void aleaMot(mot_t *A) {$/;"	f
+chiffrement	crypt.c	/^void chiffrement(mot_t *C, mot_t *M, mot_t *K) {$/;"	f
+copieMot	crypt.c	/^void copieMot(mot_t *A, mot_t *B) {$/;"	f
+couple_t	crypt.h	/^} couple_t;$/;"	t	typeref:struct:Couple
+creeMot	crypt.c	/^mot_t creeMot(unsigned int a, unsigned int b, unsigned int c) {$/;"	f
+creeMotInt	crypt.c	/^mot_t creeMotInt(unsigned int a) {$/;"	f
+creeMotUtil	crypt.c	/^mot_t creeMotUtil() {$/;"	f
+dechiffrement	crypt.c	/^void dechiffrement(mot_t *M, mot_t *C, mot_t *K) {$/;"	f
+estEgalViaXor	crypt.c	/^int estEgalViaXor(mot_t a, mot_t b, mot_t diff) {$/;"	f
+main	AES.c	/^int main(int argc, char **argv) {$/;"	f
+main	crypt.c	/^int main(int argc, char **argv) {$/;"	f
+mcouple_t	crypt.h	/^} mcouple_t;$/;"	t	typeref:struct:Couple_Mot
+mot_t	crypt.h	/^} mot_t;				\/* ----------  end of struct Mot  ---------- *\/$/;"	t	typeref:struct:Mot
+printCoupleMot	crypt.c	/^void printCoupleMot(mcouple_t m) {$/;"	f
+printMot	crypt.c	/^void printMot(mot_t a) {$/;"	f
+rondeInverse	crypt.c	/^void rondeInverse(mot_t *M, mot_t *C, mot_t *K) {$/;"	f
+sbox	AES.c	/^int sbox[256] =   {$/;"	v
+sboxinv	AES.c	/^int sboxinv[256] = $/;"	v
+tableDistributionDiff	crypt.c	/^unsigned int *tableDistributionDiff() {$/;"	f
+trouveCoupleMot	crypt.c	/^mcouple_t *trouveCoupleMot(mot_t *diff, int nbmess) {$/;"	f
+trouveDiff	crypt.c	/^couple_t *trouveDiff(unsigned int delta, unsigned int deltastar, unsigned int *trouve) {$/;"	f
+trouveMaxTableDiff	crypt.c	/^couple_t *trouveMaxTableDiff(unsigned int *table, unsigned int *nb, unsigned int *m) {$/;"	f
+u	crypt.h	/^    unsigned int u;$/;"	m	struct:Couple
+u	crypt.h	/^    unsigned int u[3];$/;"	m	struct:Mot
+uprime	crypt.h	/^    unsigned int uprime;$/;"	m	struct:Couple
+x	crypt.h	/^    mot_t x;$/;"	m	struct:Couple_Mot
+xprime	crypt.h	/^    mot_t xprime;$/;"	m	struct:Couple_Mot
+xtime	AES.c	25;"	d	file:

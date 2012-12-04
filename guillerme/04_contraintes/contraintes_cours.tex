@@ -1,0 +1,269 @@
+\input{library.tex}
+
+% Algo
+% fonction revise3(xij : var, cij : constante) : Booleen
+% CHANGE <- F
+% for each vi \in D(Xi) do
+%   v_J <- first(D(xj));
+%   while non cij(vi, vj) and vj != nil do
+%       vj <- next(vj, D(Xj))
+%   if vj = nil then
+%       remove vi from D(Xi)
+%       CHANGE <- T
+% return CHANGE
+
+% Adaptive Consistancy Deckter et Pearl 89
+% Article d'origine
+% Lire et comprendre l'article
+
+\begin{document}
+
+\section{Introduction}
+
+\subsection{Problème de coloration de cartes}
+
+\underline{Complexité AC3 :}
+
+% A faire
+
+\begin{algorithm}[t]
+    \caption{AC 2001}
+    \label{algo_ac2001}
+    \begin{algorithmic}[1]
+        \Function{Revise 2001}{$x_{ij}$ : var, $c_{ij}$ : constant}
+            \State CHANGE $\gets F$;
+            \For{each $v_i \in D(x_i) \And \mbox{Last}(x_i, c_{ij} \not \in D(x_j)$}
+                \State $v_j \gets \mbox{next}(\mbox{Last}(x_i, c_{ij}))$;
+                \While{$\neg c_{ij}(v_i, v_j) \And v_j \neq \mbox{nil}$}
+                    \State $v_j \gets (v_j, D-x_j))$;
+                \EndWhile
+                \If{$v_j = \mbox{nil}$}
+                    \State remove $v_i$ from $D(x_i)$;
+                    \State CHANGE $\gets T$;
+                \EndIf
+            \EndFor
+            \State \Return CHANGE;
+        \EndFunction
+    \end{algorithmic}
+\end{algorithm}
+
+\subsection{K-consistance}
+
+$N = (X, D, C)$ is $k-$consistant iff: \begin{displaymath}
+\exists Y \subseteq X, | Y | = k -1, \quad \forall I \mbox{ locally consistant on } Y, \forall
+X_{ik} \in X \backslash Y, \exists v_{ik} \in D(X_{ik}),\newline \mbox{ such that } I \cup \{(X_{ik} =
+v_{ik})\} \mbox{ is locally consistant. }
+\end{displaymath}
+
+% figure 1
+% figure 2
+
+\underline{Note :} Si $n$ est binaire et il existe au plus une contrainte par paire de variables,
+alors $2-$consistance est équivalent à arc-consistance.
+
+\begin{df}
+    $N$ est fortement $k-$consistant ssi il est $j-$consistant $\forall j \in 1, \dots, k$
+\end{df}
+
+\subsubsection*{Complexité}
+
+Si on veut l'optimalité en temps on obtient les complexité suivantes :
+\begin{itemize}
+    \item temps : $O(n^kd^k)$
+    \item espace : $O(n^{k+1}d^{k+1})$
+\end{itemize}
+Si on veut une complexité optimale en espace on obtient les complexités suivantes :
+\begin{itemize}
+    \item temps : $O(n^{k+1}d^{k+1})$
+    \item espace : $O(n^kd^k)$
+\end{itemize}
+
+\begin{df}
+    Une instance est dite \em{globalement consistante} ssi elle s'étend en une solution. Un réseau est
+    dit \em{globalement consistant} ssi toute instance localement consistante est globalement
+    consistante.
+    \begin{displaymath} I \in sol(N)[Y] \end{displaymath}
+\end{df}
+
+\begin{prop}
+    Un réseau est globalement consistant ssi il est fortement $n-$consistant.
+\end{prop}
+
+\subsection{Théorèmes de Freuder}
+
+\begin{df}
+    On appelle \em{graphe ordonné} un graphe dont les sommets sont ordonnés.
+\end{df}
+\begin{df}
+    On appelle \em{largeur d'un sommet} le nombre de prédécesseurs de ce sommets.
+\end{df}
+\begin{note}
+    \begin{displaymath}
+        \begin{array}{rcl}
+            \Lambda (X) & = & \Lambda^-(X) \cup \Lambda^+(X)\\
+            \Lambda^-(X) & = & \{Y | Y < X \mbox{ et } Y \in \Lambda(X)
+        \end{array}
+    \end{displaymath}
+\end{note}
+\begin{df}
+    On appelle \em{largeur d'un ordre} la largeur maximale des sommets de cet ordre.
+\end{df}
+\begin{df}
+    On appelle \em{largeur d'un graphe} la largeur de tous les ordres.
+\end{df}
+
+\subsection{Algorithme de Freuder}
+
+L'algorithme permet de connaître la largeur d'un graphe $G$.
+
+\begin{algorithm}
+    \caption{Algorithme de Freuder}
+    \label{algo_freuder}
+    \begin{algorithmic}[1]
+        \State $K \gets 0$;
+        \State Supprimer les sommets isolés;
+        \While{$G \neq \emptyset$}
+            \State $K \gets K + 1$;
+            \While{$\exists X \in G, |\Lambda(X)| \leq K$}
+                \State Supprimer $X$;
+            \EndWhile
+        \EndWhile
+        \State /* ordre inverse d'élimination = largeur min */
+        \State \Return $K$
+    \end{algorithmic}
+\end{algorithm}
+
+% figure 3
+
+\begin{thrm}[Premier théorème de Freuder]
+    Si un réseau de largeur $k$ est fortement $(k+1)-$consistant, alors il existe un ordre
+    d'instanciation sans retour arrière.
+\end{thrm}
+
+Le problème de ce théorème est que lorsque l'on cherche à rendre le graphe fortement
+$(k+1)-$consistant, l'algorithme rajoute des arêtes sur le graphe et change donc la largeur du
+graphe. Le théorème est donc inutile sauf pour les graphes de largeur 1.
+
+\begin{corol}
+    Si $N$ est de largeur 1\footnote{Il s'agit alors d'un arbre.}, on peut le résoudre en $O(nd^2)$,
+    c'est à dire AC + BT.
+\end{corol}
+
+\section{Algorithmes de recherche}
+
+Pour améliorer l'algorithme de BackTrack, on paut :
+\begin{itemize}
+    \item méthodes rétrospectives\footnote{look-back methods}
+    \item méthodes de propogation de contraintes
+    \item méthodes d'ordonnancement des variables
+    \item méthodes d'ordonnancement des valeurs
+\end{itemize}
+
+\subsection{Méthodes rétrospectives}
+
+Ces méthodes ne sont plus au goût du jour, nous ne nous intéresserons qu'aux méthodes les plus
+abouties. Ces méthodes se basent sur une meilleure sélection des points de retour arrière.
+
+Voir le Backjumping et la mémorisation des "nogoods" (instanciations impossibles).
+
+\subsection{Méthodes prospectives}
+
+Le principe de base est donné par ce qui suit :\\
+A chaque niveau de l'arbre de décision de $1, \dots, i, \dots, n$, on instancie $x_i$ et on supprime
+des domaines des variables succédant $x_i$ dans l'arbres, les valeurs incompatibles avec $x_i$. Et
+si il existe une variable successeure dont le domaine est vide, on réalise alors un backtrack et on
+coupe la branche de l'arbre.
+
+Considérons la procédure \em{Forward Checking}\footnote{Harlick Elliott 80}
+
+\begin{algorithm}
+    \caption{Forward Checking}
+    \label{algo_fc}
+    \begin{algorithmic}[1]
+        \Function{FC}{$(N, I)$ : Booléen}
+            \If{$|I| = n$}
+                \State \Return T
+            \EndIf
+            \State Choisir $X_i \not \in I$;
+            \For{ each $V_i \in D(X_i)$}
+                \State $D(X_i) \gets \{V_i\}$;
+                \State Supprimer tous les $(X_j, V_j)$ inconsistants avec $I \cup \{(x_i = v_i)\}, \forall X_J \not \in I$;
+                \If{$\not \exists J | D(X_J) = \emptyset$}
+                    \If{$FC(N, I\cup \{(x_i, v_i)\}$}
+                        \State \Return T
+                    \EndIf
+                \EndIf
+                \State Restaurer les caleurs des $X_J$ supprimées à cause de $X_i = V_i$;
+            \EndFor
+            \State \Return False
+        \EndFunction
+    \end{algorithmic}
+\end{algorithm}
+
+\subsection{Algorithme MAC\footnote{Maintaining Arc Consistency}}
+
+\begin{algorithm}
+    \caption{Maintaining Arc Consistency}
+    \label{alg_mac}
+    \begin{algorithmic}[1]
+        \Function{MAC}{$N$ : Boolean}
+            \If{$AC(N)$}
+                \If{$N$ ground}
+                    \State \Return $T$
+                \EndIf
+                \State Choose $X_i$ unfixed in $N$ and $v_i \in D(X_i)$
+                \If{$MAC(N \cup \{ X_i = v_i \})$}
+                    \State \Return $T$
+                \EndIf
+                \If{$MAC(N \cup \{x_i \neq v_i\})$}
+                    \State \Return $T$
+                \EndIf
+            \EndIf
+            \State \Return $F$
+        \EndFunction
+    \end{algorithmic}
+\end{algorithm}
+
+\subsection{Ordonnancement des variables}
+
+En 1980, Haralick et Elliott ont ennoncé le \emph{fail first principle}\footnote{On cherche à
+assigner d'abord les variables étant à même de provoquer le plus rapidement possible des erreurs.}
+et ont proposé une heuristique \emph{dom}.
+
+\subsubsection{Heuristiques statiques (Static Variable Orderind)}
+
+\begin{df}
+    \emph{deg} \\
+    On choisit la variable de degré maximum dans le graphe de contraintes.
+\end{df}
+
+C'est une heuristique statique puisque le graphe des contraintes et statique tout au long de la
+recherche et donc l'ordre d'évaluation reste le même.
+
+\subsubsection{Heuristiques dynamiques}
+
+\begin{df}
+    \emph{dom}\\
+    On choisit la variable de plus petit domaine.
+\end{df}
+
+C'est une heuristique dynamique ou statique selon l'algorithme utilisé : par exemple avec le
+backtrack, c'est une heuristique statique dans le cas du Forward Checking c'est une heuristique
+dynamique.
+
+\section{Décomposition de contraintes globales}
+
+\subsection{Décomposabilité opérationnelle}
+
+\begin{df}
+    Soit une instance de contrainte globale $N = (X, D_X, \{c\})$ et sa décomposition $M = (X \cup Y, D_X +
+    D_Y, \mathcal{C})$. On dit que $M$ préserve l'arcconsistance sur $N$ ssi pour tout $D'_X
+    \sqsubseted D_x$, $AC(X, D_X', \{c\}) = AC(X \cup Y, D'_x \cup D_y, \mathcal{C})$.
+\end{df}
+
+\begin{df}
+    Checker$(C, D) =$ vrai ssi $\exist I$ sur $D^{X(c)} / c(I)$
+\end{df}
+
+
+\end{document}

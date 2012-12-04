@@ -1,0 +1,951 @@
+\documentclass[a4paper, 10pt]{thesis}
+
+\input{library.tex}
+
+\begin{document}
+
+\chapter{Attaque diff\'erentielle sur les chiffrements par bloc}
+
+\section{Différence des entrées sorties d'une $S-$boîte}
+
+On considère une substitution $S : \{0,1\}^{l'} \longmapsto \{0,1\}^{l'}$
+
+\begin{df}
+    On considère un couple $(u, u') \in \{0, 1\}^2$ et une différence $\Delta \in \{0,1\}^{l'}$.
+    \begin{enumerate}
+        \item La différence en entrée de $S$ est le ou exclusif $U \bigoplus U'$
+        \item La différence en sortie de $S$
+        \item Rattraper
+    \end{enumerate}
+\end{df}
+
+\begin{ex}
+    Considérons l'exemple suivant :
+    \begin{displaymath}
+        \begin{array}{|c|c|c|c|c|}
+            \hline
+            U & 00 & 01 & 10 & 11 \\ \hline
+            S(U) & 10 & 00 & 11 & 01 \\ \hline
+        \end{array}
+    \end{displaymath}
+    Alors pour $U = 10$ et $U' = 11$, la différence en entrée est $U \bigoplus U' = 01$, celle en
+    sortie est donnée par $S(U) \bigoplus S(U') = 11 \bigoplus 01 = 10$ et les couples sont donnés
+    par : \begin{displaymath}
+        C(01) =\{(00, 01), (01, 00) , (10, 11), (11, 10)\}
+    \end{displaymath}
+\end{ex}
+
+\begin{df}
+    Soit $\Delta, \Delta^* \in \{0,1\}^{l'}$, on définit ce qui suit :
+    \begin{enumerate}
+        \item $\Diff_{\Delta \mapsto \Delta^*}(S) = \{(U, U') \in \{0, 1\}^{l'} \mbox{ et } U
+                \bigoplus U' = \Delta \mbox{ et } S(U) \bigoplus S(U') = \Delta^*$
+        \item On définit : \begin{displaymath}
+                N_{\Delta \mapsto \Delta^*}(S) = \card(\Diff_{\Delta \mapsto \Delta^*}(S))
+            \end{displaymath}
+        \item On définit : \begin{displaymath}
+                P_{\Delta \mapsto \Delta^*} = \frac{N_{\Delta \mapsto \Delta^*}}{2^l}
+            \end{displaymath}
+    \end{enumerate}
+\end{df}
+
+\begin{ex}
+    Considérons l'exemple suivant :
+    \begin{displaymath}
+        \begin{array}{|c|c|c|c|c|c|c|c|c|}\hline
+            U & 0000 & 0001 & 0010 & 0011 & 0100 & 0101 & 0110 & 0111 \\ \hline
+            U' & 1011 & 1010 & 1001 & 1000 & 1111 & 1110 & 1101 & 1100 \\ \hline
+            S(U) & 1110 & 0100 & 1101 & 0001 & 0010 & 1111 & 1011 & 1000\\ \hline
+            S(U') & 1100 & 0110 & 1010 & 0011 & 0111 & 0000 & 1001 & 0101\\ \hline
+            S(U) \bigoplus S(U') & 0010 & 0010 & 0111 & 0010 & 0101 & 1111 & 0010 & 1101\\ \hline
+        \end{array}
+    \end{displaymath}
+    \begin{displaymath}
+        \begin{array}{|c|c|c|c|c|c|c|c|c|}\hline
+            U & 1000 & 1001 & 1010 & 1011 & 1100 & 1101 & 1110 & 1111 \\ \hline
+            U' & 0011 & 0010 & 0001 & 0000 & 0111 & 0110 & 0101 & 0100 \\ \hline
+            S(U) & 0011 & 1010 & 0110 & 1100 & 0101 & 1001 & 0000& 0111 \\ \hline
+            S(U') & 0001 & 1101 & 0100 & 1110 & 1000 & 1011 & 1111 & 0010 \\ \hline
+            S(U) \bigoplus S(U') & 0010 & 0111 & 0010 & 0010 & 1101 & 0010 & 1111 & 0101 \\ \hline
+        \end{array}
+    \end{displaymath}
+    On obtient les valeurs de $N_{1011 \mapsto \Delta^*}$ pour $\Delta^* \in \{0, 1\}^4$ suivant :
+    \begin{displaymath}
+        \begin{array}{|c|c|c|c|c|c|c|c|c|}\hline
+            \Delta^* & 0000 & 0001 & 0010 & 0011 & 0100 & 0101 & 0110 & 0111 \\ \hline
+            N_{1011 \mapsto \Delta^*} & 0 & 0 & 8 & 0 & 0 & 2 & 0 & 2 \\ \hline
+        \end{array}
+    \end{displaymath}
+    \begin{displaymath}
+        \begin{array}{|c|c|c|c|c|c|c|c|c|}\hline
+            \Delta^* & 1000 & 1001 & 1010 & 1011 & 1100 & 1101 & 1110 & 1111 \\ \hline
+            N_{1011 \mapsto \Delta^*} & 0 & 0 & 0 & 0 & 0 & 2 & 0 & 2 \\ \hline
+        \end{array}
+    \end{displaymath}
+\end{ex}
+
+\section{Propagation de différence sur une ronde d'un SPN}
+
+On considère une ronde d'un SPN :
+
+% figure 1
+
+\begin{pr}
+    Soit $S_i : \{0, 1\}^{l'} \mapsto \{0, 1\}^{l'}$ pour les $t$ $S-$boîtes et soit $S : \{0, 1\}^l
+    \mapsto \{0, 1\}^l$ la concaténée des $S_i$. Soit $\Delta_i \mapsto \Delta_i^*$ pour $i = 1,
+    \dots, t$ les propagations de différence pour chaque boîte $S_i$. On définit enfin :
+    \begin{displaymath}
+        \left \lbrace
+        \begin{array}{ccc}
+            \Delta & = & [\Delta_1, \Delta_2, \dots, \Delta_t] \\
+            \Delta^* & = & [\Delta_1^*, \Delta_2^*, \dots, \Delta_t^*] \\
+        \end{array}
+        \right .
+    \end{displaymath}
+    On a alors : \begin{displaymath}
+        P_{\Delta \mapsto \Delta^*}(S) = P_{\Delta_1 \mapsto \Delta_1^*} \times P_{\Delta_2 \mapsto
+        \Delta_2^*} \times \dots P_{\Delta_t \mapsto \Delta_t^*} 
+    \end{displaymath}
+\end{pr}
+
+\begin{proof}
+    Il suffit juste de remarquer que : \begin{displaymath}
+        \Diff_{\Delta \mapsto \Delta^*} (S) = \Diff_{\Delta_1 \mapsto \Delta_1^*} \times
+        \Diff_{\Delta_2 \mapsto \Delta_2^*} \times \dots \times \Diff_{\Delta_t \mapsto \Delta_t^*} 
+    \end{displaymath}
+    Et donc :
+    \begin{displaymath}
+        \begin{array}{rrcl}
+            & N_{\Delta \mapsto \Delta^*}(S) & = & \prod_{i=1}^t N_{\Delta_i \mapsto \Delta_i^*}\\
+            \Rightarrow & P_{\Delta \mapsto \Delta^*}(S) & = & \displaystyle \frac{N_{\Delta \mapsto
+    \Delta^*}}{2^l} \\
+    \Rightarrow &  P_{\Delta \mapsto \Delta^*}(S) & = & \displaystyle \prod_{i=1}^t \frac{N_{\Delta \mapsto
+\Delta^*}}{2^l} \\
+    \Rightarrow & P_{\Delta \mapsto \Delta^*}(S) & = & P_{\Delta_i \mapsto \Delta_i^*}
+        \end{array}
+    \end{displaymath}
+\end{proof}
+
+\begin{ex}
+    On considère la situation suivante :
+
+    %figure 2
+
+    On en déduit donc que : 
+    \begin{displaymath}
+        P_{\Delta = (\Delta_1, \Delta_2) \mapsto \Delta^* = (\Delta_1^*, \Delta_2^*)} = \frac{1}{64}
+    \end{displaymath}
+\end{ex}
+
+La proposition indique comment se propage une différence à travers un XOR avec la clef et la
+permutation.
+
+\begin{pr}
+    Soit $U, U' \in \{0, 1\}^l$ et $\Delta = U \bigoplus U'$.
+    \begin{enumerate}
+        \item Soit $W = U \bigoplus K$ et $W' = U' \bigoplus K$ alors $W \bigoplus W' =
+            \Delta$\footnote{Autrement dit la clé n'a aucune incidence sur la propagation de
+            différence.}
+        \item Soit $P : \{1, \dots, l\} \mapsto \{1, \dots, l\}$ une permutation, alors si $V =
+            P(U)$ et $V' = P(U')$ alors $V \bigoplus V' = p(\Delta)$
+    \end{enumerate}
+\end{pr}
+
+\begin{proof} Démontrons chacune des parties de la proposition séparément :\begin{enumerate}
+    \item La démonstration est directe : 
+        \begin{displaymath}
+            \begin{array}{rcl}
+                W \bigoplus W' & = & (U \bigoplus \not K) \bigoplus (U' \bigoplus \not K) \\
+                               & = & U \bigoplus U' \\
+                               & = & \Delta
+            \end{array}
+        \end{displaymath}
+    \item $U$ et $U'$ sont de la forme : $U = [u_1, u_2, \dots, u_l]$ et $U' = [u'_1, u'_2, \dots,
+        u'_l]$. On peut alors écrire : 
+        \begin{displaymath}
+            \begin{array}{rrcl}
+                & V = P(U) & = & [u_{P(1)}, \dots, u_{P(l)}] \\
+                & V' = P(U') & = & [u'_{P(1)}, \dots, u'_{P(l)}] \\
+                \Rightarrow & V \bigoplus V' & = & [u_{P(1)} \bigoplus u'_{P(1)}, \dots, u_{P(l)}
+            \bigoplus u'_{P(l)}] \\
+                & & = & P([u_1 \bigoplus u'_1, \dots, u_l \bigoplus u'_l] \\
+                & & = & P(\Delta) \\
+            \end{array}
+        \end{displaymath}
+    \end{enumerate}
+\end{proof}
+
+%figure 3
+
+Sur la ronde, on a la propagation : 
+\begin{displaymath}
+    \Delta \mapsto P(\Delta^*)
+\end{displaymath}
+et sa probabilité :
+\begin{displaymath}
+    P_{\Delta \mapsto P(\Delta^*)} = P_{\Delta_1 \mapsto \Delta_1^*} \times \dots P_{\Delta_t
+    \mapsto \Delta_t^*}
+\end{displaymath}
+
+\section{Propagation de différence sur $r - 1$ rondes}
+
+Pour construire une propagation de différence entre l'entrée de la première ronde et la sortie de la
+$r^e$ ronde, il faut trouver $r-1$ propagation de ronde : $\Delta^{(i)} \mapsto \Delta^{*(i)}$ ou
+$i$ est le numéro de la ronde tel que $\Delta^{*(i)} = \Delta^{(i+1)}$, pour $i = 1, \dots, r$.
+
+% figure 4
+
+On suppose les rondes \emph{indépendantes}\footnote{Ce n'est pas vrai en pratique.} celà implique
+que la probabilité $\Delta^{(1)} \mapsto \Delta^{*(r-1)}$ entre l'entrée de la première ronde et la
+sortie de le $(r - 1)^e$ ronde est donnée par : 
+\begin{displaymath}
+    P_{\Delta^{(1)} \mapsto \Delta^{*(r-1)}} \cong P_{\Delta^{(1)} \mapsto \Delta^{*(1)}} \times
+    \dots \times P_{\Delta^{(r-1)} \mapsto \Delta^{*(r-1)}}
+\end{displaymath}
+
+On a une propagation de différence :
+\begin{displaymath}
+    \Delta^{(0)} \longrightarrow^{p} \Delta^{(r-1)}
+\end{displaymath}
+
+depuis le message clair, vers le message chiffré de l'avant dernière ronde avec une probabilité $p$.
+
+\begin{df}
+    Une $S-$boite $S_i$ est une boite active si la différence en entrée $\Delta_i^{(r-1)}$ est non
+    nulle.
+\end{df}
+
+Les bits de la clé de la $r^e$ ronde que l'on va attaquer sont ceux correspondants aux bits sortant
+des boites actives. En particulier, si l'on note $K' = P^{-1}(K^{(r)})$, alors la connaissance de
+$K_i'$ permet, à partir d'un message chiffré $C$, de calculer $C_i^{(r)}$.
+
+\section{Mise en place de l'attaque}
+
+Pour une propagation de différence $\Delta^{(0)} \longrightarrow \Delta^{(r-1)}$, on a un nombre $N$
+de couples $(M,C)$ et $(M \bigoplus \Delta^{(0)}, C')$ de messages clair-chiffré.
+
+\begin{algorithm}
+    \caption{Mise en place de l'attaque}
+    \label{alg_att_diff}
+    \begin{algorithmic}[1]
+        \For{all $(M, C)$ and $(M', C')$}
+            \For{all $\hat{K}'$ bits de $K'$ correspondant aux boites actives}
+                \State On calcule les $C_i^{(r-1)}$ et $C_i^{'(r-1)}$ correspondant aux boites
+                actives
+                \If{$C_i^{(r-1)} \bigoplus C_i^{'(r-1)} = \Delta_i^{(r-1)}$ pour tout $i$ actif}
+                    \State On augmente un compteur associé à $\hat{K'}$
+                \EndIf
+            \EndFor
+        \EndFor
+    \end{algorithmic}
+\end{algorithm}
+
+Si le nombre de bit $\hat{K'}$ vaut $\alpha$, pour une mauvaise valeur de $\hat{K'}$, le fait que
+$C_i^{(r-1)} \bigoplus C_i^{'(r-1)} \forall i$ est vérifié avec une probabilité de $\displaystyle
+\frac{1}{2^\alpha}$ et donc le compteur associé aura une valeur proche de $\displaystyle
+\frac{N}{2^\alpha}$.
+
+Pour une bonne clé, le fait que $C_i^{(r-1)} \bigoplus C_i^{'(r-1)} = \Delta_i^{(r-1)} \forall i$ se
+produit avec une probabilité $p$\footnote{On suppose que $p > \frac{1}{2^\alpha}$.} et la valeur du
+compteur attendue est de $N \times p$.
+
+Finalement si $p \gg \frac{1}{2^\alpha}$ la valeur du compteur de la bonne clef satisfait $N_p \gg
+\frac{N}{2^\alpha}$ donc a la plus grande valeur.
+
+\chapter{Introduction \`a la cryptographie asym\'etrique}
+
+En cryptographie classique, on a besoin :
+\begin{itemize}
+    \item une clé secrète $K$
+    \item une fonction de chiffrement $e_K$
+    \item une fonction de déchiffrement $d_K$
+\end{itemize}
+$d_k$ s'obtient facilement à partir de $e_k$, dans certains cas, les deux fonctions sont égales.
+Tout la sécurité du cryptosystème repose sur le secret de la clé $K$. L'inconvénient de ce système
+est le problème d'échange de clé secrète $K$.
+
+C'est pour cette raison qu'a été introduite la notion de cryptographie asymétrique, cherchant à
+répondre à cette question: \emph{Est-il possible de concevoir un cryptosystème tel que $d_K$ soit
+difficile à calculer à partir de $e_k$?}. ON a donc :
+\begin{itemize}
+    \item une fonction de chiffrement \underline{publique} $e_k$
+    \item une fonction de déchiffrement \underline{privée} connue uniquement de Bob $d_k$
+\end{itemize}
+
+L'article fondateur du concept est un article de 1976 par Diffie-Hellman, et la première
+implémentation du concept est RSA (1977, Rivest-Shamir,Adleman). RSA fonctionne sur le problème de
+la factorisation entière.
+
+\begin{rq}
+    Un cryptosystème asymétrique n'est jamais inconditionnellement sûr.
+\end{rq}
+
+Considérons $x \in X$, un message, $y = e_K(x) \in Y$ le chiffré de $x$. Si quelqu'un intercepte le
+message $y$, il a toujours la possibilité de parcourir l'ensemble du domaine des messages et de les
+crypter jusqu'à ce qu'il tombe sur $y$ : 
+\begin{displaymath}
+    \forall x' \in X, \mbox{ calculer }e_K(x')\mbox{ jusqu'à obtenir } e_k(x') = y
+\end{displaymath}
+
+Il est donc primordial d'étudier la \emph{sécurité calculatoire} d'un système asymétrique.
+
+\section{Fonction à sens unique avec trappe}
+
+\begin{df}
+    Si $e_k$ est injective (si $x \neq y \Rightarrow e_k(x) \neq e_k(y)$), on dit qu'elle est à sens
+    unique si $e_k$ est facile à calculer et si $e_k^{-1}$ est difficile sauf pour Bob qui connaît
+    une information secrète supplémentaire, appelée la trappe.
+\end{df}
+
+\begin{rq}
+    On ne sait pas prouver l'existence de telle fonctions.
+\end{rq}
+
+\begin{ex}[Fonction supposée à sens unique]
+    Soit une fonction : 
+    \begin{displaymath}
+        f : \left \{ 
+        \begin{array}{rcl}
+            \frac{\mathbb{Z}}{n\mathbb{Z}} & \longrightarrow & \frac{\mathbb{Z}}{n\mathbb{Z}} \\
+            x & \longmapsto & x^a \mod n \\
+        \end{array} \right .
+    \end{displaymath}
+    Ce pour $x \in \mathbb{N}^*$ et $a \in \mathbb{Z}$.
+    La fonction servant à inverser est la suivante :
+    \begin{displaymath}
+        f^{-1} : \left \{ 
+        \begin{array}{rcl}
+            \frac{\mathbb{Z}}{n\mathbb{Z}} & \longrightarrow & \frac{\mathbb{Z}}{n\mathbb{Z}} \\
+            y & \longrightarrow & y^b \\
+        \end{array}
+        \right .
+    \end{displaymath}
+\end{ex}
+
+\section{Rappels d'arithmétiques et d'algèbre}
+\subsection{Divisibilité et primalité}
+
+\begin{df}
+    Soient $a, b \in \mathbb{Z}$, on dit que $b$ divise $a$ noté $b|a$, s'il existe $q$ tel que $a =
+    q . b$
+\end{df}
+\begin{df}
+    $p \in \mathbb{Z}$ est dit premier s'il est divisible uniquement par $1$ et par lui même, ($1$
+    n'est pas premier par convention).
+\end{df}
+\begin{df}
+    La division euclidienne de $a \in \mathbb{Z}$ par $b \in \mathbb{Z}$ est le couple $(q, r)$ tel
+    que $a = b.q + r$ avec $0 \leq r < |b|$. $(q, r)$ est unique.
+\end{df}
+
+\subsection{PGCD}
+
+\begin{df}
+    Soient $a, b \in \mathbb{Z}$. Le plus grand diviseur commun à $a$ et $b$, noté $pgcd(a,b)$, ou
+    $gcd(a,b)$ ou $(a,b)$ ou $a circonflexe b$, est le plus grand entier $d \in \mathbb{N}$ tel que $d|a$ et
+    $d|b$.
+\end{df}
+
+\begin{df}
+    Si $(a,b) = 1$ alors on dit que $a$ et $b$ sont premiers entre eux.
+\end{df}
+
+\subsubsection{Algorithme d'Euclide}
+
+\underline{\textbf{Idée :}} $a, b \in \mathbb{Z}$, $a \geq b \geq 0$, $a = bq + r$ alors $(a, b) =
+(b, r)$
+
+\begin{proof}
+    Soit $d = (a,b)$, $d' = (b, r)$, on veut montrer que $d|d'$ et $d'|d$ et donc $d = d'$.
+    \begin{enumerate}
+        \item $d|a \  d|b \Rightarrow d | (a - qb) \Rightarrow d|r$, or $d|b \mbox{ et } d|r \Rightarrow d|d'$
+        \item $d'|b$ et $d'|r \Rightarrow d'|(bq + r) \Rightarrow d'|a$, or $d'|a et d'|b
+            \Rightarrow d'|d$
+    \end{enumerate}
+\end{proof}
+
+\begin{algorithm}[h]
+    \caption{Algorithme d'Euclide}
+    \begin{algorithmic}[1]
+        \Function{PGCD}{$(a, b)$}
+            \State $R_0 \gets a$
+            \State $R_1 \gets b$
+            \While{$R_1 \neq 0$}
+                \State $T \gets R_1$
+                \State $R_1 \gets R_0 \mod R_1$
+                \State $R_0 \gets T$
+            \EndWhile
+            \State \Return $R_0$
+        \EndFunction
+    \end{algorithmic}
+\end{algorithm}
+
+\subsection{Relation de Bezout}
+
+$a, b \in \mathbb{Z},\ d = (a,b)$, alors il existe $u, v \in \mathbb{Z}$ tel que $au + bv = d$
+
+\subsubsection{Algorithme d'euclide étendu}
+
+$a \geq b \geq 0,\ (r_i)_{i>0}$ la suite des restes de l'algorithme d'Euclide. $r_0 = a, r_1 = b,
+r_{i+1} = r_{i-1} - q_i r_i$. Si $r_l$ est le dernier reste non nul, alors $r_l = u_la + v_l b = (a,
+b)$ avec : \begin{displaymath}
+    \left \lbrace \begin{array}{rcl}
+        u_0 = 1 & u_1 = 0 & u_{i+1} = u_{i-1} - q_i u_i \\
+        v_0 = 0 & v_1 = 1 & v_{i+1} = v_{i-1} - q_i v_i \\
+    \end{array}
+    \right .
+\end{displaymath}
+
+\begin{prop}
+    Les suites $(u_i)_i$ et $(v_i)_i$ vérifient $u_i a + v_i b = r_i,\quad \forall i > 0$
+\end{prop}
+
+\begin{proof}[induction sur $i$]
+    Initialisation OK.\\
+    On suppose : \begin{displaymath}
+        \begin{array}{rcl}
+            u_{i-1}a + v_{i-1}b & = & r_{i-1} \\
+            u_i a + v_i b & = & r_i \\
+        \end{array}
+    \end{displaymath}
+\end{proof}
+
+\subsection{Les entiers modulo $N$}
+
+\begin{df}
+    $n>0, a, b \in \mathbb{Z}$, on dit que $a$ est congrue à $b$ modulo $n$, noté $a \equiv b (mod
+    n)$ si $n|(a-b)$
+\end{df}
+
+\begin{prop}
+    $a \equiv b (mod n) \leftrightarrow a \mbox{ et } b$ ont le même reste dans la division par $n$
+\end{prop}
+
+\begin{df}
+    $\forall a \in \mathbb{Z}$, la classe de $a$ est l'ensemble des entiers $b$ tels que $a \equiv b
+    (mod n)$.
+\end{df}
+
+\begin{prop}
+    $\forall a \in \mathbb{Z}, \exists ! 0 \leq r < n$ tel que $a \equiv r (mod n)$. On peut utiliser
+    $r$ comme représentant de la classe de $a$.
+\end{prop}
+
+\begin{df}
+    Les entiers modulo $n$, noté $\frac{\mathbb{Z}}{n\mathbb{Z}}$ est l'ensemble des classes
+    d'équivalence des entiers $\{0, 1, 2, \dots, n-1\}$.
+\end{df}
+
+On munit $\frac{\mathbb{Z}}{n\mathbb{Z}}$ de deux opérations : $+ mod n$, $\times mod n$.
+
+\begin{rq}
+    $\mathbb{Z}/n\mathbb{Z}$ a une structure d'anneau.
+\end{rq}
+
+\begin{rq}
+    $a+b mod n$ peut se calculer sans division, si $a+b < n$ alors $a+b$ sinon $a + b -n$
+\end{rq}
+
+\begin{rq}
+    Il existe des algorithmes de multiplication modulo $n$ sans division. On note alors la
+    complexité de la multiplacation de $a$ par $b$ ($|a| = n, |b| = m$) : $M(n,m)$.
+\end{rq}
+
+\begin{df}
+    Soit $a \in \mathbb{Z}/n\mathbb{Z}$. L'inverse multiplicatif de $a mod n$ est l'entier $x \in
+    \mathbb{Z}$ tel que $a.x \equiv 1 (mod n)$. Si $x$ existe, il est unique. On dit que $a$ est
+    inversible (ou $a$ est une unité). On le note $a^{-1}$
+\end{df}
+
+\begin{df}
+    La division de $a$ par $b$ modulo $n$ est le produit $a.b^{-1} mod n$ si $b^{-1}$ existe.
+\end{df}
+
+\begin{prop}
+    $a \in \mathbb{Z}/n\mathbb{Z}$, $a$ est inversible ssi $(a,n) = 1$.
+\end{prop}
+
+% figure 1
+
+Pour calculer $a^{-1} mod n$, on utilise Euclide étendu. En effet, d'après Bezout : $au + nv =
+pgcd(a, n) = 1$, donc $a^{-1} = u$.
+
+\subsection{L'ensemble $(\mathbb{Z}/n\mathbb{Z})^*$}
+
+\begin{df}[Fonction d'Euler]
+    Si $n \geq 1$, on note $\Phi(n)$ le nombre d'entier dans $\llbracket 1, n \rrbracket$ premiers
+    avec $n$.
+\end{df}
+
+\begin{df}
+    Le groupe multiplicatif $(\mathbb{Z}/n\mathbb{Z})^* = \{a \in \mathbb{Z}/n\mathbb{Z} : (a,n) =
+    1\}$. L'ordre de $(\mathbb{Z}/n\mathbb{Z})^* = \#(\mathbb{Z} / n\mathbb{Z})^*) = |(\mathbb{Z} / n
+    \mathbb{Z})^*|$.
+\end{df}
+
+\begin{rq}
+    $|(\mathbb{Z}/n\mathbb{Z})^*| = \Phi(n)$
+\end{rq}
+
+\begin{prop}
+    \begin{itemize}
+        \item Si $p$ est premier, $\Phi(p) = p-1$
+        \item $\Phi(m.n) = \Phi(m) . \Phi(n)$
+    \end{itemize}
+\end{prop}
+
+\begin{thrm}[Théorème d'Euler]
+    Si $a \in (\mathbb{Z}/n\mathbb{Z})^*$, alors $a^{\Phi(n)} \equiv 1 (mod n)$.
+\end{thrm}
+
+\begin{corol}[Petit théorème de Fermat]
+    Si $(a, p) = 1$, alors $a^{p-1} \equiv 1 (mod n)$
+\end{corol}
+
+\begin{df}
+    $a \in (\mathbb{Z} / n\mathbb{Z})^*$, l'ordre de $a$ noté $ord(a)$ est le plus petit entier $t$,
+    tel que $a^t \equiv 1 (mod n)$.
+\end{df}
+
+\begin{prop}
+    Si $ord(a) \equiv t$ et si $a^s \equiv 1$ alors $t|s$, en particulier, $t|\Phi(n)$
+\end{prop}
+
+\begin{df}
+    Si $ord(a) = \Phi(n)$, alors on dit que $a$ est un générateur (ou élément primitif) de
+    $(\mathbb{Z}/n\mathbb{Z})^*$
+\end{df}
+
+Si $(\mathbb{Z}/ n\mathbb{Z})^*$ admet un générateur alors on dit que $(\mathbb{Z}/n\mathbb{Z})^*$
+est cyclique. Si $g$ est un générateur de $(\mathbb{Z}/n\mathbb{Z})^*$, $(\mathbb{Z}/n\mathbb{Z})^*
+= \{g^{(i)} mod n : 0 \leq i < \Phi(n)\}$.
+
+\subsubsection{Exponentiation rapide modulo $n$}
+
+On veut calculer : $x^a = x.x.x. \dots . x,\quad a$ fois.
+
+\underline{\textbf{Principe :}} \begin{displaymath}
+    a^k = \left \lbrace
+    \begin{array}{rl}
+        a^{\frac{k}{2}} & \mbox{ si } k \mbox{ pair } \\
+        a^{\frac{k}{2}} . a & \mbox{ sinon }
+    \end{array}
+    \right .
+\end{displaymath}
+
+% fig 2
+
+\section{Echange de clé de Diffie-Hellman}
+
+Soit $G = (\mathbb{Z}/p\mathbb{Z})^*$ avec $p$ premier et $g$ un générateur de $G$, qui sont des
+données publiques.
+
+Alice choisit en secret $a \in \mathbb{Z}$, calcule $h = g^a mod p$ et l'envoie à Bob. Bob fait de
+même avec un aléatoire $b$ et envoie à Alice $k = g^b mod p$.
+
+A la réception, Alice calcule $k^a mod p = (g^b)^a mod p = g^{ba} mod p$. De son côté Bob calcule
+$k^b mod p = (g^a)^b mod p = g^(ab) mod p$. Ils ont donc calculé la même chose.
+
+% fig 3
+
+\subsection{Petit rappel Diffie-Hellman (KAS = Key agreement Scheme)}
+
+Soit $(G, .)$ un groupe et $g \in G$ d'ordre $n$, Alice choisit $a$ au hasard ($0\leq a < n$),
+calcule $\hat{a} = g^a$ et envoie $\hat{a}$ à Bob. De son côté, Bob choisit $b$ au hasard ($0 \leq b
+< n$), calcule $\hat{b} = g^b$ et envoie $\hat{b}$ à Alice.
+
+Une fois qu'ils ont reçu le message, Alice calcule $K = \hat{b}^a$ et Bob calcule $\hat{a}^b$. Les
+deux calculs sont égaux. Ils ont alors leur clé secrète.
+
+Le problème est basé sur le problème appelé CDH (Computational Diffie-Hellman).
+
+\subsection{Computational Diffie-Hellman Problem}
+
+Étant donnés, $g, \hat{a} = g^a, \hat{b} = g^b$, calculer $K = g^{ab}$.
+
+\begin{conj}
+    Si $n$ est suffisamment grand, CDH est \emph{impossible} à calculer.
+\end{conj}
+
+\begin{rmq}
+    Le terme \emph{impossible} est à prendre avec des pincettes, il est possible de le calculer mais
+    les ressources de calcul nécessaires à la résolution de ce problème sont très largement
+    supérieures à ce que l'on est capable de faire aujourd'hui.
+\end{rmq}
+
+\begin{rmq}
+    DHKAS est vulnérable à une attaque de type \emph{man in the middle}
+\end{rmq}
+
+\begin{df}
+    Une attaque de type \emph{man in the middle} est une attaque où Eve récupère les messages
+    circulant entre Alice et Bob et est capable de d'envoyer un autre message à la place.
+\end{df}
+
+\begin{displaymath}
+    \begin{array}{ccccc}
+        \underline{Alice} & & \underline{Eve} & & \underline{Bob} \\
+        \\
+        a, \hat{a} = g^a & \longrightarrow & a' : \tilde{a} = g^{a'} & \longrightarrow & \\
+                         & \longleftarrow & b' : \tilde{b} = g^{b'} & \longleftarrow & g^b = \hat{b}, b \\
+        K_A = g^{b'a} & & K_A = g^{ab'} & & \\
+                      & & K_B = g^{a'b} & & K_B = g^{a'b} \\
+    \end{array}
+\end{displaymath}
+
+On voit ici que Eve possède une clé pour Bob et une clé pour Alice, en interceptant tous les
+messages entre Alice et Bob, elle est capable de les déchiffrer avec la clé pour Alice et de les
+rechiffrer avec la clé pour Bob.
+
+Une solution pour éviter ce genre d'attaque et de réaliser un échange de clé authentifié.
+
+\section{RSA (Rivest, Shamir, Adleman, 1977)}
+
+\subsection{Historique}
+
+Les trois chercheurs travaillaient dans le même laboratoire, Rivest et Shamir ont passé pas mal de
+temps à chercher des fonctions mathématiques mettant en oeuvre le principe de Diffie-Hellman. A
+chaque trouvaille, ils allaient voir Adleman pour vérifier si leur fonction était sûre. Après
+quelques temps ils ont fini par en trouver une que Adleman n'a pas été capable de casser. Shamir et
+Rivest ont écrit leur article en mettant Adleman dans les auteurs, à la première position (par ordre
+alphabétique). Ce dernier refusa d'apparaître dans les auteurs, mais suite à la pression de Rivest
+et Shamir, il accepta à condition que son nom apparaisse en dernier.
+
+\subsection{Principe}
+
+\subsubsection{Cadre et notation}
+
+\begin{displaymath}
+    \begin{array}{ccccc}
+        \mathcal{P} & = & \{ \mbox{ plain msg } \} & = & \mathbb{Z}/ n\mathbb{Z} \\
+        \mathcal{C} & = & \{ \mbox{ chiffrés } \} & = & \mathbb{Z} / n\mathbb{Z} \\
+        \mathbb{K} & = & \{ \mbox{ clés } \} & = & \{ (n, p, q, a, b) : ab \equiv 1 (\mod \Phi(n))\}
+    \end{array}
+\end{displaymath}
+
+Où $n = p.q$, avec $p, q$ grands premiers. On a alors : 
+\begin{displaymath}
+    \Phi(n) = \Phi(p) . \Phi(q) = (p-1)(q-1)
+\end{displaymath}
+
+\subsection{Chiffrement}
+
+Pour $K = (n, p, q, a, b)$ :
+\begin{displaymath}
+    \left .
+    \begin{array}{ccccc}
+        e_K(x) & = & x^b \mod n & = & y \\
+        d_K(x) & = & y^a \mod n \\
+    \end{array}
+    \right \rbrace
+    \quad \mbox{ où } (x, y) \in \mathbb{Z}/n\mathbb{Z}
+\end{displaymath}
+
+Les clés, $p, q, a$ sont des clés privées et les clés $n, b$ sont publiques.
+
+\begin{thrm}
+    Le déchiffrement d'un message chiffré, donne bien le message initial.
+\end{thrm}
+
+\begin{proof}
+    Séparons deux cas :
+    \begin{itemize}
+        \item Si $x \in (\mathbb{Z}/n\mathbb{Z})^*$ :
+            \begin{displaymath}
+                \begin{array}{rcl}
+                    ab & \equiv & 1 (\mod \Phi(n)) \\
+                    ab & \equiv & t.\Phi(n) + 1 \\
+                    \\
+                    d_K(x) & \equiv & y^a \\
+                           & \equiv & (x^b)^a \\
+                           & \equiv & x^{ba} \\
+                           & \equiv & x^{t\Phi(n) + 1} (\mod n) \\
+                           & \equiv & (x^{\Phi(n)})^t . x (\mod n) \\
+                           & \equiv & 1^t x (\mod n) \\
+                           & \equiv & x (\mod n)\\
+                \end{array}
+            \end{displaymath}
+        \item Si $x \in (\mathbb{Z}/n\mathbb{Z}) \\ (\mathbb{Z}/n\mathbb{Z})^*$, on a alors : 
+            \begin{displaymath}
+                \left .
+                \begin{array}{rrcll}
+                    & x & \equiv & 0 & (\mod p) \\
+                    \Rightarrow x^{ab} & \equiv & 0 & (\mod p) \
+                \end{array}
+                \right \rbrace \Rightarrow
+                \left .
+                \begin{array}{rcll}
+                    x & \equiv & x^{ab} & (\mod p) \\
+                    x & \equiv & x^{ab} & (\mod q) \\
+                \end{array}
+                \right \rbrace
+                \Rightarrow x \equiv x^{ab} (\mod pq)
+            \end{displaymath}
+    \end{itemize}
+\end{proof}
+
+\subsubsection{Généralisation}
+
+Pour tout protocole asymétrique, il faut trois fonctions :
+\begin{enumerate}
+    \item Génération de la clé
+    \item Chiffrement
+    \item Déchiffrement
+\end{enumerate}
+
+% TP Coder RSA
+
+\subsubsection{Génération des clés}
+
+Il y a plusieurs impératifs à respecter :
+\begin{itemize}
+    \item choisir 2 grands premiers $p, q$ avec $p \neq q$
+    \item calcul $n = pq$, $\Phi(n) = (p - 1)(q - 1)$
+    \item choisir $b$ \underline{aléatoirement}, $(1 < b < \Phi(n))$ tel que $(b, \Phi(n)) = 1$
+    \item calcul $a = b^{-1} \mod n$ à l'aide de l'algorithme d'Euclide étendu
+    \item publier $(n, b)$ et garder secret $(p, q, a, \Phi(n))$
+\end{itemize}
+
+\subsection{Sécurité de RSA}
+
+On cherche à calculer $a$, pour ce faire, il faut calculer $b^{-1} \mod \Phi(n)$, mais $\Phi(n)$
+n'est pas connu. Si je sais factoriser $n = p.q$ alors je sais calculer $\Phi(n)$. RSA repose sur la
+difficulté de factoriser $n$.
+
+\begin{conj}
+    RSA est polynomialement équivalent à la factorisation.
+\end{conj}
+
+\subsection{Attaque de Wiener}
+
+Cette attaque exploite le fait que si $p$ et $q$ sont trop proches et que si l'exposant secret $a$
+est trop petit\footnote{PLus précisément, si $3a < n^{1/4}$ et $q < p < 2q$.} alors :
+\begin{displaymath}
+    \left | \frac{b}{n} - \frac{t}{a} \right | < \frac{1}{3a^2}
+\end{displaymath}
+où $ab \equiv t \Phi(n) + 1$. On se trouve dans le cadre où $\frac{t}{a}$ est un convergent du
+développement en fractions continues de $\frac{b}{n}$.
+
+\section{Sécurité sémantique et modèle de sécurité}
+
+\subsection{Type d'attaque}
+
+Jusqu'à maintenant, lorsque l'on utilisait le terme de \emph{casser} comme équivalent de
+\emph{récupérer la clé privée}. Mais il peut y avoir d'autres type d'objectifs moins ambitieux, tels
+que : 
+\begin{itemize}
+    \item Bris total
+    \item Inversion du chiffrement : retrouver l'intégralité d'un message clair à partir d'un
+        message chiffré
+    \item Sécurité sémantique : retrouver 1 bit d'information sur un message clair associé à un
+        chiffré donné, c'est une attaque intéressante du point de vue du concepteur de
+        cryptosystèmes. (RSA naïf n'est pas sémantiquement sûr : fuit du symbole de Jacobi puisque
+        le symbole de Jacobi est identique pour le message clair et pour le message chiffré)
+    \item Attaque par distingueur : avec une bonne probabilité ( > 1/2), l'adversaire est capable de
+        distinguer d'un côté les chiffrés de deux messages clairs d'une part et d'autre part, les
+        chiffrés d'un message clair et d'une chaîne aléatoire.
+\end{itemize}
+
+\subsection{Modèles de sécurité}
+
+\begin{itemize}
+    \item Attaque à clairs choisis non adaptatif : on choisit une série de messages et une fois
+        qu'ils sont choisis on ne peut plus changer
+    \item Attaque à clairs choisis adaptatif : on choisit les messages à chiffrer en fonction de la
+        sortie des messsages choisis.
+\end{itemize}
+
+\section{Les cryptosystèmes basés sur le problème du logarithme discret}
+
+On le note DLP (Discrete Log Problem).
+
+Soit $(G, \times)$ un groupe fini, $\alpha \in G$ d'ordre $n$. Soit :
+\begin{displaymath}
+    <\alpha> = \{\alpha ^ i : 0 \leq i < n \}
+\end{displaymath}
+$<\alpha>$ est un sous groupe de $G$ d'ordre $n$, et $<\alpha>$ est cyclique.p
+
+\subsection{Exemples classiques}
+
+$G = (\mathbb{Z}/p\mathbb{Z})^*$ avec $p$ premier (si $p$ est premier, alors $G$ est un corps), on
+notera alors $G = \mathbb{F}_p^*$ le sous groupe multiplicatif d'un corps fini $\mathbb{F}_p$, soit
+$\alpha$ un générateur modulo $p$ et $n = |<\alpha>| = p-1$ ou : \\
+$\alpha$ : élément d'ordre premier $q$ ($q / (p-1)$), on obtien $\alpha$ en calculant $\alpha =
+e^{(p-1)/q} \mod p$ avec $e$ un générateur de $\mathbb{F}_p^*$.
+
+% Vérifier sur un petit exemple
+
+Le DLP est alors défini comme suit :
+\begin{df}
+    Soit $(G, \times)$, $\alpha \in G$ d'ordre $n$, $\beta \in <\alpha>$, trouver l'unique $0 \leq a <
+    n$ tel que $\alpha^a = \beta \mod n$.
+
+    On le note $a = \log_{\alpha}\beta$
+\end{df}
+
+\begin{rmq}
+    DLP est \emph{difficile} alors que l'inverse (exponentiation mod $p$) est facile.
+    On en déduit que l'exponentiation est une fonction à sens unique (dans certains groupes bien
+    choisis)
+\end{rmq}
+
+\begin{rmq}
+    $\mathbb{F}_p = \mathbb{Z} / n\mathbb{Z}$, si l'on prend $\mathbb{F}_p^*$ on revient à l'exemple
+    présenté, la fonction exponentiation est donc bien à sens unique. Si au lieu de prendre
+    $(\mathbb{Z}/n\mathbb{Z}, \times)$, on prend $(\mathbb{Z}/n\mathbb{Z}, +)$, alors le DLP devient
+    : trouver $a$ tel que $a \alpha = \beta$, ce qui est trivial.
+\end{rmq}
+
+\subsubsection{El Gamal}
+
+Soit $p$ premier tel que DLP dans $\mathbb{F}_p^*$ est difficile. Soit $\alpha \in \mathbb{F}_p^*$,
+un générateur de $\mathbb{F}_p^*$. Soient : 
+\begin{displaymath}
+    \begin{array}{rcl}
+        \mathcal{P} & = & \mathbb{F}_p^* \\
+        \mathcal{C} & = & \mathbb{F}_p^* \times \mathbb{F}_p^* \\
+        \mathbb{K} & = & \{(p, \alpha, a, \beta) : \beta \equiv \alpha^a (\mod p) \} \\
+    \end{array}
+\end{displaymath}
+
+Pour $K  (p, \alpha, a; \beta)$ et pour $k \in \mathbb{Z}/(p-1)\mathbb{Z}$ choisi aléatoirement et
+gardé secret : 
+\begin{itemize}
+    \item $e_K = (y_1, y_2)$, où :
+        \begin{displaymath}
+            \left \lbrace 
+            \begin{array}{rcl}
+                y_1 & = & \alpha^k \mod p \\
+                y_2 & = & x \beta^k \mod p \\
+            \end{array}
+            \right \| 
+            (y_1, y_2) \in \mathbb{F}_p^*
+        \end{displaymath}
+    \item $d_K(y_1, y_2) = y_2 (y_1^a)^{-1} \mod p$
+\end{itemize}
+
+\subsubsection*{Principe}
+
+$x$ est masqué avec $\beta ^k$. Bob connaît $a$, il peut donc calculer $\beta^k$ à partir de
+$\alpha^k$ (transmis avec le message chiffré) et d'enlever le masque divisant $y_2$ par $\beta^k$.
+
+\begin{prop}
+    El Gamal est viable (le message déchiffré est identique au message initial).
+\end{prop}
+
+\begin{proof}
+    \begin{displaymath}
+        \begin{array}{rcll}
+            d_K(y_1, y_2) & \equiv & y_2 / (y_1^a) & \mod p \\
+                          & \equiv & (x\beta ^k) / (\alpha^k)^a & \mod p \\
+                          & \equiv & (x\beta^k) / (\alpha^a)^k & \mod p \\
+                          & \equiv & x \beta^k / \beta^k & \mod p \\
+                          & \equiv & x & \mod p \\
+        \end{array}
+    \end{displaymath}
+\end{proof}
+
+\subsubsection*{Sécurité}
+
+Si on sait calculer $a = \log_{\alpha} \beta$ alors on peut déchiffrer, alors El Gamal repose sur le
+DLP, ce qui implique que DLP dans $\mathbb{F}_p^*$ doit être difficile et donc celà suppose que $p >
+2^{1024}$ et $p-1$ n'est pas friable\footnote{Il n'admet pas une multitude de petits facteurs
+premiers.}
+
+En pratique, El Gamal repose sur CDH (Computational Diffie Hellman)\footnote{$\alpha, \alpha^b,
+\alpha^c \longrightarrow \alpha^{bc}$}, auquel est associé un problème de décision DDH (Decision
+Diffie Hellman) : soient $\alpha, \alpha^b, \alpha^c, \alpha^d \rightarrow $ décider si $d \equiv bc
+(\mod n)$.
+
+Or il existe une réduction de Turing de DLP vers CDH et de CDH vers DDH. CDH est donc DLP-calculable
+ou DLP-récursive.
+\begin{displaymath}
+    DDH \leq_T CDH \leq_T DLP
+\end{displaymath}
+
+\begin{rmq}
+    Il faut trouver de bons groupes, c'est à dire qu'ils doivent vérifier les propriétés suivantes :
+    \begin{itemize}
+        \item avoir une représentation compacte (beaucoup de groupe par bit)
+        \item loi de groupe facile à calculer 
+        \item DLP difficile
+    \end{itemize}
+\end{rmq}
+
+\begin{ex}
+    On peut par exemple prendre le groupe des points d'une courbe elliptique ou jacobiennes de
+    courbes hyperelliptiques de genre 2 (voire 3)
+\end{ex}
+
+\section{Signature numérique}
+
+\begin{tabular}{c|c} 
+    Signature traditionnelle & Signature numérique \\ \hline
+    Fait partie du message & Est indépendante mais doit être liée au message \\
+    Vérification par comparaison & Vérifiable par un algo publique \\
+    $\Rightarrow$ facile à falsifier & $\Rightarrow$ difficile à falsifier \\
+    Copie $\neq$ original & Copie $=$ original \\
+                          & $\Rightarrow$ précautions pour éviter la réutilisation \\
+\end{tabular}
+
+Un schéma de signature c'est :
+\begin{enumerate}
+    \item un algo de signature
+    \item un algo de vérification
+\end{enumerate}
+
+Il s'agit donc d'un quintuplet $(\mathcal{P}, \mathcal{A}, \mathcal{K}, \mathcal{S}, \mathcal{V})$ :
+\\
+
+
+\begin{tabular}{ccl}
+    $\mathcal{P}$ & : & ensemble fini de messages possibles \\
+    $\mathcal{A}$ & : & ensemble fini de signatures possibles \\
+    $\mathcal{K}$ & : & espace des clés \\ \\
+\end{tabular}
+
+$\forall k \in \mathcal{K}$, alors il existe un algorithme $\sig_K \in \mathcal{S}$ et un algorithme
+$\ver_K \in \mathcal{V}$ tel que :
+\begin{displaymath}
+    \ver_K(x, y) = \left \lbrace
+    \begin{array}{rc}
+        \mbox{vrai } & \mbox{ si } y = \sig_K(x) \\
+        \mbox{faux } & \mbox{ sinon }
+    \end{array}
+    \right .
+\end{displaymath}
+
+Le couple $(x, y)$ représente le message signé. Les fonctions $\ver_K$ (publique) et $\sig_K$
+(privée) sont polynomiales.
+
+$\forall x \in \mathcal{P}$, il doit être impossible de calculer $y$ tel que $\ver_K(x, y) = $ vrai,
+pour qui ne connaît pas $\sig_K$.
+
+\begin{rmq}
+    Il peut exister plusieurs signatures $y$ telles que $\ver_K(x, y) = $ vrai. Si Eve sait calculer
+    $(x, y)$ tel que $\ver_K(x, y) = $ vrai (et que $x$ n'a pas été au préalable signé par Alice),
+    alors $y$ est une contrefaçon.
+\end{rmq}
+
+\subsection{Signature RSA}
+
+Soient $n = pq$, $\mathcal{P} = \mathcal{A} = \mathbb{Z} / n\mathbb{Z}$, $\mathcal{K} = \{ (n, p, q,
+a, b) : ab \equiv 1 (\mod \Phi(n)) \}$. Pour $K \in \mathcal{K}$, on a : 
+\begin{displaymath}
+    y = \sig_K(x) = x^a \mod n 
+\end{displaymath}
+et :
+\begin{displaymath}
+    \ver_K(x, y) = \mbox{ vrai } \Leftrightarrow x \equiv y^b (\mod n)
+\end{displaymath}
+
+\begin{rmq}
+    N'importe qui peut contrefaire un message à la place d'Alice : si l'on prend un $y$ au hasard,
+    on calcule $x = e_K(y)$, alors $y = \sig_K(x)$ est une signature valide pour le message $x$.
+    Heureusement, il ne semble pas exister de méhode de contrefaçon permettant de choisir $x$.
+    Pour éviter ce genre de désagréments, on utilise une fonction de hachage.
+\end{rmq}
+
+
+\end{document}
+

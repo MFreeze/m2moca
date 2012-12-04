@@ -1,0 +1,120 @@
+% Encodage et police
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{eurosym}
+
+% Figures
+\usepackage{graphicx}
+\usepackage{subfig}
+
+% Insertion de code
+\usepackage{moreverb}
+
+% Insertion de pdf
+\usepackage{pdfpages}
+
+% Réduction des marges
+%\usepackage{fullpage}
+\usepackage[top=2.5cm, bottom=2.5cm, left=3.5cm, right=3.5cm]{geometry}
+
+% Mathématiques
+\usepackage[fleqn]{amsmath}
+\usepackage{amsthm}
+\usepackage{bbm}
+\usepackage{amssymb}
+\usepackage{stmaryrd}
+
+% Graphes
+\usepackage{tikz}
+\usepackage{pgf}
+\usetikzlibrary{arrows,automata}
+
+% Reseaux de Petri
+\usetikzlibrary{petri}
+
+% Arbres
+\usetikzlibrary{trees}
+
+% Diagramme de gantt
+\usepackage{pgfgantt}
+
+% Algorithmes
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+%\usepackage{algorithmic}
+%\usepackage{algorithmicx}
+
+% Théorèmes, Lemmes -- numérotation personnalisée
+\theoremstyle{plain}
+\newtheorem{thrm}{Théorème}[section]
+\newtheorem{lemma}{Lemme}[subsection]
+\newtheorem{corol}{Corollaire}[section]
+
+% Théorèmes, Lemmes -- numérotation classique
+\newtheorem{nthrm}{Théorème}
+\newtheorem{nlemma}{Lemme}
+\newtheorem{ncorol}{Corollaire}
+
+% Théorèmes, Lemmes -- non numérotés
+\newtheorem*{thrm*}{Théorème}
+\newtheorem*{lemma*}{Lemme}
+\newtheorem*{corol*}{Corollaire}
+
+% Définitions, Propriétés -- numérotation personnalisée
+\theoremstyle{definition}
+\newtheorem{df}{Définition}[subsection]
+\newtheorem{prop}{Propriété}[subsection]
+\newtheorem{conj}{Conjecture}[subsection]
+
+% Définitions, Propriétés -- numérotation classique
+\newtheorem{ndf}{Définition}
+\newtheorem{nprop}{Propriété}
+\newtheorem{nconj}{Conjecture}
+
+% Définitions, Propriétés -- non numérotés
+\newtheorem*{df*}{Définition}
+\newtheorem*{prop*}{Propriété}
+\newtheorem*{conj*}{Conjecture}
+
+% Autres -- numérotation personnalisée
+\theoremstyle{remark}
+\newtheorem{note}{Note}[subsubsection]
+\newtheorem{pr}{Proposition}[subsection]
+\newtheorem{rmq}{Remarque}[subsubsection]
+
+% Autres -- numérotation classique
+\newtheorem{nnote}{Note}
+\newtheorem{npr}{Proposition}
+\newtheorem{nrmq}{Remarque}
+
+% Autres -- non numérotés
+\newtheorem*{note*}{Note}
+\newtheorem*{pr*}{Proposition}
+\newtheorem*{rmq*}{Remarque}
+
+% Exemples
+\newtheorem*{ex}{Exemple}
+
+% Opérateurs mathématiques
+\DeclareMathOperator{\poly}{\textbf{poly}}
+\DeclareMathOperator{\gap}{\mbox{gap}}
+\DeclareMathOperator{\Bg}{\mbox{Big}}
+\DeclareMathOperator{\Sml}{\mbox{Sml}}
+\DeclareMathOperator{\Diff}{\mbox{Diff}}
+\DeclareMathOperator{\card}{\mbox{Card}}
+\DeclareMathOperator{\Obj}{\mbox{Obj}}
+\DeclareMathOperator{\concat}{\bullet}
+\DeclareMathOperator{\sig}{\mbox{Sig}}
+\DeclareMathOperator{\ver}{\mbox{Ver}}
+\DeclareMathOperator{\dist}{\mbox{dist}}
+
+\newcommand{\base}[4]{
+    \draw[->] (0,0) to (0, #1);
+    \draw[->] (0,0) to (#2, 0);
+    
+    \node at (0, #1+2) {#3};
+    \node at (#2 + 2, -2) {#4};
+}
+                
+    

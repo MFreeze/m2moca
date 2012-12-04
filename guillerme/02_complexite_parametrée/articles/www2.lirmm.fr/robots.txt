@@ -1,0 +1,15 @@
+# Interdit aux robots l'indexation de l'Intranet [GG 12/05/00]
+
+User-agent: *
+Disallow: /lirmm/interne/
+Disallow: /~dufayard/plasmo_draft_beta/
+Disallow: /~gambette/PhylogeneticNetworks/add.php
+Disallow: /~gambette/PhylogeneticNetworks/basket.php
+Disallow: /~gambette/PhylogeneticNetworks/bibs.php
+Disallow: /~gambette/PhylogeneticNetworks/edit.php
+Disallow: /~gambette/PhylogeneticNetworks/feedback.php
+Disallow: /~gambette/PhylogeneticNetworks/login.php
+Disallow: /~gambette/PhylogeneticNetworks/show.php
+Disallow: /~gambette/PhylogeneticNetworks/search.php
+Disallow: /~manseri/
+

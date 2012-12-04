@@ -1,0 +1,617 @@
+\documentclass[a4paper,11pt]{thesis}
+
+\input{library.tex}
+
+\begin{document}
+
+\chapter{Communication de groupes : Problème de Steiner}
+
+\section{D\'{e}finition du probl\`{e}me}
+
+Problèmatique : On dispose d'un émetteur qui veut émettre à un ensemble d'utilisateur d'un réseau.
+
+Il existe deux stratégies utilisées :
+\begin{itemize}
+    \item innondation : utilisé pour la télévision. Lorsqu'un routeur reçoit un message, il
+        retransmet sur toutes ses sorties. Au niveau du récepteur, l'information est détruite si
+        elle ne lui est pas destinée. Il existe une sauvegarde pour éviter de retransmettre trop
+        d'information
+    \item communication paire à paire : il s'agit d'une retransmission non pas en broadcast mais
+        à un utilisateur seulement ce qui implique une dupplication à la source.
+\end{itemize}
+
+Chacun des deux modèles ont des problèmes : le premier pose le problème de la saturation du réseau
+et de l'envoi de données inutiles. Le second pose le problème de la saturation à la source.
+
+Mise en place des réseaux intelligents.
+
+On cherche alors à trouver un sous réseau physique (ou logique) pour diffuser d'un émetteur vers un
+groupe $M$ de noeuds (DEERING). Dans cette problèmatique, on ne fait aucune hypothèse sur $M$.
+
+La modélisation naturelle est la suivante.
+
+\begin{df}[Problème de Steiner]
+    ~\\
+    \textbf{\underline{Données :}} $G = (V, E), M \subseteq V$ et une fonction de coût $E \mapsto
+    \mathbb{R}$\\
+    \textbf{\underline{Résultat :}} $H = (V', E)$ avec $V' \subset V, E' \subset E, M \subset V'$.
+    Il s'agit d'un sous graphe partiel connexe de $G$ qui minimise des contraintes.
+\end{df}
+
+\section{Probl\'{e}me de l'arbre de Steiner}
+
+On se restreint au problème le plus simple : les arêtes ont un poids uniforme, ce qui revient à
+minimiser la taille de $|E'|$. Celà revient à chercher un arbre de Steiner, puisque si la solution
+optimale est un cycle, alors on peut enlever une arête et garder une composante connexe, ce qui
+donne une contradiction sur l'optimalité de la solution trouvée. Un cycle ne peut donc pas être
+solution optimale.
+
+\begin{df}
+    ~\\
+    \textbf{\underline{Données :}} $G = (V, E)$, $k \in \mathbb{N},\ M \subseteq V$\\
+    \textbf{\underline{Resultat :}} Existe-t-il un arbre couvrant tous les sommets de $M$, $T = (V',
+    E')$ avec $|E'| = k$
+\end{df}
+
+Il existe des cas faciles : 
+\begin{itemize}
+    \item $|M| = 2$, on recherche alors un plus court chemin
+    \item $|M| = 3$, on cherche la meilleure étoile
+    \item $|M| = K,\ K \in \mathbb{Z}$, l'algorithme est polynomial exposant $K$
+    \item $M = V$, il s'agit d'un arbre couvrant de poids minimum
+\end{itemize}
+
+\begin{thrm}
+    Ce problème est $NP-$complet.
+\end{thrm}
+
+\begin{proof}
+    On va utiliser le problème \emph{Exact 3-Set Cover}:
+    \begin{itemize}
+        \item[] \textbf{\underline{Données :}} un ensemble de $3n$ variables $X = \{X_1, X_2, \dots,
+            X_{3n}\}$, un ensemble de triplets de $X$, $Q = \{q_1, q_2, \dots, q_n\}$
+        \item[] \textbf{\underline{Question :}} Existe-t-il $Q'$, $Q' \subset Q,\ |Q'| = n$ tel que
+            : $\bigcup_{q \in Q'} q = X$
+    \end{itemize}
+    % figure A.1
+    Dans le graphe ainsi construit, il existe un arbre de Steiner de taille $4n$ si et seulement si
+    la réponse est OUI pour l'instance de \emph{Exact 3-Set Cover}.
+
+    \begin{enumerate}
+        \item Supposons que la réponse est OUI pour l'instance de \emph{Exact 3-Set Cover} avec $Q'
+            = \{q_1', q_2', \dots, q_n'\}$ Prenons l'arbre induit par $X \cup \{s\} \cup Q'$ c'est
+            un arbre de Steiner avec $4n + 1$ sommets, donc $4n$ arêtes.
+        \item Supposons que l'arbre de Steiner a $4n$ arêtes, donc il a $4n + 1$ sommets. $3n + 1$
+            sommets sont les sommets de $M$, donc il y a $n$ de $Q = \{q_1', q_2', \dots, q_n'\}$.
+            Comme l'arbre est connexe, il couvre forcément les sommets de $X$. Il s'agit donc bien
+            d'une partition.
+    \end{enumerate}
+\end{proof}
+
+Trouver le meilleur arbre est $NP-$difficile. Il est même APX, mais il n'existe pas de schéma
+d'approximation polynomiale. La meilleure borne connueest supérieure à $1.5$.
+
+\subsection{Une heuristique simple}
+
+Cette heuristique fonctionne même si les arête sont valuées.
+
+% Décrire comme algo
+\begin{enumerate}
+    \item On construit un complet dont les sommets sont les élément de $M$
+    \item cout$(\{x_i, x_j\}) = \dist_G(x_i, x_j)$
+    \item On calcule dans $K_m$ un arbre couvrant de poids minimum.
+    \item A chaque arête de l'ACPM, on associe dans $G$ un chemin de même longueur que son coût
+    \item On supprime des arêtes pour arriver à un arbre
+\end{enumerate}
+
+\begin{thrm}
+    Cette heuristique est $2-$approchée
+\end{thrm}
+
+\begin{proof}
+    Soit $\omega^*$ le coût de l'arbre de Steiner optimal et $\omega$ le coup de la solution
+    obtenue par l'ago. Par définition, on a $\omega^* \leq \omega \leq 2 \omega^*$. Soit $T^*$
+    l'arbre optimal de poids $\omega^*$
+    %fig A.2
+    Le parcours de l'arbre a un poids égal à  deux fois le poids de $T^*$ :
+    \begin{displaymath}
+        \begin{array}{rcl}
+            2 \omega^* & = & \sum_{i=1}^{n-1}d_{T^*}(x_i, x_{i+1}) + d_{T^*}(x_n, x_1) \\
+                       & \geq & \sum_{i=1}^{n-1} g_G(x_i, x_{i+1}) \\
+                       & \geq & \omega_1 \\
+                       & \geq & \omega 
+        \end{array}
+    \end{displaymath}
+    Avec $\omega_1$ le poids de l'ACPM de $K_M$.
+\end{proof}
+
+\subsection{Autres algorithmes d'approximation}
+
+\subsubsection{Arbre $k$ restreint (qui connecte $k$ membres du groupe)}
+
+% Décrire comme algorithme
+\begin{enumerate}
+    \item Prendre le meilleur arbre $k$ restreint $T_1$ (meilleur qui minimise une fonction)
+    \item On contracte $T_1$
+    \item On continue jusqu'à résoudre de façon triviale, le problème
+\end{enumerate}
+
+Une fonction classique : le poids du meilleur ACPM dans $K_M$ qui contient $T_1$.
+
+\section{Variantes avec contraintes de diam\`{e}tre}
+
+\subsection{Pr\'{e}sentation du probl\`{e}me de Steiner-bis}
+
+\subsubsection*{Arbre de Steiner bis}
+\begin{itemize}
+    \item[] \textbf{\underline{Données :}} Soit $G, s \in V, M \subseteq V$ et $\Delta$ sous les
+        hypothèses : \begin{displaymath}
+            \forall e \in E, \quad c(e) = \mbox{delai}(e) = 1
+        \end{displaymath}
+    \item[] \textbf{\underline{Question :}} Trouver un arbre de cout minimum tel que :
+        \begin{displaymath}
+            \forall v \in M,\quad \dist(s, w) \leq \Delta
+        \end{displaymath}
+\end{itemize}
+
+\subsubsection*{Set Cover}
+
+\begin{itemize}
+    \item[] \textbf{\underline{Données :}} $X = \{x_1, \dots, x_p\}, Y = \{y_1, \dots, y_q\}, y_j
+        \subseteq X$
+    \item[] \textbf{\underline{Question :}} Trouver $Y' \subseteq Y$ de cardinalité minimale tel que
+        :\begin{displaymath}
+            \bigcup_{y \in Y'} y = X
+        \end{displaymath}
+\end{itemize}
+
+Ce problème n'a pas de garantie de performance meilleure que $\theta(\log n)$.
+
+\subsubsection*{R\'{e}duction}
+
+% fig A.3
+
+$T_h$ l'arbre donné par une heuristique : 
+\begin{displaymath}
+    Y' = \{y_j | y_j \in T_h \}
+\end{displaymath}
+Alors $Y'$ couvre $X$.
+
+On a : \begin{displaymath}
+    c(T_h) = n|Y'| + p
+\end{displaymath}
+
+Si $T^*$ est l'arbre optimal, $c(T^*) = n|Y^*| + p$, avec $Y^* = \{y_j | y_j \in T^* \}$ est une
+solution optimale pour \emph{Set Cover}.
+
+On a : \begin{displaymath}
+    \frac{c(T_h)}{c(T^*)} = \frac{n|Y'| + p}{n|Y^*| + p}
+\end{displaymath}
+
+Supposons l'existence d'un algorithme $\rho-$approché, ce qui se traduit par : 
+\begin{displaymath}
+    \frac{c(T_h)}{c(T^*)} \leq \rho
+\end{displaymath}
+
+On a alors : 
+\begin{displaymath}
+    \begin{array}{rrcl}
+        & \displaystyle \frac{n|Y'| + p}{n|Y^*| + p} & \leq & \rho \\
+        \Rightarrow & n|Y'|  + p & \leq & \rho(n |Y^*| + p) \\
+        \Rightarrow & n|Y'| & \leq & \rho(n |Y^*| + p) - p \\
+        \Rightarrow & |Y'| & \leq & \rho |Y^*| + \displaystyle \frac{p(\rho -1)}{n} \\
+        \Rightarrow & ...
+    \end{array}
+\end{displaymath}
+
+On en déduit l'existence d'un algorithme $2\rho-$approché pour \emph{Set Cover}. Ce qui est
+impossible si $P \neq NP$.
+
+\subsection{Relax de contraintes}
+
+Soit $T$ un arbre couvrant un groupe $M$, on s'intéresse à 2 paramètres :
+\begin{enumerate}
+    \item Le nombre d'arêtes $\omega(T)$
+    \item Le diamètre $d(T)$
+\end{enumerate}
+
+Un algorithme $h$ est $(\rho, \tau)-$approché si :
+\begin{displaymath}
+    \max_{G, M} \frac{d(T_h)}{d_G(M)} \leq \tau \mbox{ et } \max_{G, m}
+    \frac{\omega(T_h)}{\omega(T^{st})} \leq \rho
+\end{displaymath}
+Avec $T^{st}$ l'arbre de Steiner optimal pour le groupe $M$.
+
+On va montrer que $\forall \tau > 2, \exists \rho \in \mathbb{R}$ tel qu'une heuristique est $(\rho,
+\tau)-$approchée.
+
+\subsubsection{Quelques r\'{e}sultats n\'{e}gatifs}
+
+% Susceptible de tomber à l'examen
+Il est impossible de garantir un coût optimal et un ration pour le diamètre constant.\\
+% Parce qu'il existe des graphes pour lesquels les arbres de Steiner n'ont pas une largeur bornée
+
+Il est aussi impossible de garantir $\tau < 2$ et $\rho$ constant.\\
+
+\begin{thrm}
+    $\forall \rho > 1$ il est impossible de garantir $\tau < 1 /(\rho - 1)$
+    % Preuve en exercice
+\end{thrm}
+
+% Rattraper le cours
+
+\section{Probl\`{e}me de Steiner}
+
+% Chercher la véritable définition de l'arbre de Steiner
+\textbf{\underline{Données :}} Un graphe $G = (V, E)$, $\forall e \in E : c(e) > 0$, $\forall v
+\in V : c(v) > 0$ et $M \in V$ l'ensemble des sommets à couvrir.
+\textbf{\underline{Solution :}} Un arbre, $T = (V_T, E_T)$ tel que $T$ minimise le coût.
+
+\subsection{Probl\`{e}me de Steiner dans l'espace rectilin\'{e}aire}
+
+% fig C1
+
+Les arêtes de l'arbre de Steiner sont uniquement des lignes parallèles à l'axe des $x$ ou à celui
+des $y$
+
+Il y a des applications directes à la microélectronique.
+
+\section{Algorithmes exacts pour le probl\`{e}me de Steiner}
+
+\subsection{STEA (Steiner Tree Enumeration Algorithm)}
+
+% fig C2
+
+\subsubsection{Deo-Hakimi}
+
+Le seul moyen de trouver l'arbre de Steiner de coût minimum, il faut énumérer l'ensemble des
+arbres de couverture partielle de $G$ et chercher celui de coût minimum.
+
+On appelle $S = V \backslash M$, l'algorithme de Hakimi est le suivant :
+\begin{algorithm}
+    \caption{Deo-Hakimi}
+    \label{deohakimi}
+    \begin{algorithmic}[1]
+        \State Enumérer tous les sous-ensembles de S
+        \For{$s \in S$}
+            \State Créer le graphe engendré par $M \cup s$
+            \State Calculer le MST
+        \EndFor
+    \end{algorithmic}
+\end{algorithm}
+
+La complexité de cet algorithme est de l'ordre de $2^{|V| - |M|}. |V|^2$.
+
+\subsubsection{Lauler}
+
+L'algorithme de Lauler est le même que précédemment sauf qu'il travaille sur la fermeture métrique
+du graphe de départ.
+
+\subsection{Solution exacte avec programmation dynamique}
+
+\subsubsection{Sous optimalit\'{e}}
+
+Supposons un arbre de Steiner $T$ pour un ensemble de sommets $M$, soit $v$ un sommet de $T$ tel que
+$v$ est la racine d'un arbre $T_v$. Alors $T_v$ est un arbre de Steiner pour l'ensemble $M_v \subset
+M$.
+
+%fig C3
+% La preuve se fait par l'absurde.
+
+\subsubsection{Principe}
+
+%fig C4
+
+\subsubsection{Algorithme}
+
+% Ecrire l'algorithme
+
+\subsection{Balabrishnan et Patel}
+
+% fig C5
+
+On ajoute un noeud ficitif $a$ que l'on relie aux noeuds $n \not \in V \\ M$, chaque arête partant
+de $a$ a un coût $0$. On choisit arbitrairement un noeud $b$ que l'on relie à $a$.
+
+On cherche alors le MST dans le graphe obtenu.
+
+%fig C6
+
+On obtient un arbre de longueur $6$ mais à partir duquel, en supprimant $(ab)$ on n'obtient pas
+d'arbre couvrant les trois sommets.
+
+%fig C7
+
+L'algorithme examine alors les arbres de longueur $8$, aucun ne marche. On examine ensuite ceux de
+longueur $9$
+
+% fig C8
+
+\subsection{ILP (Integer Linear Programming)}
+
+Soit $G = (V, E)$, $c(e) > 0,\ \forall e \in E$ et $M \subseteq V$ un ensemble de terminaux à
+couvrir. Soient un ensemble de variable $X$ telles que : \begin{displaymath}
+    X_e = \left \lbrace
+    \begin{array}{rl}
+        1 & \mbox{ si } e \in T \\
+        0 & \mbox{ sinon } \\
+    \end{array}
+    \right .
+\end{displaymath}
+On notera $\delta(W)$ la coupe de $W \subseteq V$, $X(F) = \sum_{e \in F} X_e,\quad F \subseteq E$,
+on a donc $X(\delta(W))$ qui est le nombre d'arêtes de la coupe de $W$ prises dans la solution.
+
+On peut alors définir la fonction objectif : 
+\begin{displaymath}
+    \min \overline{c}^T . \overline{X} = \sum_{e \in E} c(e)X_e
+\end{displaymath}
+
+et les contraintes du système :
+\begin{displaymath}
+    X(\delta(W)) \geq 1, \qquad \forall W \subseteq V tq W \cap V_T \neq \emptyset \mbox{ et } (V \\
+    W) \cap V_T \neq \emptyset
+\end{displaymath}
+
+\section{Heuristiques}
+
+\subsection{Shortest Path Tree}
+
+A partir d'un sommet, on cherche l'ensemble des plus courts chemins on les superpose et obtient un
+graphe. Ce dernier est toujours un arbre si lorsque deux solutions ont même valeur, on fait une
+énumération par ordre alphabétique des n\oe uds.
+
+On ne peut pas approximer à l'aide d'un SPT
+
+\subsection{Takahashi Matsuyama}
+
+On partir d'un sommet quelconque de $M$ on cherche à connecter le noeud le plus proche avec un plus
+court chemin. On recalcule alors les distances de chacun des sommets. Et on recommence.
+
+Il s'agit du pendant de l'algorithme de Prime pour les arbres de Steiner. De la même manière il est
+possible d'avoir une $2-$approximation avec l'équivalent de Kruskal pour les arbres de Steiner.
+
+\subsection{Kruskal}
+
+Kruskal pour un ACPM trie les arrêtes et les ajoute à l'arbre couvrant une par une sans créer de
+cycle. On fait pareil pour Steiner, à la place des arêtes, on prends le chemin de coût minimum.
+
+\subsection{Kou-Markovski-Berman}
+
+On calcule la fermeture métrique de $M$ à l'aide des plus court chemin. On cherche alors un arbre
+dans cette fermeture, on supprime les cycles et on obtient une $2-$approximation de l'arbre de
+Steiner.
+
+\section{Algorithmes dynamiques}
+
+Considérons un groupe $M_1$ pour lequel on calcule un arbre de Steiner $T_{M_1}$ et un groupe $M_2$
+différent de $M_1$ mais proche de ce dernier, pour lequel on veut calculer $T_{M_2}$. En théorie, la
+meilleure chose à faire est de supprimer $T_{M_1}$ est de recalculer $T_{M_2}$.
+
+Les bons algorithmes dynamiques permettent de trouver un bon $T_{M_2}$ en gardant une partie de
+$T_{M_1}$.
+
+\section{Probl\`{e}mes de recouvrement sous contraintes}
+
+Tout au long de cette section, on cherche une structure connexe, plus précisément, on recherche un
+sous graphe connexe. On peut utiliser un bon petit nombre de contraintes différentes, en voici
+quelques une : \begin{itemize}
+    \item sur les degrés
+    \item sur un budget (minimiser la longueur en ne dépassant pas un certain coût)
+    \item bout à bout
+    \item sur la taille de la structure de recouvrement (on peut par exemple limiter le nombre
+        maximum de feuilles)
+    \item sur le diamètre
+    \item ..
+\end{itemize}
+
+En règle générale, quelque soit les contraintes appliquées, on a tendance à rechercher un arbre.
+
+\subsection{Contraintes sur le degr\'{e}}
+
+\subsubsection{Probl\`{e}me de recouvrement total}
+
+On le retrouve noté dans la littérature en DCMST (d... constrained minimum spanning tree).
+Soit un graphe $G =(V,E),\ c(e) > 0 \forall e \in E,\ B > 0$. On cherche la structure $T$, telle que
+$c(T)$ est minimale et $d_T(v) \leq B, \forall v \in V$.
+
+\begin{rq}
+    La solution, lorsque l'on cherche un sous graphe, est un arbre.
+\end{rq}
+
+\begin{rq}
+    La solution n'existe pas toujours.
+\end{rq}
+
+\begin{proof}
+    Si $B=2$ alors on recherche un chemin hamiltonien, qui n'existe pas toujours.
+\end{proof}
+
+Problème défini pour la première fois par Hakimi en 1968. Il l'a fait sous la forme $ILP$.
+Soit $D = d_{ij}$ la matrice des distances, soit $X = x_{ij}$ la matrice de connectivité de la
+solution : $x_{ij} = 1$ si $i$ et $j$ sont connectés dans la solution.
+
+\ipl{Problème de recouvrement total}{$\min L(X) = \sum_{i=1}^{n-1} \sum_{j=i+1}^{n} d_{ij}x_{ij}$}{\begin{itemize}
+    \item $D = d_{ij}$ la matrice des distances
+\item $X = x_{ij}$ la matrice de connectivité de la
+solution : $x_{ij} = 1$ si $i$ et $j$ sont connectés dans la solution
+\end{itemize}}{\begin{enumerate}
+    \item contrainte de degré :
+        \begin{displaymath}
+            \sum_{k = 1}^{i-1} x_{ki} + \sum_{k=i+1}^n x_{ik} \leq B \quad 0 < i < n
+        \end{displaymath}
+    \item contrainte de couverture :
+        \begin{displaymath}
+            \sum_{k=1}^{n-1}x_{ki} + \sum_{k=i+1}^n x_{ik} \geq 1
+        \end{displaymath}
+    \item contrainte pour obtenir un arbre :
+        \begin{displaymath}
+            \sum_{i=1}^{n-1} \sum_{j=i+1}^n x_{ij} = n-1
+        \end{displaymath}
+\end{enumerate}}
+
+
+%On cherche : $\min L(X) = \sum_{i=1}^{n-1} \sum_{j=i+1}^{n} d_{ij}x_{ij}$ sous les contraintes
+%suivantes : \begin{enumerate}
+%    \item contrainte de degré :
+%        \begin{displaymath}
+%            \sum_{k = 1}^{i-1} x_{ki} + \sum_{k=i+1}^n x_{ik} \leq B \quad 0 < i < n
+%        \end{displaymath}
+%    \item contrainte de couverture :
+%        \begin{displaymath}
+%            \sum_{k=1}^{n-1}x_{ki} + \sum_{k=i+1}^n x_{ik} \geq 1
+%        \end{displaymath}
+%    \item contrainte pour obtenir un arbre :
+%        \begin{displaymath}
+%            \sum_{i=1}^{n-1} \sum_{j=i+1}^n x_{ij} = n-1
+%        \end{displaymath}
+%\end{enumerate}
+
+\begin{prop}
+    Ce problème est NP-difficile
+\end{prop}
+
+\begin{proof}
+    On va réaliser une réduction de ce problème vers le problème du chemin hamiltonien
+    % fig 04/12 fig 2
+\end{proof}
+
+\subsubsection{Approximabilit\'{e}}
+
+% Article de Ravi dans la bibliographie
+Ravi se ramène à un problème bicritère qu'il exprime sous forme d'un triplet de paramètres : $(A, B,
+S)$. $A$ représente un budget (degré), $B$ représente le coût et $S$ la solution.
+
+Chaque paramètre peut prendre différentes valeurs :
+\begin{itemize}
+    \item A : \begin{enumerate}
+            \item bornes homogènes
+            \item bornes hétérogènes
+        \end{enumerate}
+    \item B : \begin{enumerate}
+            \item coût sur les sommets
+            \item coût sur les arêtes
+        \end{enumerate}
+    \item S : \begin{enumerate}
+            \item spaning tree
+            \item steiner tree
+            \item steiner forest
+        \end{enumerate}
+\end{itemize}
+
+Il s'agit donc d'un article relativement générique.
+Nous nous intéresserons au cas : (U-DEGREE, E-TOTAL-COST, SPANNING TREE).
+\begin{thrm}
+    (U-DEGREE, E-TOTAL-COST, SPANNING TREE) n'est pas $\rho-$approximable.
+\end{thrm}
+
+\begin{proof}
+    La preuve se fait à partir du chemin hamiltonien
+\end{proof}
+
+\begin{thrm}[Goemans]
+    Il existe un algo polynomial $(B+2, 1)-$approximation.
+\end{thrm}
+
+\begin{thrm}[Shing-Chi]
+    Il existe un algorithme polynomial $(B+1, 1)-$approximation.
+\end{thrm}
+
+\begin{prop}
+    Il existe une $(1, 1 + \frac{1}{B-1})-$approximation dans les graphes métriques.
+\end{prop}
+
+\begin{prop}
+    La sous-optimalité n'est pas vraie
+\end{prop}
+%fig3
+
+\subsubsection{Algorithmes exacts}
+
+En utilisant l'idée de Gabow (utilisée par Bara-Krishna pour l'arbre de Steiner) :
+\begin{enumerate}
+    \item Calculer MST
+    \item Si $d_T(v) \leq B$ alors Stop
+    \item Utiliser Gabow pour le spanning tree suivant
+    \item goto 2
+\end{enumerate}
+
+\subsubsection{Heuristiques de Boldon}
+
+\begin{enumerate}
+    \item Calculer MST
+    \item Si $d_T(v) \leq Beq$ alors Stop
+    \item $\forall v | d(v) > B$, faire une blacklist des arêtes adjacentes et pénaliser les arêtes
+    \item goto 1
+\end{enumerate}
+
+\subsubsection{Dans le cas de bornes non uniformes}
+
+\begin{thrm}[Cierlik]
+    S'il existe une solution alors :
+    \begin{displaymath}
+        \sum_{v \in V} \beta(v) \geq 2n - 2
+    \end{displaymath}
+\end{thrm}
+
+\subsubsection{Motivation : Routage multicast avec contraintes sur le degr\'e}
+
+On peut citer deux exemples :
+\begin{itemize}
+    \item le cas où un message arrivant ne peut être dupliqué que en un nombre limité de copies
+    \item dans le cas d'un routeur optique, on ne peut dupliquer la lumière qu'à l'aide de splitter
+        qui son terriblement chers, on se retrouve alors dans le cas de contraintes non uniformes
+        sur les degrés : $2$ si le routeur optique ne dispose pas de splitter, $>2$ sinon.
+\end{itemize}
+
+\subsection{Arbre de recouvrement partiel $(M \subset V)$}
+
+On cherche $\min c(T),\ d_T(v) \leq \beta(v) \quad v \in V_T$. 
+Les résultats sont similaires à ceux obtenus pour le recouvrement complet à savoir la non
+approximabilité de ce problème sans relaxation de la contrainte sur les degrés.
+
+\subsubsection{Formulation ILP}
+
+% Rattraper la partie 
+% Présenter la formulation ILP du problème
+
+\subsection{Routage avec qualit\'e de service}
+
+Supposons un graphe $G=(V,E)$ ou chaque arête possède plusieurs valeurs contenues dans un vecteur
+$w$ associé à chaque arêtes.
+% fig pouah!!
+
+Il existe plusieurs types de métriques : \begin{itemize}
+    \item additives (sur un chemin, cumul lorsque l'on passe sur plusieurs chemins, la distance, la
+        longueur, le délai sont des métriques additives)
+    \item multiplicatives (les probabilités sont des métriques multiplicatives). Dans le cas de
+        métriques multiplicatives, on peut revenir à une métriques additives (à l'aide du logarithme
+        par exemple)
+    \item concaves (la bande passante est une métrique concave, imaginons un chemin divisé en deux
+        tronçons de débit différents, le débit du chemin est donné par le minimum du débit des deux
+        tronçons)
+\end{itemize}
+
+On ne s'intéressera que aux métriques additives.
+
+Pour notre problème chaque composante de $w$ est une métrique additive, on dispose aussi d'un
+vecteur de qualité de service $L$. Alors un chemin est faisable si :
+% fig chemin_faisable
+
+On a alors deux problèmes envisageables pour le routage unicast avec qualité de service:
+\begin{enumerate}
+    \item on cherche un chemin faisable (MCP)
+    \item on cherche un chemin faisable de cout minimum (MCOP)
+\end{enumerate}
+
+\begin{prop}
+    Les deux problèmes sont NP-difficiles
+\end{prop}
+
+\subsubsection{SAMCRA}
+
+Il s'agit d'un Dijkstra modifié. Pour prendre des décisions locales, il utilise une longueur
+non-linéaire : \begin{displaymath}
+    l(P) = \max_i \frac{\w_i(l)}{L_i}
+\end{displaymath}
+% Regarder SAMCRA
+\end{document}
