@@ -1,5 +1,5 @@
 % Encodage et police
-\usepackage[utf8x]{inputenc}
+\usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[french]{babel}
 \usepackage{eurosym}
@@ -95,6 +95,8 @@
 
 % Exemples
 \newtheorem*{ex}{Exemple}
+\newtheorem*{exo}{Exercice}
+\newtheorem*{rappel}{Rappel}
 
 % Opérateurs mathématiques
 \DeclareMathOperator{\poly}{\textbf{poly}}
@@ -108,7 +110,12 @@
 \DeclareMathOperator{\sig}{\mbox{Sig}}
 \DeclareMathOperator{\ver}{\mbox{Ver}}
 \DeclareMathOperator{\dist}{\mbox{dist}}
+\DeclareMathOperator{\bw}{\mbox{branchwidth}}
+\DeclareMathOperator{\tw}{\mbox{treewidth}}
+\DeclareMathOperator{\lm}{\leq_m}
+\DeclareMathOperator{\lc}{\leq_c}
 
+\newcommand{\wqo}[0]{\emph{well-quasi-ordered}}
 \newcommand{\base}[4]{
     \draw[->] (0,0) to (0, #1);
     \draw[->] (0,0) to (#2, 0);
