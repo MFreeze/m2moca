@@ -1,4 +1,4 @@
-\documentclass[a4paper, 11pt]{report}
+\documentclass[a4paper, 11pt]{thesis}
 
 \include{library}
 
@@ -176,7 +176,7 @@ Le théorème de Courcelle et un outil de preuve d'existence d'algo FPT.
 
 Une structure $S$ est définie par :
 \begin{itemize}
-    \item un vocabulaire $\tho$ ensemble des symboles relationnels d'arité $\geq 1$
+    \item un vocabulaire $\tau$ ensemble des symboles relationnels d'arité $\geq 1$
     \item un univers $U$
 \end{itemize}
 
@@ -184,19 +184,19 @@ Une structure $S$ est définie par :
 
 % Fig ZC
 
-$\tho_1 = \{E_1\}, \quad U_1 = V \quad E_1 \subsecteq V^2$ symbole relationnel définissant les
+$\tau_1 = \{E_1\}, \quad U_1 = V \quad E_1 \subseteq V^2$ symbole relationnel définissant les
 arêtes. Pour le graphe donné, on aura alors : $U = \{a, b, c\}$ et la relation $E_1^G = \{(a,b),
 (b,c) (c,a)\}$.
 \\
 
 On peut aussi les définir comme suit :\\
-$\tho_2 = \{ VERT, EDGE, INC \}, \quad U_2 = V \cup E $. Ce qui nous donne pour le graphe précédent
+$\tau_2 = \{ VERT, EDGE, INC \}, \quad U_2 = V \cup E $. Ce qui nous donne pour le graphe précédent
 : $U_2^G = \{1,2,3,a,b,b\}$ et les relations $VERT^G = \{a, b, c\},\ EDGE^G = \{1,2,3\}$ et $(2,b) \in
 INC^G$.
 
 \subsubsection{Représentation des chaînes de caractères}
 
-$\tho_c = \{\geq\} \cup \{P_a | a \in \Sigma\}, \quad U = [n]$.
+$\tau_c = \{\geq\} \cup \{P_a | a \in \Sigma\}, \quad U = [n]$.
 
 Prenons comme exemple : $\Sigma = \{a, b\}$ et $s = ababb$, on aura alors $U_s = \{1,2,3,4,5\}$, les
 relations : $1 \geq 2 \geq 3 \geq 4 \geq 5$, $P_a^s = \{1, 3\}$ et $P_b^s = \{2, 4, 5 \}$.
@@ -219,7 +219,7 @@ $x=y, x\mathcal{R}y$ Relations d'équivalences entre les variables de l'univers
     Trouver une formule $MSOL_1$ pour exprimer la connexité d'un graphe.\\
 
     \begin{displaymath}
-        \exists X (\exist Xx \wedge \exists y \neg Xy \wedge (\forall u,v (Xu \wedge \neg Xv \Rightarrow
+        \exists X (\exists Xx \wedge \exists y \neg Xy \wedge (\forall u,v (Xu \wedge \neg Xv \Rightarrow
         \neg E uv ))) 
     \end{displaymath}
 
@@ -230,6 +230,7 @@ $x=y, x\mathcal{R}y$ Relations d'équivalences entre les variables de l'univers
 
 \begin{exo}
     Trouver une formule $MSOL_1$ pour exprimer la présence d'un vertex cover de taille $k$.
+\end{exo}
 
 \section{Largeur de branches}
 
@@ -255,6 +256,7 @@ $x=y, x\mathcal{R}y$ Relations d'équivalences entre les variables de l'univers
                 \bw = \min w(T, \mu)
             \end{displaymath}
             Par définition, si $|E(G)| \leq 1$, alors $\bw(G) = 0$
+    \end{itemize}
 \end{ex}
 
 \subsection{Propriétés basiques}
@@ -294,7 +296,7 @@ $x=y, x\mathcal{R}y$ Relations d'équivalences entre les variables de l'univers
 
 \begin{prop}
     \begin{displaymath}
-        \mbox{Si }n \geq 3$, $\bw(K_n) \leq \right \left \lceil \frac{2n}{3} \right \rceil
+        \mbox{Si }n \geq 3$, $\bw(K_n) \leq \left \lceil \frac{2n}{3} \right \rceil
     \end{displaymath}
 \end{prop}
 
@@ -316,7 +318,7 @@ $x=y, x\mathcal{R}y$ Relations d'équivalences entre les variables de l'univers
 \begin{prop}
     On a aussi :
     \begin{displaymath}
-        $\bw (K_n) \geq \left \lceil \frac{2n}{3} \right \rceil
+        \bw(K_n) \geq \left \lceil \frac{2n}{3} \right \rceil
     \end{displaymath}
 \end{prop}
 
@@ -348,9 +350,9 @@ On sait que $\tw(K_n) = n - 1$ et $\bw(K_n) = \lceil 2n/3 \rceil$ ce qui impliqu
         \item si $t$ est un sommet interne :
             \begin{displaymath}
                 % fig 1.6a
-                \forall v \in X_t$, v \in \mid(e_1) \cap \mid(e_j)
+                \forall v \in X_t, v \in \mid(e_1) \cap \mid(e_j)
             \end{displaymath}
-            avec $i \nq j$ et $i, j \in \{1, 2? 3\}$.
+            avec $i \neq j$ et $i, j \in \{1, 2? 3\}$.
     \end{itemize}
     On a alors : \begin{displaymath}
         \begin{array}{rcll}
@@ -373,7 +375,7 @@ On sait que $\tw(K_n) = n - 1$ et $\bw(K_n) = \lceil 2n/3 \rceil$ ce qui impliqu
     \begin{displaymath}
         \forall G, \quad \bw \leq \tw + 1 \leq \frac{3}{2} \bw
     \end{displaymath}
-\end{proof}
+\end{prop}
 
 \subsection{Résultat de complexité}
 
@@ -405,7 +407,7 @@ Il s'agit de graphes dessinés sans croisement d'arêtes.
     % fig 1.7
 \end{df}
 
-\subsection{SC-décomposiiton des graphes planaires}
+\subsection{SC-décomposition des graphes planaires}
 
 \begin{df}
     Soit $G$ un graphe plan. Une \underline{sphere-cut décomposition} de $G$ est une décomposition
@@ -414,8 +416,193 @@ Il s'agit de graphes dessinés sans croisement d'arêtes.
     Pour toute arête $e \in E(T)$, il existe un noose, $O_e$ de $G$ tel que $\O_e \cap V(G) =
     \mid(e)$
 \end{df}
-\subsection{Programmation Dynamique sur une SC-décomposiiton}
 
-\subsection{Généralisation}
+\subsection{Programmation Dynamique sur une SC-décomposition}
+
+%fig 05121
+
+\subsubsection{Exemple : Le cycle hamiltonien}
+
+% Idée de prog dyn pour la décomposition arborescente fig 05122
+
+On va faire de la programmation dynamique sur une SC-décomposition (on est dans les graphes
+\underline{planaire}).
+
+On sait que pour une SC-décomposition $(T, \mu)$, pour toute arête $e \in E(T)$, les sommets du
+séparateur $\mid(e)$ sont placés autour d'un noose $O_e$ dans le plan.
+
+% fig 05123
+
+A l'intérieur du noose, on a le graphe induit par $e$ dans la décomposition et à l'extérieur, on a
+le reste du graphe $G$. Comme $G$ est planaire, alors $G_e$ est aussi un graphe planaire.
+
+Cette configuration peut être abstraite. % fig 05124
+
+%Le but est de sauvegarder dans les tables les différentes configurations possibles dans la même
+%lignée que la tree décomposition : en effet les sommets appartenant au noose forment un séparateur,
+%ils peuvent donc chacun appartenir à trois ensembles.
+
+Le nombre de $4-$upplets $(X_e^1, X_e^2, X_e^3, M)$ est borné par $6^k$, il y a $3^k$ $3-$upplets
+$(X_e^1, X_e^2, X_e^3)$ et $2^k$, d'où le $6^k$.
+
+Lorsque l'on remonte dans la décomposition, on va chercher à fusionner les différentes tables,
+offrant $36^k$ entrées possibles dans la table, seulement on vient de montrer que le nombre de
+configuration maximale acceptables est $6^k$ on va donc nettoyer la table et recommencer.
+
+% fig 05125
+
+\subsection{Généralisation de cette technique}
+
+\subsubsection{Problèmes \emph{faciles}}
+
+On parle de problèmes faciles par rapport à la progreammation dynamique : 
+\begin{itemize}
+    \item ensemble indépendant
+    \item vertex cover
+    \item dominating set
+\end{itemize}
+
+On les appelle \emph{faciles}, puisque la vérification des propriétés est locale :
+pour l'ensemble indépendant, vérifier qu'ils sont indépendants se limite à vérifier pour chacun des
+sommets contenus dans l'ensemble que l'on doit vérifier.
+
+\subsubsection{Problèmes \emph{difficiles}}
+
+Quelques problèmes difficiles :
+\begin{itemize}
+    \item cycle hamiltonien
+    \item longest path
+    \item couverture connexe par sommets
+\end{itemize}
+
+Le problème hamiltonien est plus difficile puisqu'il est soumis à une contrainte globale
+(connexité), on ne peut pas tester de manière locale si un ensemble de sommets est connexe. Ce sont
+des problèmes pour lesquels la SC-décomposition dans les graphes permet d'obtenir des algos en
+exponentiel simple.
+
+\subsubsection{Couverture connexe par sommets}
+
+On doit stocker : $(X_e^0, X_e^1, P)$, $P$ représente un ensemble de taille au plus $k$ définissant
+une composante connexe. Ce nombre de composantes connexes et borné par le nombre de partitions non
+croisées à savoir le nombre catalan d'un ensemble de taille $k$:\begin{displaymath}
+    |P| \leq CN(k) \sim 4^k
+\end{displaymath}
+
+\section{Bidimensionnalité}
+
+\subsection{Introduction}
+
+Théorié introduite par Fomin, Demaine, Hajiaghayi, Thilikos (2004).
+L'objectif est d'obtenir des algorithmes paramétrés en temps
+$2^{o(k)}.n^{O(1)}$\footnote{Typiquement $2^{O(\sqrt{k})}$}, il s'agit d'un
+temps d'exécution sous exponentiel.
+
+\begin{conj}[ETH : Exponential Time Hypothesis]
+    On ne peut pas résoudre SAT en temps $2^{o(n)}$, $n$ étant le nombre de variables.
+\end{conj}
+
+\begin{rappel}
+    % fig 05126
+\end{rappel}
+
+\begin{df}[$H \leq_c G$]
+    $H$ est une contraction e $G$ si $H$ peut être obtenu à partir de $G$ en contractant des arêtes.
+\end{df}
+
+\begin{df}[$H \leq_m G$]
+    $H$ est un mineur de $G$ si $H$ peut être obtenu à partir d'un sous graphe de $G$ en contractant
+    des arêtes.
+\end{df}
+
+\begin{df}
+    Une classe de graphe $\mathcal{G}$ est fermée par mineur si : \begin{displaymath}
+        \left . \begin{array}{rcl}
+            G & \in & \mathcal{G} \\
+            G & \leq_m & G \\
+        \end{array} \right \rbrace \Rightarrow H \in \mathcal{G}
+    \end{displaymath}
+\end{df}
+
+Quelques classes fermées par mineur :
+\begin{itemize}
+    \item les graphes planaires sont fermés par mineur
+    \item les graphes de $\bw \leq K$ ou $\tw \leq k$
+    \item les forêts
+    \item les ensembles indépendants 
+    \item $\dots$
+\end{itemize}
+
+Quelques classes non fermées par mineur :
+\begin{itemize}
+    \item les forêts (la suppression d'un sommet donne une forêt)
+    \item les cliques
+    \item $\dots$
+\end{itemize}
+
+\begin{df}[well-quasi-ordered]
+    Toute séquence infine de graphe $G_1, G_2, \dots$ contient 2 graphes $G_i, G_j$ tels que $G_i
+    \lm G_j$
+\end{df}
+
+\begin{thrm}[Robertson et Seymour, 1986 - 2004]
+    Les graphes finis sont \emph{well quasi ordered} par la relation $\leq_m$.
+\end{thrm}
+
+\begin{thrm}[Kruskal, 1960]
+    Les arbres finis sont \wqo par la relation $\lm$
+\end{thrm}
+
+Ceci n'est pas vrai pour tous les graphes connexes avec la relation $\lc$ :
+% fig 05127
+% Faire la preuve sur la famille de graphe fournie (tips : la famille ne contient que des carrés, la
+% contraction d'une arête donne un triangle, puis trois possibilités pour supprimer le triangle,
+% aucune n'est concluante)
+
+\begin{corol}[Robertson et Seymour]
+    Toute classe de graphe fermée par mineurs a un ensemble \fbox{fini} de mineurs exclus minimaux.
+\end{corol}
+
+Un mineur exclu minimal est le plus petit mineur tel qu'il n'appartient plus à la la classe.
+Un cas particulier nous est donné par la classe des graphes planaires : en effet, $G$ est planaire
+si et seulement si $K_{3,3} \not \lm G$ et $K_5 \not \lm G$.
+
+\begin{proof}
+    On liste tous les graphes qui n'appartiennent pas à la classe. On a alors deux cas :
+    \begin{itemize}
+        \item si la liste est finie, il n'y a rien à prouver
+        \item si la liste est infinie, d'après Robertson et Seymour, on peut trouver deux graphes
+            $G_i, G_j$ tels que $G_i \lm G_j$, on garde alors $G_i$ et on recommence.
+    \end{itemize}
+\end{proof}
+
+\begin{df}
+    Étant donné un paramètre $P : \mathcal{G} \longrightarrow \mathbb{N}$, le problème associé est
+    le suivant : \\
+    Etant donné un graphe $G \in \mathcal{G}$, un entier fixé $k$, on se pose la question :
+    \begin{displaymath}
+        P(G) \left . \begin{array}{c}
+            = \\ \leq \\ \geq \\
+        \end{array}
+        \right .
+        K ?
+    \end{displaymath}
+\end{df}
+
+\begin{df}
+    Un paramètre $P$ est fermé par mineur (resp. par contraction) si :
+    \begin{displaymath}
+        \forall G, H \quad H \lm G\ (\mbox{resp. } H \lc G) \Rightarrow P(H) \leq P(G)
+    \end{displaymath}
+\end{df}
+
+%fig 05128
+
+% Taille de max independant set, taille min feedback vertex set, taille min connected dominating set
+% sont ils fermés par contraction, mineur, les deux ?
+
+
+
+
+
 \end{document}
 
