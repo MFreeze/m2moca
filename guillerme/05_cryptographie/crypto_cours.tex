@@ -946,6 +946,295 @@ et :
     Pour éviter ce genre de désagréments, on utilise une fonction de hachage.
 \end{rmq}
 
+\subsection{Sécurité sémantique des schémas de signature}
+
+Il existe différents modèles similaires à ceux vus précédemment :
+\begin{itemize}
+    \item sans message : Eve n'a que la clé publique $\ver_k$
+    \item à messages connus : Eve possède un ensemble de messages $\{(x_i, y_i)\}$ signés par Alice
+        avec $y_i = \sig_K(x_i)$
+    \item à messages choisis : Eve possède les signatures d'Alice pour un ensemble de $\{x_i\}$
+        qu'elle (Eve) a choisi
+\end{itemize}
+
+De la même manière il existe polusieurs objectifs :
+\begin{itemize}
+    \item Bris total : récupérer la clé privée d'Alice
+    \item Contrefaçon universelle : Eve peut signer tous les messages (avec une bonne probabilité)
+    \item Contrefaçon existentielle : Eve peut créer une paire $(x, y)$ valide \footnote{C'est
+            l'attaque la plus simple, puisque pour n'importe quel schéma de signature non
+            correctement étudié, il est possible de d'abord générer une clé et ensuite de calculer
+            le messages lui correspondant, même si le message n'a probablement aucun sens, il s'agit
+        d'un exemple de contrefaçon existentielle.}
+\end{itemize}
+
+\subsection{Les fonctions de hachage}
+
+En pratique, on ne signe pas directement un message $x$ mais $h(x)$ où $h$ est une fonction de
+hachage cryptographiquement sûre. On peut en citer quelques une : \begin{itemize}
+    \item MD4 (cassé)
+    \item MD5 (utilisé pour le stockage de mot de passe sous UNIX/LINUX)
+    \item SHA0 (cassé)
+    \item SHA1 (cassé)
+    \item SHA2
+    \item SHA3
+\end{itemize}
+
+On a donc ce qui suit :
+\begin{displaymath}
+    \begin{array}{rcccccccl}
+        \underline{\mbox{Alice}} & & & & & & & & \underline{\mbox{Bob}} \\
+                                 & x & \longrightarrow & h(x) = z & \longrightarrow_{(x,y)} & z & =
+        & h(x) & \\
+        & y & = & \sig_K(z) & & \ver_K(z,y) & = & \mbox{vrai} & \\
+    \end{array}
+\end{displaymath}
+
+La fonction de hachage doit vérifier certaines propriétés cryptographiques. Soit $h : X
+\longrightarrow Y$, $X$ étant l'ensemble des messages : $X = \{$msg$\}$ et $Y$ l'ensemble des hachés
+possibles $Y = \{$hachés$\}$ tels que $|X| > |Y|\quad (|X| > 2|Y|)$, alors $h$ doit vérifier :
+\begin{enumerate}
+    \item Résistance à la pré-image : étant donné $y \in Y$, il s'agit de trouver $x$ tel que $y =
+        h(x)$
+    \item Résistance à la seconde pré-image : étant donné $x \in X$, trouver $x' \in X$ tel que
+        $h(x') = h(x)$ avec $x \neq x'$
+    \item Résitance aux collisions : il s'agit de trouver $x, x', \ (x \neq x')$ tel que $h(x) \neq
+        h(x')$
+\end{enumerate}
+
+\subsection{Signature de El Gamal}
+
+\subsubsection{Schéma}
+
+Soient $p$ un nombre premier tel que $DLP$ est difficile dans $\mathbb{F}_b^*$, soit $\alpha$ un
+générateur de $\mathbb{F}_p^*$, $\mathcal{P} =\mathbb{F}_p^*$, $A = \mathbb{F}_p^* \times
+\mathbb{Z}/(p-1)\mathbb{Z}$, $\mathcal{K} = \{(p, \alpha, a, \beta) : \beta^a (\mod p)\}$. Pour $K =
+(p, \alpha, a, \beta)$ et $k$ aléatoire (secret) dans $\mathbb{Z}/(p-1)\mathbb{Z}$, on a :
+\begin{displaymath}
+    \begin{array}{rcl}
+        \sig_K(x) & = & (\gamma, \delta) \\
+        \gamma & = & \alpha^k \mod p \\
+        \delta & = & (x - a \gamma)k^{-1} \mod p-1
+    \end{array}
+    \quad x, \gamma \in \mathbb{F}_p^*, \ \delta \in \mathbb{Z}/(p-1)\mathbb{Z}
+\end{displaymath}
+
+On a alors :
+\begin{displaymath}
+    \ver_k(x, (\gamma, \delta)) = \mbox{vrai} \Leftrightarrow \beta^{\gamma} \gamma^{\delta} \equiv \alpha^x (\mod p)
+\end{displaymath}
+
+\begin{proof}
+    Dans le premier sens : 
+    \begin{displaymath}
+        \begin{array}{rcll}
+            \beta^\gamma . \gamma^\delta & \equiv & (\alpha^a)^\gamma (\alpha^k)^\delta & \mod p \\
+                                         & \equiv & \alpha^{a\gamma + k \delta} & \mod p \\
+                                         & \equiv & \alpha^{a\gamma + k(x - a\gamma)k^{-1}} & \mod p\\
+                                         & \equiv & \alpha^x & \mod p
+        \end{array}
+    \end{displaymath}
+
+    Pour l'autre sens, il faut supposer $\exists \gamma_1, \delta_1$ tels que $\beta^{\gamma_1}.
+    \gamma_1^{\delta_1} \equiv \alpha^x (\mod p)$ et prouver que $\gamma_1 = \gamma$ et $\delta_1 =
+    \delta$
+\end{proof}
+
+\subsubsection{Problèmes de El Gamal}
+
+La signature de El Gamal est très longue, elle est de l'ordre de deux fois la taille du message. Il
+existe donc différentes améliorations pour El Gamal.
+
+Parmis elle, l'algorithme de Schnorr qui consiste simplement à altérer le calcul de $\delta$ celui
+ci est alors égal à : \begin{displaymath}
+    \delta = (x-a\gamma)k^{-1} \mod q \quad \mbox{ avec } q | (p-1)
+\end{displaymath}
+
+On peut aussi citer DSA (Digital Signature Algorithm) qui fut le standard américain jusqu'en 2009,
+et le nouveau standard ECDSA (Elliptic Curve Digital Signature Algorithm).
+
+\section{Tests de primalité}
+
+La question que l'on se pose est : \emph{Comment trouver de grands nombres premiers?}\footnote{De
+l'ordre de 500 bits (pour une clé de 1000 bits).}
+
+% Check algorithme de génération de nombres aléatoires
+En pratique, on génère des nombres aléatoires et on teste leur primalité à l'aide d'algorithmes
+probabilistes efficaces (polynomiaux). Dans la mesure ou les algorithmes sont probabilistes, il est
+possible qu'il réponde $n$ est premier alors qu'il ne l'est pas. Pour minimiser la probabilité
+d'erreur, on fait plusieurs tests.
+
+\subsection{Combient doit on faire de tests?}
+
+Le nombre de nombres premiers inférieurs à un nombre $N$ est à peu près égal à $N / \ln N$, on a
+donc $p \leq N$ est premier avec une probabilité $1 / \ln N$ ( $2 / \ln N$ si $p$ est impair ).
+D'où le fait qu'en faisant $\ln N/2$ tests, on a de bonnes chances de tomber sur un premier.
+
+\begin{ex}
+    Pour $2^{511} \leq N < 2^{512}$, $\ln N \approx 340$, il faut donc environ $170$ tests pour
+    avoir de bonnes chances d'avoir un nombre premier.
+\end{ex}
+
+\subsubsection{Algorithme de type Monte-Carlo}
+
+Il s'agit d'un algorithme probabiliste pour un problème de décision. On considèrera la version
+suivante de l'algorithme :
+\emph{Yes biaised Monte Carlo} : la réponse \emph{yes} est toujours correcte, mais la
+réponse \emph{no} peut être fausse. On dit que ces algorithmes ont une probabilité d'erreur
+$\epsilon$ si, pour toute instance vraie (réponse \emph{yes}) l'agorithme répond \emph{non}
+avec une probabilité au plus $\epsilon$
+
+\begin{rq}
+    En pratique, les tests de primalité coûtent beaucoup trop cher, on s'intéresse donc au primal du
+    test de primalité, appelé \emph{Compositness test}.
+\end{rq}
+
+Le problème Composite est le suivant : \emph{Etant donné un entier $n > 2$, est ce que $n$ possède
+un facteur non trivial?}
+
+\begin{rq}
+    Si l'algorithme répond \emph{yes}, on ne demande pas le facteur.
+\end{rq}
+
+On introduit maintenant le test de Solovay-Strassen, il s'agit d'un \emph{yes biaised MC} avec
+$\epsilon = 1/2$, s'il répond \emph{yes} alors $n$ n'est pas premier, s'il répond \emph{no}, on
+n'est pas beaucoup plus avancé.
+
+\begin{df}
+    Soit $1 \leq x \leq p -1$, $x$ est un \underline{résidu quadratique modulo $p$} si $\exists y \in
+    \mathbb{Z}/(p-1)\mathbb{Z}$ tel que $y^2 \equiv x \mod p$. So $\not \exists y$ tel que $y^2
+    \equiv x \mod p$, alors $x$ est un \underline{non résidu quadratique modulo $p$}.
+\end{df}
+
+\begin{thrm}
+    \label[thrm1]
+    Soit $p>2$ premier, $x$ est résidu quadratique modulo $p$ ssi : \begin{displaymath}
+        x^{(p-1) / 2} \equiv 1 (\mod p)
+    \end{displaymath}
+\end{thrm}
+
+\begin{proof}
+    Dans un premier temps on a :
+    \begin{displaymath}
+        \begin{array}{rcll}
+            x^{(p-1) / 2} & \equiv & (y^2)^{(p-1) / 2} & \mod p \\
+                          & \equiv & y^{p-1} & \mod p \\
+                          & \equiv & 1 & \mod p \quad \mbox{d'après le petit théorème de Fermat}\\
+        \end{array}
+    \end{displaymath}
+
+    Dans l'autre sens, considérons $g$ un générateur de $(\mathbb{Z}/(p-1)\mathbb{Z})^*$, on peut
+    alors écrire : \begin{displaymath}
+        \exists i \ (0 < i \leq p-1)\ : \quad x \equiv g^i\ (\mod p)
+    \end{displaymath}
+    On a donc : \begin{displaymath}
+        x^{(p-1) / 2} \equiv g^{i(p-1)/2}
+    \end{displaymath}
+    Or par définition du générateur : \begin{displaymath}
+        \begin{array}{rrcl}
+            & \ord(g) & = & p-1 \\
+            \Rightarrow & (p-1) & | & i(p-1)/2 \\
+            \Rightarrow & i & & \mbox{est pair} \\
+        \end{array}
+    \end{displaymath}
+\end{proof}
+
+\begin{df}[Symbole de Legendre]
+    Soit $p$ premier : 
+    \begin{displaymath}
+        \left ( \frac{a}{p} \right ) = \left \lbrace \begin{array}{rcl}
+            0 & \mbox{si} & a|p \\
+            1 & \mbox{si} & a \mbox{ est un résidu quadratique modulo }p \\
+            -1 & \mbox{si} & a \mbox{ est un non résidu quadratique modulo }p \\
+        \end{array} \right .
+    \end{displaymath}
+\end{df}
+
+\begin{thrm}
+    Soir $p > 2$ un nombre premier, alors : \begin{displaymath}
+        \forall a \legendre{a}{p} = a^{(p-1)/2} \mod p
+    \end{displaymath}
+\end{thrm}
+
+\begin{proof}
+    Si $a | p,\ a^{(p-1) / 2} \equiv 0 (\mod p)$, si $a$ est un résidu quadratique modulo $p$, alors
+    d'après le théorème~\ref{thrm1}, $a^{(p-1) / 2} \equiv 1 (\mod p)$.
+
+    Si $a$ est un non résidu quadratique modulo $p$ : \begin{displaymath}
+        a^{(p-1)/2} \equiv -1 (\mod p) \Leftarrow a^{p-1} \equiv 1 (\mod p)
+    \end{displaymath}
+\end{proof}
+
+\begin{df}[Symbole de Jacobi]
+    Soit $n$ un entier positif impair :
+    \begin{displaymath}
+        n = \Pi_{i = 1}^k p_i^{e_i} (p_i \mbox{ premier })
+    \end{displaymath}
+    Soit $a \geq 0$, alors : \begin{displaymath}
+        \legendre{a}{n} = \Pi_{i=1}^k \legendre{a}{p_i}^{e_i}
+    \end{displaymath}
+\end{df}
+
+\begin{ex}
+    Calculer $\legendre{208}{525}$ : \\
+    \begin{displaymath}
+        525 = 5 . 105 = 5^2 . 21 = 3 . 5^2 . 7 
+    \end{displaymath}
+    On a donc :\begin{displaymath}
+        \legendre{208}{525} = \legendre{208}{3} \legendre{208}{5}^2 \legendre{208}{7} = 
+        \legendre{1}{3} \legendre{3}{5}^2 \legendre{5}{7} = 1 . (-1)^2 . (-1) = -1
+    \end{displaymath}
+\end{ex}
+
+\begin{prop}
+    Soit $ > 2$ impair: \begin{itemize}
+        \item Si $n$ est premier, alors \begin{displaymath}
+                \legendre{a}{n} = a^{(n-1)/2} \mod p \quad \forall a
+            \end{displaymath}
+        \item Si $n$ n'est pas premier, et si $\exists a$ tels que :
+            \begin{displaymath}
+                \legendre{a}{n} = a^{(n-1)/2} \mod n
+            \end{displaymath}
+            $n$ est alors appelé un \underline{pseudo premier d'Euler} en base $a$
+    \end{itemize}
+\end{prop}
+
+\begin{ex}
+    \begin{displaymath}
+        \legendre{10}{91} = -1 = 10^{45} \mod 91
+    \end{displaymath}
+    $91$ est un pseudo premier d'Euler en base $10$
+\end{ex}
+
+\begin{rq}
+    On peut montrer que $\forall n$ impair, non premier, $n$ est un pseudo premier d'Euler pour au
+    plus la moitié des entiers $1 \leq a \leq n-1$
+\end{rq}
+
+On peut maintenant définir l'algorithme de Solovay-Strassen:
+\begin{algorithm}[h!]
+    \caption{Algorithme de Solovay-Strasse}
+    \label{solovay-strassen}
+    \begin{algorithmic}[1]
+        \Function{Test}{$n>2$}
+            \State Choisir $1 \leq a \leq n-1$ de manière aléatoire
+            \If{$\displaystyle \legendre{a}{n} \equiv a^{(n-1)/2} (\mod n)$}
+                \State \Return $n$ n'a pas de facteurs
+            \Else
+                \State \Return $n$ a un facteur
+            \EndIf
+        \EndFunction
+    \end{algorithmic}
+\end{algorithm}
+            
+\begin{prop}
+    L'algorihtme de SS est de type \emph{yes biaised MC} avec une probabilité d'erreur au plus
+    $1/2$.
+\end{prop}
+
+\subsection{Complexité : Est ce que SS est polynomial?}
+
+On sait que calculer $a^{(p-1) / 2} \mod p$ est polynomial.
 
 \end{document}
 
