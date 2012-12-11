@@ -8,14 +8,14 @@
 
 \section*{Algorithmes}
 
-\subsection{Notations}
+\subsection*{Notations}
 \begin{itemize}
 	\item $e = $ nombre de contraintes
 	\item $r = $ arité max
 	\item $d = $ domaine max
 \end{itemize}
 
-\subsection{BT}
+\subsection*{BT}
 \begin{algorithm}[!h]
 \caption{BT}
 \label{BT}
@@ -36,7 +36,7 @@
 \end{algorithmic}
 \end{algorithm}
 
-\subsection{AC3}
+\subsection*{AC3}
 \begin{algorithm}[!h]
 \caption{AC3}
 \label{AC3}
@@ -84,7 +84,7 @@
 \end{algorithm}
 
 
-\subsection{AC2001}
+\subsection*{AC2001}
 
 \begin{algorithm}[!h]
 \caption{revise(AC2001)}
@@ -93,7 +93,7 @@
 \REQUIRE $X_i$ une variable, $C_{ij}$ une contrainte portant sur $X_i,X_j$
 \STATE $CHANGE \leftarrow false$
 \FOR {each $V_i \in D(X_i)$ and last$(V_i,C_{ij}) \notin D(X_j)$}
-\STATE $V_j \leftarrow$ next(last($V_i, C_{ij} $))
+\STATE $V_j \leftarrow$ next(last($V_i, C_{ij} $),$D(X_j)$)
 \WHILE {$\neg C_{ij}(V_i,V_j)$ and $V_{ij} \neq nil$}
 \STATE $V_j \leftarrow$ next($V_j, D(X_j)$)
 \ENDWHILE
