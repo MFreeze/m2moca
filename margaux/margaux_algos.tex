@@ -1,0 +1,203 @@
+\documentclass[a4paper,)11pt]{article}
+\usepackage[francais]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{algorithm,algorithmic}
+
+
+\begin{document}
+
+\section*{Algorithmes}
+\begin{algorithm}[!h]
+\caption{BT}
+\label{BT}
+\begin{algorithmic}[1]
+\REQUIRE N un réseau, I une instanciation
+\IF {$|I|=n$}
+	\STATE return true
+\ENDIF
+\STATE choose a variable $X_i \notin I$
+\FOR {each $V_i \in D(X_i)$ }
+	\IF {$I \cup \{(X_i=V_i)\}$ locally consistent }
+		\IF {BT($N$, $I \cup \{X_i=V_i\}$ }
+		\STATE return true
+\ENDIF
+\ENDIF
+\ENDFOR
+\STATE return false
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[!h]
+\caption{AC3}
+\label{AC3}
+\begin{algorithmic}
+\REQUIRE Q
+\STATE $Q \leftarrow \{(X_i=C_{ij} | C_{ij} \in \cal{C} \}$
+\WHILE {$Q \neq \emptyset$}
+\STATE select and delete $(X_i,C_{ij})$ from Q
+\IF {revise$(X_i,C_{ij})$}
+\IF  {D$(X_i) = \emptyset$}
+\STATE return false
+\ELSE
+\STATE $Q \leftarrow Q \cup \{(X_k,C_{ki}) | k \neq j\}$
+\ENDIF
+\ENDIF
+\ENDWHILE
+\STATE return true
+\end{algorithmic}
+\end{algorithm}
+
+
+\begin{algorithm}[!h]
+\caption{revise3}
+\label{R3}
+\begin{algorithmic}
+\REQUIRE $X_i$ une variable, $C_{ij}$ contrainte portant sur $X_i,X_j$
+\STATE $CHANGE \leftarrow false$
+\FOR {each $V_i \in D(X_i)$}
+\STATE $V_j \leftarrow first(D(X_j))$
+\WHILE {$\neg C_{ij}(V_i,V_j)$ and $V_{ij} \neq nil$}
+\STATE $V_j \leftarrow$ next($V_j, D(X_j)$)
+\ENDWHILE
+\IF {$V_j = nil$}
+\STATE remove $V_i$ from $D(X_i)$
+\STATE $CHANGE \leftarrow true$
+\ENDIF
+\ENDFOR
+\STATE return CHANGE
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[!h]
+\caption{revise(AC2001)}
+\label{R2001}
+\begin{algorithmic}
+\REQUIRE $X_i$ une variable, $C_{ij}$ l'ensemble de contraintes portant sur $X_i$
+\STATE $CHANGE \leftarrow false$
+\FOR {each $V_i \in D(X_i)$ and LAST$(X_i,C_{ij}) \notin D(X_j)$}
+\STATE $V_j \leftarrow$ next(last($X_i, C_{ij} $))
+\WHILE {$\neg C_{ij}(V_i,V_j)$ and $V_{ij} \neq nil$}
+\STATE $V_j \leftarrow$ next($V_j, D(X_j)$)
+\ENDWHILE
+\IF {$V_j = nil$}
+\STATE remove $V_i$ from $D(X_i)$
+\STATE $CHANGE \leftarrow true$
+\ENDIF
+\ENDFOR
+\STATE return CHANGE
+\end{algorithmic}
+\end{algorithm}
+
+
+\begin{algorithm}[!h]
+\caption{FC}
+\label{FC}
+\begin{algorithmic}
+\REQUIRE N,I
+\IF {$|I|=n$}
+\STATE return true
+\ELSE
+\STATE choose $X_i \notin I$
+\FOR {each $V_i \in D(X_i)$}
+\STATE $D(X_i) \leftarrow \{V_i\}$
+\STATE supprimer tous les $(X_j,V_j)$ qui sont inconsistant ac $I \cup \{X_i=V_i\},\ \forall X_j \notin I$
+\IF {$\not\exists j,\ D(X_j)= \emptyset$}
+\IF {FC($N,I \cup \{X_i,V_i\}$)}
+\STATE return true
+\ENDIF
+\ENDIF
+\STATE restaurer les valeurs des $X_j$ supprimés à cause de l'instanciation $X_i=V_i$
+\ENDFOR
+\ENDIF
+\STATE renvoyer faux
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[!h]
+\caption{MAC}
+\label{MAC}
+\begin{algorithmic}
+\REQUIRE N
+\IF {AC(N)}
+\IF {N is ground}
+\STATE return true
+\ENDIF
+\STATE choose $X_i$ non fixé dans N et $V_i \in D(X_i)$
+\IF {MAC($N \cup \{X_i=V_i\}$)}
+\STATE return true
+\ENDIF
+\IF {MAC($N \cup \{X_i \neq V_i\}$)}
+\STATE return true
+\ENDIF
+\ENDIF
+\STATE return false
+\end{algorithmic}
+\end{algorithm}
+
+\section*{Borne consistance}
+
+Soit $N=(X;D;\cal{C})$ et $c \in \cal{C}$.\\
+Un "support aux bornes" $\tau$ sur $c$ est un tuple qui satisfait $c$ et pour tout $X_i \in X(c)$, $\min_D (X_i) \le \tau [X_i] \le \max_D (X_i)$.\\
+Un contrainte $c$ est BC ssi $\forall X_i \in X(c),\ (X_i,\min_D(X_i))$ et $(X_i, \max_D(X_i))$ ont un support aux bornes.\\
+N est BC ssi toutes les contraintes sont BC.
+
+\section*{Singleton Arc Consistancy}
+Un réseau $N=(X;D;\cal{C})$ et $c \in \cal{C}$ est SAC ssi $\forall X_i \in X,\ \forall V_i \in D(X_i)$, le sous réseau $N_{|X_i=V_i}$ admet une fermeture arc consistante.\\
+
+\section*{max Restricted Path Consistancy}
+Une valeur $V_i \in D(X_i)$ est maxRPC ssi $\forall C_{ij} \in \cal{C},\ \exists V_j \in D(X_j)$ tq $\forall X_k \in X,\ \exists V_k \in D(X_k)$ tq $C_{ik}(V_i,V_k)$ et $C_{jk}8V_j,V_k)$.\\
+Un réseau est maxRPC ssi $\forall X_i \in X,\ \forall V_I \in D)X_i),\ V_i$ est maxRPC.
+
+\section*{Contraintes globales}
+
+\subsection*{All-diff}
+\begin{algorithm}[!h]
+\caption{AC\_alldiff}
+\label{AC_ad}
+\begin{algorithmic}
+\STATE A partir d'une contrainte \textbf{all-diff}, générer un graphe biparti variables-valeurs
+\STATE Calculer un couplage maximum du graphe
+\IF {une variable est libre}
+\STATE Pas de solution
+\ENDIF
+\STATE Appliquer une décomposition D\&M à partir du couplage obtenu
+\STATE Calculer les composantes fortement connexes de la partie "bien-valuée"
+\STATE Éliminer les valeurs des domaines correspondant aux arêtes relient les parties "bien-valuée" et "sur-valuée" et aux arêtes reliant deux composantes fortement connexes
+\end{algorithmic}
+\end{algorithm}
+
+\subsection*{Modélisation d'une gcc par un flot}
+
+\paragraph{Sommets:}
+Les valeurs, les variables, une source $s$ et un puits $p$.
+
+\paragraph{Arcs:}
+\begin{itemize}
+\item Un arc $(u,v)$ de chaque valeur $u$ vers sa variable $v$; $l(u,v)=0,\ c(u,v)=1$
+\item Un arc $(s,u)$ de $s$ vers chaque valeur $u$; $l(s,u)=l_u,\ c(s,u)=c_u$
+\item Un arc $(v,t)$ de chaque variable $v$ vers $t$; $l(v,t)=0,\ c(t,v)=1$
+\item Un arc $(t,s)$ tel que $l(t,s)=0,\ c(t,s)= \infty$
+\end{itemize}
+
+\subsection*{Algorithme d'AC d'une gcc}
+\begin{algorithm}[!h]
+\caption{AC\_gcc}
+\label{AC_gcc}
+\begin{algorithmic}
+\STATE Générer le graphe $G=gcc(C)$ à partir d'une gcc C
+\STATE Initialiser chaque arc $(u,v)$ avec un flot $f(u,v)=0$
+\STATE Calculer un flot maximum $f$ par une augmentation de chemin dans le graphe résiduel $R(f,G)$
+\IF {f est infaisable}
+\STATE C n'est pas consistante
+\ENDIF
+\STATE Calculer les composantes fortement connexes de $R(f,G)$
+\STATE Eliminer toute valeur correspondant à un arc $(u,v)$ de $R(f,G)$ tel que:
+\begin{itemize}
+\item f(u,v)=0
+\item $u$ et $v$ n'appartiennent pas à la même composante fortement connexe de $R(f,G)$
+\end{itemize}
+\end{algorithmic}
+\end{algorithm}
+
+
+\end{document}
