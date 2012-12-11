@@ -72,7 +72,7 @@
 \caption{revise(AC2001)}
 \label{R2001}
 \begin{algorithmic}
-\REQUIRE $X_i$ une variable, $C_{ij}$ l'ensemble de contraintes portant sur $X_i$
+\REQUIRE $X_i$ une variable, $C_{ij}$ une contrainte portant sur $X_i,X_j$
 \STATE $CHANGE \leftarrow false$
 \FOR {each $V_i \in D(X_i)$ and LAST$(X_i,C_{ij}) \notin D(X_j)$}
 \STATE $V_j \leftarrow$ next(last($X_i, C_{ij} $))
