@@ -19,4 +19,6 @@
 \contentsline {subsubsection}{Le sommet $v$ appartient \IeC {\`a} $X_t^1$}{20}
 \contentsline {subsubsection}{$v$ appartient \IeC {\`a} $X_t^2$}{20}
 \contentsline {subsubsection}{Le sac fusion}{21}
-\contentsline {chapter}{\numberline {6.}Conclusion}{22}
+\contentsline {section}{\numberline {5.3}Description de l'algorithme}{21}
+\contentsline {subsection}{\numberline {5.3.1}Validit\IeC {\'e} de l'algorithme}{21}
+\contentsline {chapter}{\numberline {6.}Conclusion}{23}
