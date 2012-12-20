@@ -59,6 +59,7 @@
 #define BEG 0
 #define DH  1
 #define RSA 2
+#define ELGAMAL 3
 
 #define BUFF_SIZE 100
 /* 
@@ -76,15 +77,22 @@ int main(int argc, char **argv) {
     int body_position = 1, i;
 
     long long int dhgen = 0, dhkey = 0, dhord = 0, dhrand = 0, dhalrand = 0, dhalkey = 0, dhalice = 0, dhbob = 0;
-    long long int rsaaprime = 0, rsabprime = 0, rsan = 0, rsaphi = 0, rsapubkey = 0, rsakey = 0;
+    long long int rsaaprime = 0, rsabprime = 0, rsan = 0, rsaphi = 0;
+    rsapbk_t rsapbkey;
+    rsapvk_t rsaprivkey;
 
-    char *title[] = {"Asymetric Cryptography", "Diffie Hellman", "Rivest Shamir Adlemar"};
-    char *goptions[] = {GFUNC, "F1  : Diffie Hellman", "F2  : RSA", "F12 : Quit", NULL};
+    memset(&rsapbkey, 0, sizeof(rsapbkey));
+    memset(&rsaprivkey, 0, sizeof(rsaprivkey));
+
+    char *title[] = {"Asymetric Cryptography", "Diffie Hellman", "Rivest Shamir Adlemar", "El Gamal"};
+    char *goptions[] = {GFUNC, "F1  : Diffie Hellman", "F2  : RSA", "F3  : El Gamal", "F12 : Quit", NULL};
 
     char *dhoptions[] = {PFUNC, "g : Generator definition", "o : Order definition", "r : Pick random number",
         "k : Key generation", "p : Print Informations", NULL};
     char *rsaoptions[] = {PFUNC, "k : Key generation", "e : Encrypt", "d : Decrypt",
         "n : Prime numbers definition", "p : print", NULL};
+    char *egamaloptions[] = {PFUNC, "g : Generator definition", "o : Order definition", "k : Private Key generation",
+        "K : Public Key generation", "d : Decryption", "e : Encrytion", "p : Print Informations", NULL};
     //}}}
 
     //{{{ Launching ncurse
@@ -156,11 +164,24 @@ int main(int argc, char **argv) {
                 wrefresh(pers_func.win);
                 break;
                 //}}}
+                //{{{ F3
+            case KEY_F(3):
+                // ElGamal
+                cur_window = ELGAMAL;
+                printOptions(pers_func, egamaloptions);
+                werase(header.win);                
+                defineBorder(header);
+                mvwprintw(header.win, ceil((header.height)/2), 
+                        ceil((header.width - sizeof(title[cur_window]))/2), title[cur_window]);
+                wrefresh(header.win);
+                wrefresh(pers_func.win);
+                break;
+                //}}}
                 // {{{ d
             case 'd':
                 // {{{ RSA
                 if (cur_window == RSA) {
-                    if (!rsakey) {
+                    if (!rsaprivkey.privkey) {
                         printWindow(body, &body_position, "[Error] You have to generate a couple of key before.");
                         wrefresh(body.win);
                     }
@@ -176,7 +197,7 @@ int main(int argc, char **argv) {
                                     "[Error] Invalid encrypted int, it must be lesser or equal to Euler totient function")) ||
                                 (rsadecrypt <= 1 && printWindow(body, &body_position,
                                     "[Error] Invalid int : must be greater than 1")));
-                        initmess = rsaDecrypt(rsakey, rsan, rsadecrypt);
+                        initmess = rsaDecrypt(rsaprivkey, rsadecrypt);
                         destroy_win(ask);
                         sprintf(buffer, "[RSA] Initial Message : %lld", initmess);
                         printWindow(body, &body_position, buffer);
@@ -192,7 +213,7 @@ int main(int argc, char **argv) {
             case 'e':
                 // {{{ RSA
                 if (cur_window == RSA) {
-                    if (!rsakey) {
+                    if (!rsapbkey.pubkey) {
                         printWindow(body, &body_position, "[Error] You have to generate keys before.");
                         wrefresh(body.win);
                         continue;
@@ -211,7 +232,7 @@ int main(int argc, char **argv) {
                     destroy_win(ask);
                     noecho();
                     DRAW_BORDER;
-                    encrypt = rsaEncrypt(rsapubkey, rsan, initmess);
+                    encrypt = rsaEncrypt(rsapbkey, initmess);
                     sprintf(buffer, "[RSA] Encryption of %lld : %lld.", initmess, encrypt);
                     printWindow(body, &body_position, buffer);
                     REFRESH;
@@ -321,12 +342,12 @@ int main(int argc, char **argv) {
                     // {{{ RSA
                 } else if (cur_window == RSA) {
                     if (rsaphi) {
-                        rsaKeyGen(rsan, rsaphi, &rsakey, &rsapubkey);
-                        sprintf(buffer, "[RSA] Key computed : %lld", rsakey);
+                        rsaKeyGen(rsan, rsaaprime, rsabprime, rsaphi, &rsaprivkey, &rsapbkey);
+                        sprintf(buffer, "[RSA] Key computed : %lld", rsaprivkey.privkey);
                         printWindow(body, &body_position, buffer);
-                        sprintf(buffer, "[RSA] Public key computed : %lld", rsapubkey);
+                        sprintf(buffer, "[RSA] Public key computed : %lld", rsapbkey.pubkey);
                         printWindow(body, &body_position, buffer);
-                        sprintf(buffer, "[RSA] Key product : %lld", (rsapubkey * rsakey) % rsaphi);
+                        sprintf(buffer, "[RSA] Key product : %lld", (rsapbkey.pubkey * rsaprivkey.privkey) % rsaphi);
                         printWindow(body, &body_position, buffer);
                         wrefresh(body.win);
                     }
@@ -400,11 +421,11 @@ int main(int argc, char **argv) {
                     rsaphi ? sprintf(buffer, "[RSA] phi(n) : %lld.", rsaphi) : buffer == strcpy(buffer,
                             "[RSA] phi(n) not yet computed.");
                     printWindow(body, &body_position, buffer);
-                    rsapubkey ? sprintf(buffer, "[RSA] Public Key : %lld.", rsapubkey) : buffer == strcpy(buffer,
-                            "[RSA] Public Key not yet defined.");
+                    rsapbkey.pubkey ? sprintf(buffer, "[RSA] Public Key (n, k) : (%lld, %lld).", rsapbkey.n,
+                            rsapbkey.pubkey) : buffer == strcpy(buffer, "[RSA] Public Key not yet defined.");
                     printWindow(body, &body_position, buffer);
-                    rsakey ? sprintf(buffer, "[RSA] Key : %lld.", rsakey) : buffer == strcpy(buffer,
-                            "[RSA] Key not yet defined.");
+                    rsaprivkey.privkey ? sprintf(buffer, "[RSA] Key (p, q, k): (%lld, %lld, %lld).", rsaprivkey.p,
+                            rsaprivkey.q, rsaprivkey.privkey) : buffer == strcpy(buffer, "[RSA] Key not yet defined.");
                     printWindow(body, &body_position, buffer);
                 }
                 //}}}

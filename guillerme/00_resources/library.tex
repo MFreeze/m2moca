@@ -1,104 +1,130 @@
-% Encodage et police
+% {{{ PACKAGES
+% {{{ ENCODAGE ET POLICE
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[french]{babel}
 \usepackage{eurosym}
+% }}}
 
-% Figures
+% {{{ FIGURES
 \usepackage{graphicx}
 \usepackage{subfig}
+% }}}
 
-% Insertion de code
+% {{{ INSERTION DE CODE
 \usepackage{moreverb}
+% }}}
 
-% Insertion de pdf
+% {{{ INSERTION DE PDF
 \usepackage{pdfpages}
+% }}}
 
-% Réduction des marges
+% {{{ RÉDUCTION DES MARGES
 %\usepackage{fullpage}
 \usepackage[top=2.5cm, bottom=2.5cm, left=3.5cm, right=3.5cm]{geometry}
+% }}}
 
-% Mathématiques
+% {{{ MATHÉMATIQUES
 \usepackage[fleqn]{amsmath}
 \usepackage{amsthm}
 \usepackage{bbm}
 \usepackage{amssymb}
 \usepackage{stmaryrd}
+% }}}
 
-% Graphes
+% {{{ GRAPHES
 \usepackage{tikz}
 \usepackage{pgf}
-\usetikzlibrary{arrows,automata}
+\usetikzlibrary{arrows,automata,shapes}
+% }}}
 
-% Reseaux de Petri
+% {{{ RESEAUX DE pETRI
 \usetikzlibrary{petri}
+% }}}
 
-% Arbres
+% {{{ ARBRES
 \usetikzlibrary{trees}
+% }}}
 
-% Diagramme de gantt
+% {{{ DIAGRAMME DE GANTT
 \usepackage{pgfgantt}
+% }}}
 
-% Algorithmes
+% {{{ ALGORITHMES
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode}
 %\usepackage{algorithmic}
 %\usepackage{algorithmicx}
+% }}}
+% }}}
 
-% Théorèmes, Lemmes -- numérotation personnalisée
+% {{{ NEWTHEOREM
+% {{{ THÉORÈMES, lEMMES -- NUMÉROTATION PERSONNALISÉE
 \theoremstyle{plain}
 \newtheorem{thrm}{Théorème}[section]
 \newtheorem{lemma}{Lemme}[subsection]
 \newtheorem{corol}{Corollaire}[section]
+% }}}
 
-% Théorèmes, Lemmes -- numérotation classique
+% {{{ THÉORÈMES, lEMMES -- NUMÉROTATION CLASSIQUE
 \newtheorem{nthrm}{Théorème}
 \newtheorem{nlemma}{Lemme}
 \newtheorem{ncorol}{Corollaire}
+\newtheorem{npb}{Problème}
+% }}}
 
-% Théorèmes, Lemmes -- non numérotés
+% {{{ THÉORÈMES, lEMMES -- NON NUMÉROTÉS
 \newtheorem*{thrm*}{Théorème}
 \newtheorem*{lemma*}{Lemme}
 \newtheorem*{corol*}{Corollaire}
+% }}}
 
-% Définitions, Propriétés -- numérotation personnalisée
+% {{{ DÉFINITIONS, pROPRIÉTÉS -- NUMÉROTATION PERSONNALISÉE
 \theoremstyle{definition}
 \newtheorem{df}{Définition}[subsection]
 \newtheorem{prop}{Propriété}[subsection]
 \newtheorem{conj}{Conjecture}[subsection]
+% }}}
 
-% Définitions, Propriétés -- numérotation classique
+% {{{ DÉFINITIONS, pROPRIÉTÉS -- NUMÉROTATION CLASSIQUE
 \newtheorem{ndf}{Définition}
 \newtheorem{nprop}{Propriété}
 \newtheorem{nconj}{Conjecture}
+% }}}
 
-% Définitions, Propriétés -- non numérotés
+% {{{ DÉFINITIONS, pROPRIÉTÉS -- NON NUMÉROTÉS
 \newtheorem*{df*}{Définition}
 \newtheorem*{prop*}{Propriété}
 \newtheorem*{conj*}{Conjecture}
+% }}}
 
-% Autres -- numérotation personnalisée
+% {{{ AUTRES -- NUMÉROTATION PERSONNALISÉE
 \theoremstyle{remark}
 \newtheorem{note}{Note}[subsubsection]
 \newtheorem{pr}{Proposition}[subsection]
 \newtheorem{rmq}{Remarque}[subsubsection]
+% }}}
 
-% Autres -- numérotation classique
+% {{{ AUTRES -- NUMÉROTATION CLASSIQUE
 \newtheorem{nnote}{Note}
 \newtheorem{npr}{Proposition}
 \newtheorem{nrmq}{Remarque}
+% }}}
 
-% Autres -- non numérotés
+% {{{ AUTRES -- NON NUMÉROTÉS
 \newtheorem*{note*}{Note}
 \newtheorem*{pr*}{Proposition}
 \newtheorem*{rmq*}{Remarque}
+% }}}
 
-% Exemples
+% {{{ EXEMPLES
 \newtheorem*{ex}{Exemple}
 \newtheorem*{exo}{Exercice}
 \newtheorem*{rappel}{Rappel}
+% }}}
+% }}}
 
-% Opérateurs mathématiques
+% {{{ OPÉRATEURS MATHÉMATIQUES
 \DeclareMathOperator{\poly}{\textbf{poly}}
 \DeclareMathOperator{\gap}{\mbox{gap}}
 \DeclareMathOperator{\Bg}{\mbox{Big}}
@@ -111,14 +137,154 @@
 \DeclareMathOperator{\ver}{\mbox{Ver}}
 \DeclareMathOperator{\dist}{\mbox{dist}}
 \DeclareMathOperator{\bw}{\mbox{branchwidth}}
-\DeclareMathOperator{\tw}{\mbox{treewidth}}
+\DeclareMathOperator{\tw}{\mbox{tw}}
 \DeclareMathOperator{\lm}{\leq_m}
 \DeclareMathOperator{\lc}{\leq_c}
 \DeclareMathOperator{\lex}{\mbox{lex}}
 \DeclareMathOperator{\ord}{\mbox{ord}}
+% }}}
 
+% {{{ MACCROS
+% {{{ MACROS DIVERSES
+\newcommand{\npc}{$NP-$complet}
+\newcommand{\npd}{$NP-$difficile}
+\newcommand{\la}{largeur arborescente}
 \newcommand{\legendre}[2]{\left ( \frac{#1}{#2} \right )}
 \newcommand{\wqo}[0]{\emph{well-quasi-ordered}}
+\newcommand{\Tau}[0]{\mathcal{T} = (T, \{X_t : t \in T\})}
+\newcommand{\Taug}[0]{\mathcal{T}_G = (T, \{X_t : t \in T\})}
+\newcommand{\Taustar}[0]{\mathcal{T}^* = (T, \{X_t : t \in T\})}
+\newcommand{\Taugstar}[0]{\mathcal{T}_G^* = (T, \{X_t : t \in T\})}
+\newcommand{\pdsol}[1]{(X_{#1}^0, X_{#1}^1, X_{#1}^2, M_{#1})}
+% }}}
+                
+% {{{ NOM DE PROBLEMES
+\newcommand{\hcycle}{\textsc{HAMILTONIAN CYCLE} }
+\newcommand{\vcover}{\textsc{VERTEX COVER} }
+\newcommand{\twidth}{\textsc{TREE WIDTH} }
+\newcommand{\wiset}{\textsc{WEIGHTED INDEPENDANT SET} }
+\newcommand{\fvset}{\textsc{FEEDBACK VERTEX SET} }
+% }}}
+
+% {{{ MISE EN PAGE
+\newcommand{\dfpb}[3]{
+    ~\\
+    \hrule
+    \begin{npb}
+        #1
+        \begin{itemize}
+            \itemindent 10mm
+            \item[\textbf{Données :}] #2
+            \item[\textbf{Question :}] #3
+        \end{itemize}
+    \end{npb}
+    \hrule
+    ~\\
+}
+% }}}
+
+% }}}
+    
+% {{{ TIKZ
+%%% {{{ STYLE
+\tikzstyle{edge}=[
+	-,
+	draw=black
+]
+
+\tikzstyle{sized}=[
+    minimum width=9mm
+]
+
+\tikzstyle{tvertex}=[
+	node distance=15mm,
+    inner sep = 1mm
+]
+
+\tikzstyle{tvert}=[
+	node distance=5mm,
+    inner sep=1mm
+]
+
+\tikzstyle{tmvertex}=[
+    tvertex,
+    sized
+]
+
+\tikzstyle{tmvert}=[
+    tvert,
+    sized
+]
+
+\tikzstyle{mvertex}=[
+    tmvertex,
+	circle,
+	draw=black,
+	fill=black!50
+]
+
+\tikzstyle{mvert}=[
+    tmvert,
+	circle,
+	draw=black,
+	fill=black!50
+]
+
+\tikzstyle{vertex}=[
+    tvertex,
+	circle,
+	draw=black,
+	fill=black!50
+]
+
+\tikzstyle{vert}=[
+    tvert,
+	circle,
+	draw=black,
+	fill=black!50
+]
+
+\tikzstyle{treedec}=[
+	vertex,
+	node distance=15mm,
+	draw=red,
+	fill=red!50
+]
+
+\tikzstyle{treeedge}=[
+	edge,
+	draw=red
+]
+
+\tikzstyle{giedge}=[
+	edge,
+	draw=blue
+]
+
+\tikzstyle{bounding}=[
+	thick, %ultra
+	%dash pattern=on 1mm off 1mm,
+	densely dotted,
+	fill=blue!10,
+	draw=blue!70
+]
+
+\tikzstyle{patate}=[
+    rounded corners=5pt,
+    draw=black,
+    fill=black!50,
+    text width=12mm,
+    text centered
+]
+
+\tikzstyle{patatoid}=[
+    ellipse,
+    node distance=10mm,
+    draw=black
+]
+%%% }}}
+
+% {{{ DESSINS
 \newcommand{\base}[4]{
     \draw[->] (0,0) to (0, #1);
     \draw[->] (0,0) to (#2, 0);
@@ -126,5 +292,6 @@
     \node at (0, #1+2) {#3};
     \node at (#2 + 2, -2) {#4};
 }
-                
-    
+% }}}
+%}}}
+

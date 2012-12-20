@@ -30,13 +30,17 @@ groupe $M$ de noeuds (DEERING). Dans cette problèmatique, on ne fait aucune hyp
 
 La modélisation naturelle est la suivante.
 
-\begin{df}[Problème de Steiner]
-    ~\\
-    \textbf{\underline{Données :}} $G = (V, E), M \subseteq V$ et une fonction de coût $E \mapsto
-    \mathbb{R}$\\
-    \textbf{\underline{Résultat :}} $H = (V', E)$ avec $V' \subset V, E' \subset E, M \subset V'$.
-    Il s'agit d'un sous graphe partiel connexe de $G$ qui minimise des contraintes.
-\end{df}
+%\begin{df}[Problème de Steiner]
+%    ~\\
+%    \textbf{\underline{Données :}} $G = (V, E), M \subseteq V$ et une fonction de coût $E \mapsto
+%    \mathbb{R}$\\
+%    \textbf{\underline{Résultat :}} $H = (V', E)$ avec $V' \subset V, E' \subset E, M \subset V'$.
+%    Il s'agit d'un sous graphe partiel connexe de $G$ qui minimise des contraintes.
+%\end{df}
+
+\dfpb{Problème de Steiner}{$G = (V, E), M \subseteq V$ et une fonction de coût $E \mapsto
+\mathbb{R}$}{$H = (V', E)$ avec $V' \subset V, E' \subset E, M \subset V'$.  Il s'agit d'un sous
+graphe partiel connexe de $G$ qui minimise des contraintes.}
 
 \section{Probl\'{e}me de l'arbre de Steiner}
 
@@ -430,11 +434,11 @@ Problème défini pour la première fois par Hakimi en 1968. Il l'a fait sous la
 Soit $D = d_{ij}$ la matrice des distances, soit $X = x_{ij}$ la matrice de connectivité de la
 solution : $x_{ij} = 1$ si $i$ et $j$ sont connectés dans la solution.
 
-\ipl{Problème de recouvrement total}{$\min L(X) = \sum_{i=1}^{n-1} \sum_{j=i+1}^{n} d_{ij}x_{ij}$}{\begin{itemize}
+Problème de recouvrement total $\min L(X) = \sum_{i=1}^{n-1} \sum_{j=i+1}^{n} d_{ij}x_{ij}$ \begin{itemize}
     \item $D = d_{ij}$ la matrice des distances
 \item $X = x_{ij}$ la matrice de connectivité de la
 solution : $x_{ij} = 1$ si $i$ et $j$ sont connectés dans la solution
-\end{itemize}}{\begin{enumerate}
+\end{itemize}{\begin{enumerate}
     \item contrainte de degré :
         \begin{displaymath}
             \sum_{k = 1}^{i-1} x_{ki} + \sum_{k=i+1}^n x_{ik} \leq B \quad 0 < i < n
@@ -447,7 +451,7 @@ solution : $x_{ij} = 1$ si $i$ et $j$ sont connectés dans la solution
         \begin{displaymath}
             \sum_{i=1}^{n-1} \sum_{j=i+1}^n x_{ij} = n-1
         \end{displaymath}
-\end{enumerate}}
+\end{enumerate}
 
 
 %On cherche : $\min L(X) = \sum_{i=1}^{n-1} \sum_{j=i+1}^{n} d_{ij}x_{ij}$ sous les contraintes
@@ -611,7 +615,7 @@ On a alors deux problèmes envisageables pour le routage unicast avec qualité d
 
 Il s'agit d'un Dijkstra modifié. Pour prendre des décisions locales, il utilise une longueur
 non-linéaire : \begin{displaymath}
-    l(P) = \max_i \frac{\w_i(l)}{L_i}
+    l(P) = \max_i \frac{w_i(l)}{L_i}
 \end{displaymath}
 % Regarder SAMCRA
 \end{document}

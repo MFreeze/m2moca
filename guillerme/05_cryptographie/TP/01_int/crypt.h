@@ -25,6 +25,32 @@
 
 #define CRYPT_H
 
+typedef struct rsaprivkey {
+    long long int p;
+    long long int q;
+    long long int privkey;
+} rsapvk_t;
+
+typedef struct rsapubkey {
+    long long int n;
+    long long int pubkey;
+} rsapbk_t;
+
+typedef struct elgamalpublickey {
+    long long int h;
+    long long int g;
+    long long int ord;
+} egpbk_t;
+
+typedef struct elgamalprivatekey {
+    long long int privkey;
+    long long int ord;
+} egpvk_t;
+
+typedef struct elgamalcryptedmes {
+    long long int y1;
+    long long int y2;
+} egcm_t;
 /* 
  * ===  FUNCTION  ======================================================================
  *         Name:  euclide
@@ -63,9 +89,11 @@ long long int extEuclideInv(
  * =====================================================================================
  */
 void rsaKeyGen(long long int n,
+        long long int p,
+        long long int q,
 		long long int phi,
-		long long int *key,
-		long long int *pubkey);
+		rsapvk_t *key,
+		rsapbk_t *pubkey);
 
 /* 
  * ===  FUNCTION  ======================================================================
@@ -73,7 +101,7 @@ void rsaKeyGen(long long int n,
  *  Description:  Encrypt a number with RSA
  * =====================================================================================
  */
-long long int rsaEncrypt(long long int k, long long int n, long long int a);
+long long int rsaEncrypt(rsapbk_t k, long long int a);
 
 /* 
  * ===  FUNCTION  ======================================================================
@@ -81,7 +109,7 @@ long long int rsaEncrypt(long long int k, long long int n, long long int a);
  *  Description:  Decrypt a number with RSA
  * =====================================================================================
  */
-long long int rsaDecrypt(long long int k, long long int n, long long int a);
+long long int rsaDecrypt(rsapvk_t k, long long int a);
 
 /* 
  * ===  FUNCTION  ======================================================================
@@ -116,4 +144,39 @@ long long int findPrime(long long int max_bound);
  */
 long long int fastExp(long long int a, long long int b, long long int n);
 
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  elGamalPrivKeyGen
+ *  Description:  Generate a private key for el gamal
+ * =====================================================================================
+ */
+void elGamalPrivKeyGen(egpvk_t *key, long long int ord);
+
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  elGamalPubKeyGen
+ *  Description:  Generate a public key for elGamal
+ * =====================================================================================
+ */
+void elGamalPubKeyGen(egpbk_t *k, long long int ord, long long int gen, 
+        egpvk_t privkey);
+
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  elGamalEncrypt
+ *  Description:  
+ * =====================================================================================
+ */
+void elGamalEncrypt(egcm_t *mess, egpbk_t pubkey, long long int m);
+
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  elGamalDecrypt
+ *  Description:  
+ * =====================================================================================
+ */
+long long int elGamalDecrypt(egcm_t mess, egpvk_t privkey);
 #endif

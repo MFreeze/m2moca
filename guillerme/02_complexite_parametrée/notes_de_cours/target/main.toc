@@ -1,0 +1,22 @@
+\select@language {french}
+\contentsline {chapter}{\numberline {1.}Autour de \textsc {HAMILTONIAN CYCLE} }{3}
+\contentsline {section}{\numberline {1.1}$NP-$compl\IeC {\'e}tude}{3}
+\contentsline {section}{\numberline {1.2}Bornes de noyau}{7}
+\contentsline {chapter}{\numberline {2.}Des algorithmes polynomiaux dans les arbres}{8}
+\contentsline {chapter}{\numberline {3.}Les d\IeC {\'e}compositions arborescentes d'un graphe}{9}
+\contentsline {section}{\numberline {3.1}Principe}{9}
+\contentsline {section}{\numberline {3.2}Largeur arborescente}{11}
+\contentsline {chapter}{\numberline {4.}La programmation dynamique sur les d\IeC {\'e}compositions arborescentes}{13}
+\contentsline {section}{\numberline {4.1}D\IeC {\'e}composition arborescente simple}{13}
+\contentsline {section}{\numberline {4.2}Le principe des algorithmes de programmation dynamique sur une d\IeC {\'e}compostion arborescente}{13}
+\contentsline {chapter}{\numberline {5.}R\IeC {\'e}solution de \textsc {HAMILTONIAN CYCLE} avec une largeur arborescente born\IeC {\'e}e}{15}
+\contentsline {section}{\numberline {5.1}Repr\IeC {\'e}sentation des solutions partielles}{15}
+\contentsline {section}{\numberline {5.2}La r\IeC {\'e}solution du probl\IeC {\`e}me}{19}
+\contentsline {subsection}{\numberline {5.2.1}Le sac feuille}{19}
+\contentsline {subsection}{\numberline {5.2.2}Le sac suppression}{19}
+\contentsline {subsection}{\numberline {5.2.3}Le sac ajout}{19}
+\contentsline {subsubsection}{Le sommet $v$ appartient \IeC {\`a} $X_t^0$}{20}
+\contentsline {subsubsection}{Le sommet $v$ appartient \IeC {\`a} $X_t^1$}{20}
+\contentsline {subsubsection}{$v$ appartient \IeC {\`a} $X_t^2$}{20}
+\contentsline {subsubsection}{Le sac fusion}{21}
+\contentsline {chapter}{\numberline {6.}Conclusion}{22}

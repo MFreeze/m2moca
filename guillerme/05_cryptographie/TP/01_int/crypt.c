@@ -122,20 +122,10 @@ int eratosthene(long long int a) {
  * =====================================================================================
  */
 int isGenerator(long long int ord, long long int a) {
-    long long int *table = (long long int *)calloc(ord+1, sizeof(long long int));
-    long long int tmp = a;
     int i;
-    while(!table[tmp]) {
-        table[tmp]++;
-        tmp = (tmp * a) % (ord + 1);
-    }
-    for (i=1; i<ord+1; i++)
-        if (!table[i]) {
-            free(table);
+    for (i=2; i<ord+1; i++)
+        if (fastExp(a, i, ord + 1) == a)
             return 0;
-        }
-
-    free(table);
 	return 1;
 }		/* -----  end of function isGenerator  ----- */
 
@@ -161,15 +151,21 @@ long long int findPrime(long long int max) {
  * =====================================================================================
  */
 void rsaKeyGen(long long int n,
+        long long int p,
+        long long int q,
 		long long int phi,
-		long long int *key,
-		long long int *pubkey) {
+		rsapvk_t *key,
+		rsapbk_t *pubkey) {
     do {
-        *pubkey = findPrime(phi);
-    } while (euclide(phi, *pubkey) != 1);
+        pubkey->pubkey = findPrime(phi);
+    } while (euclide(phi, pubkey->pubkey) != 1);
+    pubkey->n = n;
+
     long long int a;
-    extEuclideInv(*pubkey, phi, &a);
-    *key = a % phi;
+    extEuclideInv(pubkey->pubkey, phi, &a);
+    key->privkey = a % phi;
+    key->p = p;
+    key->q  = q;
 }		/* -----  end of function rsaKeyGen  ----- */
 
 
@@ -179,8 +175,8 @@ void rsaKeyGen(long long int n,
  *  Description:  
  * =====================================================================================
  */
-long long int rsaEncrypt(long long int k, long long int n, long long int m) {
-	return fastExp(m, k, n);
+long long int rsaEncrypt(rsapbk_t pubkey, long long int m) {
+	return fastExp(m, pubkey.pubkey, pubkey.n);
 }		/* -----  end of function rsaEncrypt  ----- */
 
 /* 
@@ -189,19 +185,79 @@ long long int rsaEncrypt(long long int k, long long int n, long long int m) {
  *  Description:  
  * =====================================================================================
  */
-long long int rsaDecrypt(long long int k, long long int n, long long int m) {
-	return fastExp(m, k, n);
+long long int rsaDecrypt(rsapvk_t k, long long int m) {
+	return fastExp(m, k.privkey, k.p * k.q);
 }		/* -----  end of function rsaDecrypt  ----- */
 
 /* 
  * ===  FUNCTION  ======================================================================
  *         Name:  fastExp
- *  Description:  
+ *  Description:  Computes a^b % n
  * =====================================================================================
  */
 long long int fastExp(long long int a, long long int b, long long int n) {
     if (b == 1)
         return a%n;
+    if (b == 0) 
+        return 1;
     return (b%2 ? (a * fastExp((a*a)%n, (b-1)/2, n))%n : (fastExp((a*a)%n, b/2, n))%n);
 }		/* -----  end of function fastExp  ----- */
 
+
+/*-----------------------------------------------------------------------------
+ *  El Gamal functions
+ *-----------------------------------------------------------------------------*/
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  elGamalPrivKeyGen
+ *  Description:  
+ * =====================================================================================
+ */
+void elGamalPrivKeyGen(egpvk_t *key, long long int ord) {
+    key->privkey = 1 + rand() % ord;
+    key->ord = ord;
+}		/* -----  end of function elGamalKeyGen  ----- */
+
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  elGamalPubKeyGen
+ *  Description:  
+ * =====================================================================================
+ */
+void elGamalPubKeyGen(egpbk_t *k, long long int ord, long long int gen,
+        egpvk_t privkey) {
+    k->h = fastExp(gen, privkey.privkey, ord + 1);
+    k->g = gen;
+    k->ord = ord +1;
+}		/* -----  end of function elGamalPubKeyGen  ----- */
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  elGamalEncrypt
+ *  Description:  
+ * =====================================================================================
+ */
+void elGamalEncrypt(egcm_t *mess, egpbk_t pubkey, long long int m) {
+    long long int ephemerialkey;
+    do {
+        ephemerialkey = 1 + (rand() % (pubkey.ord - 1));
+    } while (euclide(ephemerialkey, pubkey.ord) != 1);
+    mess->y1 = fastExp(pubkey.g, ephemerialkey, pubkey.ord + 1);
+    mess->y2 = fastExp(pubkey.h, ephemerialkey, pubkey.ord + 1) * m % (pubkey.ord +1);
+}
+
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  elGamalDecrypt
+ *  Description:  
+ * =====================================================================================
+ */
+long long int elGamalDecrypt(egcm_t mess, egpvk_t privkey) {
+    long long int inter = fastExp(mess.y1, privkey.privkey, privkey.ord + 1);
+    long long int inve;
+    extEuclideInv(inter, privkey.ord + 1, &inve);
+    return ((mess.y2 * inve) % (privkey.ord + 1));
+}
