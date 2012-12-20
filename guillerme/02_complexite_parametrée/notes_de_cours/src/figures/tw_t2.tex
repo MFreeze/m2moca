@@ -1,0 +1,9 @@
+\node[patate] (1) {$1$ $2$};
+\node[patate, below=of 1] (2) {$2$ $3$ $4$};
+\node[patate, below left=of 2] (3) {$3$ $4$ $5$};
+\node[patate, below right=of 2] (4) {$4$ $6$ $7$};
+
+\draw[edge] (1) to (2);
+\draw[edge] (2) to (3);
+\draw[edge] (2) to (4);
+

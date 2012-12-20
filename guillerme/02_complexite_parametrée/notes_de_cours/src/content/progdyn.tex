@@ -1,0 +1,105 @@
+% {{{ PROG DYN
+Les algorithmes polynomiaux utilisant la programmation dynamique pour des graphes présentant une
+largeur arborescente bornée suivent en général le même schéma présenté à la
+section~\ref{pd_scheme}. Pour la plupart, ils s'appuient sur le principe de décomposition
+arborescente simple que nous allons présenter.
+
+%% {{{ DECOMPOSITION ARBORESCENTE SIMPLE
+\section{Décomposition arborescente simple}
+
+\begin{ndf}
+    Étant donné un graphe $G=(V,E)$, une décomposition arborescente enracinée $\mathcal{T}_G = (T,
+    \{X_t : t \in T\})$ de $G$ est dite simple si chacun des sacs $t$ de $T$ appartient à l'un des
+    quatres types suivant :
+    \begin{enumerate}
+        \item Feuille : $t$ n'admet aucun fils et $|X_t| = 1$ (figure~\ref{fig:feuille})
+        \item Ajout : $t$ admet un fils unique $t_f$ tel que $X_t = X_{t_f} \cup v$ avec $v \not
+            \in X_{t_f}$ (figure~\ref{fig:ajout})
+        \item Suppression : $t$ admet un fils unique $t_f$ tel que $X_{t_f} = X_t \cup v$ avec $v
+            \not \in X_t$ (figure~\ref{fig:suppression}) 
+        \item Fusion : $t$ admet deux fils $t_{f1}$ et $t_{f2}$ tels que $X_t = X_{t_{f1}} =
+            X_{t_{f2}}$ (figure~\ref{fig:fusion})
+    \end{enumerate}
+\end{ndf}
+
+\begin{nthrm}
+    Étant donnée une décomposition arborescente enracinée $\Taug$ d'un graphe $G=(V,E)$ de largeur
+    $k$ comportant $c$ sacs, il est possible de se ramener à une décompostion arborescente simple de
+    largeur $k$ comportant $k^2.c$ sacs en temps $O(kn)$.
+\end{nthrm}
+
+\begin{proof}
+    Le principe de la transformation est décrit par Kloks~\cite{klo94}
+\end{proof}
+
+Réduire une décomposition arborescente à une décomposition arborescente simple n'apporte pas, en
+général, de nouvelles possibilité d'un point de vue algorithmique, mais cela permet de
+considérablement simplifier la construction d'algorithmes.
+
+% {{{ FIGURES
+\begin{figure}
+    \begin{center}
+        \hfill
+        \subfloat[Feuille]{\label{fig:feuille}
+            \begin{tikzpicture}
+                \input{src/figures/pd_feuille.tex}
+            \end{tikzpicture}
+        }
+        \hfill
+        \subfloat[Ajout]{\label{fig:ajout}
+            \begin{tikzpicture}
+                \input{src/figures/pd_ajout.tex}
+            \end{tikzpicture}
+        }
+        \hfill
+        \subfloat[Suppression]{\label{fig:suppression}
+            \begin{tikzpicture}
+                \input{src/figures/pd_suppression.tex}
+            \end{tikzpicture}
+        }
+        \hfill
+        \subfloat[Fusion]{\label{fig:fusion}
+            \begin{tikzpicture}
+                \input{src/figures/pd_fusion.tex}
+            \end{tikzpicture}
+        }
+        \hfill
+        \caption{Les différents types de sac d'une décomposition arborescente simple}
+        \label{type_sac}
+    \end{center}
+\end{figure}
+        
+% }}}
+
+%% }}}
+
+%% {{{ PRINCIPE
+\section{Le principe des algorithmes de programmation dynamique sur une décompostion arborescente}
+\label{pd_scheme}
+
+Une grande partie des algorithmes FPT se basant sur la largeur arborescente d'un graphe $G = (V, E)$
+fonctionnent de la manière suivante :
+\begin{enumerate}
+    \item Dans un premier temps, l'algorithme se charge de trouver une décomposition arborescente
+        enracinée $\Taug$ de largeur bornée par une constante\footnote{Il n'est pas nécessaire que
+        cette valeur soit optimale.}
+    \item Une décomposition arborescente simple $\Taugstar$ est calculée à partir de $\mathcal{T}_G$
+    \item Puis vient l'algorithme programmation dynamique travaillant sur $\mathcal{T}_G^*$, il
+        travaille des feuilles vers la racine. Il calcule pour chaque sac, l'ensemble des solutions
+        réalisables à partir des solutions réalisables de son ou ses fils. Ces dernières sont
+        stockées dans des tables, chaque sac possédant sa table contenant les solutions partielles
+        qui lui sont propres.  Ainsi, la table de la racine de l'arbre contiennent
+        les solutions au problème étudié
+\end{enumerate}
+
+% TODO : il existe des algorithmes qui calculent en temps poly si une décomposition de taille k
+% existe
+
+On se rend compte, alors, de l'intérêt de la décomposition arborescente simple, puisqu'elle limite
+le nombre de n\oe uds différents, elle limite donc le nombre de cas à traiter, comme nous allons le
+voir.
+
+% TODO: étoffer cette partie
+%% }}}
+% }}}
+

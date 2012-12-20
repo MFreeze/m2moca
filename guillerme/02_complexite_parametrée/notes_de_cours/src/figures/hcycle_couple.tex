@@ -1,0 +1,43 @@
+\node[tmvert] (u0) {$U$};
+\node[tmvert, below=of u0] (tp0) {};
+\node[tmvert, below=of tp0] (v0) {$V$};
+\node[tmvert, below=of v0] (tp1) {};
+\node[tmvert, below=of tp1] (w0) {$W$};
+
+\node[mvert, right=of u0] (u1) {$u_1$};
+\node[mvert, right=of v0] (v1) {$v_1$};
+
+\foreach \x [evaluate=\x as \y using (\x - 1)] in {2,...,6} {
+    \node[mvert, right=of u\y] (u\x)  {$u_{\x}$};
+    \node[mvert, right=of v\y] (v\x)  {$v_{\x}$};
+    \draw[edge] (u\y) to (u\x);
+    \draw[edge] (v\y) to (v\x);
+}
+
+\draw[edge] (u1) to (v3);
+\draw[edge] (v1) to (u3);
+\draw[edge] (u4) to (v6);
+\draw[edge] (v4) to (u6);
+
+\node[mvert, right=of u6] (uw1) {$u'_{1}$};
+\node[tmvert, below=of v6] (t2) {};
+\node[tmvert, below=of t2] (t3) {};
+\node[mvert, right=of t3] (w1) {$w_1$};
+
+\draw[edge] (u6) to (uw1);
+
+\foreach \x [evaluate=\x as \y using (\x - 1)] in {2,...,6} {
+    \node[mvert, right=of uw\y] (uw\x)  {$u'_{\x}$};
+    \node[mvert, right=of w\y] (w\x)  {$w_{\x}$};
+    \draw[edge] (uw\y) to (uw\x);
+    \draw[edge] (w\y) to (w\x);
+}
+
+\draw[edge] (uw1) to (w3);
+\draw[edge] (w1) to (uw3);
+\draw[edge] (uw4) to (w6);
+\draw[edge] (w4) to (uw6);
+
+\draw[edge] (u0) to (u1);
+\draw[edge] (v0) to (v1);
+\draw[edge] (w0) to (w1);

@@ -1,0 +1,9 @@
+TITRE
+=====
+
+* res/                  external ressources (png,jpg,...)
+* src/
+	-> content/         main content
+	-> bib.bib          bibliography
+	-> main.tex         main file (including all others)
+	-> 

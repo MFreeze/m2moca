@@ -1,0 +1,46 @@
+\foreach \x/\y in {2/1, 4/2, 6/3, 8/4}{
+    \node[tvert] at (0, \x) (\y) {$\y$};
+}
+
+\foreach \w in {0.5}{
+    \pgfmathparse{int(30*\w + 1)}
+    \node[vert] at (\pgfmathresult/2, 12) (s1) {$s_1$};
+    \node[vert] at (\pgfmathresult/2, -2) (s2) {$s_2$};
+
+    \node[tvert] at (-2, 0) (t1s2) {};
+    \node[tvert] at (\pgfmathresult + 2, 0) (t2s2) {};
+    \node[tvert] at (-2, 10) (t1s1) {};
+    \node[tvert] at (\pgfmathresult + 2, 10) (t2s1) {};
+
+    \draw[edge] (s1) to[out=180, in=90] (t1s1);
+    \draw[edge] (s1) to[out=0, in=90] (t2s1);
+    \draw[edge] (s2) to[out=180, in=270] (t1s2);
+    \draw[edge] (s2) to[out=0, in=270] (t2s2);
+
+    \foreach \x/\y/\col in {1/2/violet, 2/3/green, 3/4/blue, 4/2/orange}{
+        \node[tvert] at (\pgfmathresult, 2*\x) (f\x) {$\x$};
+        \draw[edge] (\x) to (f\x);
+
+        \foreach \z in {1, 2, 3, 4, 5, 6}{
+            \pgfmathparse{(\x-1)*(7*\w)+1 + (\z*\w)}
+            \node[tmp,\col] at (\pgfmathresult, \x*2) (\x\y\z) {$\bullet$};
+            \node[tmp,\col] at (\pgfmathresult, \y*2) (\y\x\z) {$\bullet$};
+        }
+
+        \foreach \z [evaluate=\z as \a using \z -1] in {2, 3, 4, 5, 6}{
+            \draw[edge, \col] (\x\y\a) to (\x\y\z);
+            \draw[edge, \col] (\y\x\a) to (\y\x\z);
+        }
+
+        \draw[edge,\col] (\x\y1) to (\y\x3);
+        \draw[edge,\col] (\x\y3) to (\y\x1);
+        \draw[edge,\col] (\x\y4) to (\y\x6);
+        \draw[edge,\col] (\x\y6) to (\y\x4);
+
+        \draw[edge] (\x) to[out=180, in=270] (t1s1);
+        \draw[edge] (\x) to[out=180, in=90] (t1s2);
+        \draw[edge] (f\x) to[out=0, in=270] (t2s1);
+        \draw[edge] (f\x) to[out=0, in=90] (t2s2);
+    }
+}
+

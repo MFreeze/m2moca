@@ -1,0 +1,18 @@
+\node[vertex] (1) {$1$};
+\node[vertex, below=of 1] (2) {$2$};
+\node[vertex, below left=of 2] (3) {$3$};
+\node[vertex, below right=of 2] (4) {$4$};
+\node[vertex, below right=of 3] (5) {$5$};
+\node[vertex, above right=of 4] (6) {$6$};
+\node[vertex, below right=of 4] (7) {$7$};
+
+\draw[edge] (1) to (2);
+\draw[edge] (2) to (3);
+\draw[edge] (2) to (4);
+\draw[edge] (3) to (4);
+\draw[edge] (3) to (5);
+\draw[edge] (4) to (5);
+
+\draw[edge] (4) to (6);
+\draw[edge] (4) to (7);
+\draw[edge] (6) to (7);
