@@ -19,13 +19,13 @@ Considérons un graphe $G=(V, E)$ et une décomposition arborescente enracinée 
 $\Taugstar$ de largeur $k$.
 \begin{nlemma}
     Si $t_i$ est un sac interne de $T$ et si $H$ est un chemin Hamiltonien dans $G$, alors
-    $H[V_{t_i}]$ est une collection de chemins disjoints dont les extrêmités appartiennent à
+    $H[V_{t_i}]$ est une collection de chemins disjoints dont les extrémités appartiennent à
     $X_{t_i}$.
 \end{nlemma}
 
 \begin{proof}
     Considérons un sac interne $t \in T$ tel que $H[V_t]$ possède au moins un chemin $c$ dont au moins
-    une extrêmité n'appartient pas à $X_t$. Appelons $v$ l'extrêmité de $c$, par
+    une extrémité n'appartient pas à $X_t$. Appelons $v$ l'extrémité de $c$, par
     hypothèse, $v \not \in X_t$.
 
     Il y a donc deux possibilités pour $v$ :
@@ -33,9 +33,9 @@ $\Taugstar$ de largeur $k$.
         \item $v \in G_t$, alors le degré de $v$ dans $H[V_t] = 1$ et donc le degré de $v$ dans $H$
             est aussi égal à $1$, donc $v$ n'appartient pas à un cycle Hamiltonien ce qui soulève une
             contradiction
-        \item donc $v \in V\backslash V_t$, par hypothèse $v$ est l'extrêmité d'un chemin appartenant à
+        \item donc $v \in V\backslash V_t$, par hypothèse $v$ est l'extrémité d'un chemin appartenant à
             $H[V_t]$, ce qui implique qu'il existe $u \in V_t$ tel que $(uv)$ est un sous-chemin de
-            $c$, ayant une extrêmité dans $V_t$ et l'autre dans $V\backslash V_t$ et ne possèdant aucun
+            $c$, ayant une extrémité dans $V_t$ et l'autre dans $V\backslash V_t$ et ne possédant aucun
             sommet appartenant à $X_t$. Or la proposition~\ref{nsep} nous dit que $X_t$ est un
             séparateur de $G$, ce qui nous amène encore à une contradiction.
     \end{enumerate}
@@ -50,14 +50,14 @@ sommets de $X_t$ en trois catégories selon leur degré dans $H[V_t]$ :
 \begin{enumerate}
     \item les sommets de degré $2$ dans $H[V_T]$ sont les sommets de $X_t$ pour lesquels, leurs
         deux voisins dans $H$ ont été découverts. Ils seront appelés les sommets internes et seront
-        notés $X_t^2$. Il est important de remarquer que pout tout $v \in X_t^2$, les voisins de $v$
+        notés $X_t^2$. Il est important de remarquer que pour tout $v \in X_t^2$, les voisins de $v$
         dans $H$ appartiennent à $V[t]$. Ils sont représentés en vert sur la figure~\ref{hcpd_h2}.
     \item les sommets de degré $0$ dans $H[V_T]$ sont les sommets de $X_t$ pour lesquels aucun
         voisin n'a encore été découvert. Nous les appellerons les sommets isolés et les noterons
         $X_t^0$, leurs voisins appartiennent tous deux à $V\backslash V_t$. Ils sont représentés en noir sur
         la figure~\ref{hcpd_h2}.
     \item les sommets de degré $1$ dans $H[V_T]$ sont tous les autres sommets pour lesquels un seul
-        de leurs voisin a été découvert, ils représentent l'ensemble des extrêmités de tous les
+        de leurs voisin a été découvert, ils représentent l'ensemble des extrémités de tous les
         chemins de la collection $H[V_t]$. Nous les appellerons les sommets extrémités et les
         noterons $X_t^1$
 \end{enumerate}
@@ -88,17 +88,17 @@ Seulement ces trois seuls ensembles ne suffisent pas à décrire de manière uni
 réalisable pour le sac $X_t$. Les deux schémas de la figure~\ref{hcpd_h3} présentent le même triplet
 d'ensembles $(X_t^0, X_t^1, X_t^2)$, les collections de chemins ne sont pas identiques.
 
-C'est pourquoi, il faut ajouter un couplage $M$ sur $X_t^1$ à ce triplet liant les deux extrêmités d'un même chemin
+C'est pourquoi, il faut ajouter un couplage $M$ sur $X_t^1$ à ce triplet liant les deux extrémités d'un même chemin
 dans $X_t$. Considérons par exemple un sac $X_t = \{1, 2, \dots, 7\}$, la représentation de sa
-soltution partielle définie par : \[
+solution partielle définie par : \[
     (X_t^0 = \{1\}, X_t^1 = \{2, 3, 5, 7\}, X_t^2 = \{4, 6\}, M = \{(2,3), (5,7)\})
 \] est donnée à la figure~\ref{hcpd_h4}.
 
 Par la suite, le quadruplet $\pdsol{t}$ désignera, par abus de langage, tantôt le sous problème
 associé à $t$ consistant à savoir s'il existe une collection de chemins disjoints de $G_t$ couvrant
-l'ensemble des sommets de $V_t$, tantot la solution partielle à ce sous problème.
+l'ensemble des sommets de $V_t$, tantôt la solution partielle à ce sous problème.
 
-Et donc pour chaque sac $t$ de la décomposition arborscente, il faut savoir si $(X_t^0, X_t^1,
+Et donc pour chaque sac $t$ de la décomposition arborescente, il faut savoir si $(X_t^0, X_t^1,
 X_t^2, M)$ est une solution partielle ou non.
 
 \begin{nrmq}
@@ -107,7 +107,8 @@ X_t^2, M)$ est une solution partielle ou non.
 \end{nrmq}
 
 \begin{nlemma}
-    Pour un sac $t$ de la décompostion arborescente, il y a $3^{k+1} k!$ sous-problèmes.
+    \label{hcpd_npb}
+    Pour un sac $t$ de la décomposition arborescente, il y a $3^{k+1} k!$ sous-problèmes.
 \end{nlemma}
 
 \begin{proof}
@@ -122,7 +123,7 @@ X_t^2, M)$ est une solution partielle ou non.
 \begin{figure}
     \begin{center}
         \includegraphics[scale=0.5]{src/figures/hcpd_hamilton_1.png}
-        \caption{Représentation d'un cycle hamiltonien dans le graphe $G$ en fonction de $X_t$}
+        \caption{Représentation d'un cycle Hamiltonien dans le graphe $G$ en fonction de $X_t$}
         \label{hcpd_h1}
     \end{center}
 \end{figure}
@@ -325,7 +326,7 @@ validité des solutions obtenues.
 \section{Description de l'algorithme}
 
 On obtient alors l'algorithme suivant, les fonctions computeSol calculant les solutions au problème
-$t$ à partir des solutions de son fils $t_f$ comme vu à la saction précédente.
+$t$ à partir des solutions de son fils $t_f$ comme vu à la section précédente.
 
 \begin{algorithm}
     \caption{Programmation dynamique sur une décomposition arborescente pour \hcycle}
@@ -373,30 +374,53 @@ $t$ à partir des solutions de son fils $t_f$ comme vu à la saction précédent
 
 \begin{nthrm}
     L'algorithme~\ref{pd_algo} répond faux si et seulement si le graphe en entrée ne possède pas de cycle
-    hamiltonien.
+    Hamiltonien.
 \end{nthrm}
 
 \begin{proof}
     \begin{itemize}
         \item[$\neg a \Rightarrow \neg b$] Si l'algorithme retourne une solution différente de faux,
             alors, par construction de l'algorithme, il est possible de calculer à partir de la
-            solution retournée un cycle hamiltonien en explorant la décomposition arborescente
+            solution retournée un cycle Hamiltonien en explorant la décomposition arborescente
             depuis la racine vers les feuilles.
         \item[$a \Rightarrow b$] Supposons maintenant que l'algorithme retourne faux alors il existe
             un sac $t \in T$ tel que le sous problème associé à $t$ n'a pas de solutions. Ainsi,
             pour les n\oe uds $X_t$ du sac $t$, il n'existe aucune collection de chemins disjoints
-            couvrant l'ensemble des sommets $V_t$ ayant leur extrêmités dans $X_t$.
+            couvrant l'ensemble des sommets $V_t$ ayant leur extrémités dans $X_t$.
+            
+            $X_t$ étant un séparateur de $G$ et l'algorithme de programmation dynamique explorant
+            l'ensemble de l'arbre des solutions partielles valide pour $G_t$, il n'existe donc
+            aucune partition de $X_t$ permettant de couvrir intégralement les sommets de $G_t$ et
+            respectant les conditions nécessaires à l'établissement d'un cycle Hamiltonien. Donc peu
+            importe quels sommets seront rajoutés lors de l'étude des sommets précédant $t$ dans
+            $T$, ces derniers n'auront aucune incidence sur $G_t$ déjà exploré.
 
-            Un tel échec ne peut se produire que lors de l'examen de sacs fusions, en effet, sacs
-            feuilles fournissant une solution triviale, permettent l'initialisation des solutions
-            partielles. Tant que des sacs ajouts ou suppression sont étudiés, il existera
-            constamment une solution partielle calculée à partir de la solution triviale obtenue
-            pour un sac feuille.
+            Et donc un retour égal à faux implique la non existence d'un cycle Hamiltonien dans $G$.
+    \end{itemize}
+\end{proof}
 
-            L'échec se produit donc pendant l'examen d'un sac fusion, ce qui implique qu'il n'existe
-            aucune paire de solutions compatibles dans les fils $t_1$ et $t_2$ de $t$. Or $X_t$ est
-            un séparateur, 
 % }}}
 %% {{{ COMPLEXITE
+\subsection{Complexité}
+
+\begin{nthrm}
+    Étant donné une décomposition arborescente de taille $k$, \phcycle{Treewidth} peut être résolu en
+    \[
+        k^{O(k)} . n
+    \]
+\end{nthrm}
+
+\begin{proof}
+    Soit un graphe $G = (V, E)$, avec $|V| = n$.
+    L'algorithme commence par calculer une décomposition simple à partir de la décomposition donnée
+    ceci se fait en temps polynomial d'après le théorème~\ref{pd_red}.
+    D'après le lemme~\ref{hcpd_npb}, pour chaque sac de $T$ il y a au plus $3^{k+1}k!$ sous
+    problème. 
+    Ce qui nous fait un total $k^2*3^{k+1}k! . n$ problèmes.
+    Chaque action s'effectuant en temps polynomial, l'algorithme s'exécute dont en temps $K^{O(k)} .
+    n$.
+\end{proof}
+
+Il existe donc un algorithme $FPT$ pour \phcycle{Treewidth}.
 %% }}}
 % }}}

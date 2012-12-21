@@ -10,7 +10,7 @@ arborescente simple que nous allons présenter.
 \begin{ndf}
     Étant donné un graphe $G=(V,E)$, une décomposition arborescente enracinée $\mathcal{T}_G = (T,
     \{X_t : t \in T\})$ de $G$ est dite simple si chacun des sacs $t$ de $T$ appartient à l'un des
-    quatres types suivant :
+    quatre types suivant :
     \begin{enumerate}
         \item Feuille : $t$ n'admet aucun fils et $|X_t| = 1$ (figure~\ref{fig:feuille})
         \item Ajout : $t$ admet un fils unique $t_f$ tel que $X_t = X_{t_f} \cup v$ avec $v \not
@@ -23,8 +23,9 @@ arborescente simple que nous allons présenter.
 \end{ndf}
 
 \begin{nthrm}
+    \label{pd_red}
     Étant donnée une décomposition arborescente enracinée $\Taug$ d'un graphe $G=(V,E)$ de largeur
-    $k$ comportant $c$ sacs, il est possible de se ramener à une décompostion arborescente simple de
+    $k$ comportant $c$ sacs, il est possible de se ramener à une décomposition arborescente simple de
     largeur $k$ comportant $k^2.c$ sacs en temps $O(kn)$.
 \end{nthrm}
 
@@ -74,7 +75,7 @@ considérablement simplifier la construction d'algorithmes.
 %% }}}
 
 %% {{{ PRINCIPE
-\section{Le principe des algorithmes de programmation dynamique sur une décompostion arborescente}
+\section{Le principe des algorithmes de programmation dynamique sur une décomposition arborescente}
 \label{pd_scheme}
 
 Une grande partie des algorithmes FPT se basant sur la largeur arborescente d'un graphe $G = (V, E)$

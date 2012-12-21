@@ -1,47 +1,46 @@
 This is BibTeX, Version 0.99d (TeX Live 2012/Arch Linux)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: target/main.aux
-I found no \bibdata command---while reading file target/main.aux
-I found no \bibstyle command---while reading file target/main.aux
-You've used 4 entries,
-            0 wiz_defined-function locations,
-            88 strings with 529 characters,
-and the built_in function-call counts, 0 in all, are:
-= -- 0
-> -- 0
-< -- 0
-+ -- 0
-- -- 0
-* -- 0
-:= -- 0
-add.period$ -- 0
-call.type$ -- 0
-change.case$ -- 0
+The style file: plain.bst
+Database file #1: src/bib.bib
+You've used 6 entries,
+            2118 wiz_defined-function locations,
+            542 strings with 4962 characters,
+and the built_in function-call counts, 2134 in all, are:
+= -- 202
+> -- 109
+< -- 2
++ -- 43
+- -- 36
+* -- 159
+:= -- 359
+add.period$ -- 18
+call.type$ -- 6
+change.case$ -- 34
 chr.to.int$ -- 0
-cite$ -- 0
-duplicate$ -- 0
-empty$ -- 0
-format.name$ -- 0
-if$ -- 0
+cite$ -- 6
+duplicate$ -- 75
+empty$ -- 166
+format.name$ -- 36
+if$ -- 441
 int.to.chr$ -- 0
-int.to.str$ -- 0
-missing$ -- 0
-newline$ -- 0
-num.names$ -- 0
-pop$ -- 0
-preamble$ -- 0
-purify$ -- 0
+int.to.str$ -- 6
+missing$ -- 6
+newline$ -- 32
+num.names$ -- 14
+pop$ -- 40
+preamble$ -- 1
+purify$ -- 29
 quote$ -- 0
-skip$ -- 0
+skip$ -- 52
 stack$ -- 0
-substring$ -- 0
-swap$ -- 0
-text.length$ -- 0
+substring$ -- 129
+swap$ -- 15
+text.length$ -- 2
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 0
+type$ -- 22
 warning$ -- 0
-while$ -- 0
-width$ -- 0
-write$ -- 0
-(There were 2 error messages)
+while$ -- 21
+width$ -- 7
+write$ -- 66

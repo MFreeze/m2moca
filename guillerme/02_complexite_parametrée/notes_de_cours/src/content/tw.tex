@@ -7,9 +7,9 @@ section~\ref{hcycle_tw}.
 %%% {{{ Principe
 \section{Principe}
 
-Le principe de décompostion arborescente a été introduit pour la première fois par Seymour et
+Le principe de décomposition arborescente a été introduit pour la première fois par Seymour et
 Robertson~\cite{robalgorithmic} dans le cadre de la théorie des mineurs dans les graphes. Une
-décompostion arborescente est la décomposition d'un graphe en séparateurs de ce graphe connectés
+décomposition arborescente est la décomposition d'un graphe en séparateurs de ce graphe connectés
 dans un arbre. De manière plus formelle, une décomposition arborescente se définit comme suit :
 
 \begin{ndf}[Décomposition arborescente]
@@ -94,7 +94,7 @@ $S_e = X_A \cap X_B$, donc $S_e = \{4\}$. En effet, en retirant le sommet $4$ de
 composantes connexes, l'une formée par les sommets contenus dans les sacs de $T_A$ privé de $4$, et
 l'autre formée par les sommets contenus dans les sacs de $T_B$ privé de $4$. Ceci est mis en
 évidence à la figure~\ref{tw_sep}. De la même manière, tout sac interne de $T$ est un séparateur de
-$G$, puisque supprimer un sac revient à supprimer toutes les arêtes adjecentes à ce sac et donc tous
+$G$, puisque supprimer un sac revient à supprimer toutes les arêtes adjacentes à ce sac et donc tous
 les séparateurs associés à ces arêtes ainsi que le n\oe uds seulement contenus dans le sac supprimé
 (cf figure~\ref{tw_bsep}). Nous noterons donc les deux propriétés suivantes :
 
@@ -120,10 +120,10 @@ appelle la largeur arborescente.
 %% {{{ DEFINITION FORMELLE DE LA TREEWIDTH
 \section{Largeur arborescente}
 
-La largeur arborscente est une notion introduite par Robertson et Seymour~\cite{robalgorithmic}
-descendant directement du principe de décomposition arborscente, en effet, la largeur arborescente
+La largeur arborescente est une notion introduite par Robertson et Seymour~\cite{robalgorithmic}
+descendant directement du principe de décomposition arborescente, en effet, la largeur arborescente
 d'une décomposition arborescente est égale à la taille de son plus gros sac moins $1$ et la largeur
-arborescente d'un graphe $G=(V,E)$ donné est égale à la plus petite valeur choisie parmis les
+arborescente d'un graphe $G=(V,E)$ donné est égale à la plus petite valeur choisie parmi les
 largeurs arborescentes de l'ensemble de ses décompositions. Autrement dit :
 
 \begin{ndf}
@@ -148,6 +148,13 @@ lequel cette valeur est calculée et un arbre. C'est pourquoi lorsque cette vale
 certains algorithmes sont efficaces pour résoudre des problèmes \npc s tels que \hcycle comme nous
 le verrons plus loin.
 
+\begin{nlemma}
+    \label{tw_approx}
+    Une $4-$approximation de la largeur arborescente peut être calculée en temps polynomial.
+\end{nlemma}
+
+L'algorithme a été présenté par Diestel et al~\cite{Die00}.
+
 \subsection*{Notations}
 
 Dans la suite de ce document, nous utiliserons les notations suivantes. Soit une décomposition
@@ -156,6 +163,8 @@ arborescente $\mathcal{T} = (T, \{X_t : t \in T\})$, si l'on enracine $\mathcal{
     \item $V_t$ l'ensemble des sommets présents dans les descendants de $t$
     \item $G_t$ le sous graphe induit par $V_t$ que l'on peut aussi noter $G[V_t]$
 \end{itemize}
+
+
 
 %% }}}
 % }}}

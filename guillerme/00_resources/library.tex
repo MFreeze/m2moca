@@ -160,13 +160,16 @@
                 
 % {{{ NOM DE PROBLEMES
 \newcommand{\hcycle}{\textsc{HAMILTONIAN CYCLE} }
+\newcommand{\phcycle}[1]{\textsc{HAMILTONIAN CYCLE }paramétré par \textsc{#1} }
 \newcommand{\vcover}{\textsc{VERTEX COVER} }
 \newcommand{\twidth}{\textsc{TREE WIDTH} }
 \newcommand{\wiset}{\textsc{WEIGHTED INDEPENDANT SET} }
 \newcommand{\fvset}{\textsc{FEEDBACK VERTEX SET} }
+
 % }}}
 
 % {{{ MISE EN PAGE
+
 \newcommand{\dfpb}[3]{
     ~\\
     \hrule
@@ -175,6 +178,22 @@
         \begin{itemize}
             \itemindent 10mm
             \item[\textbf{Données :}] #2
+            \item[\textbf{Question :}] #3
+        \end{itemize}
+    \end{npb}
+    \hrule
+    ~\\
+}
+
+\newcommand{\dfpbp}[4]{
+    ~\\
+    \hrule
+    \begin{npb}
+        #1
+        \begin{itemize}
+            \itemindent 10mm
+            \item[\textbf{Données :}] #2
+            \item[\textbf{Paramètre :}] #4
             \item[\textbf{Question :}] #3
         \end{itemize}
     \end{npb}
