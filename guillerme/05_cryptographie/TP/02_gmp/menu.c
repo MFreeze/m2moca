@@ -40,7 +40,7 @@
 char ***hierarchy = NULL;
 // Always NULL, at the end AND last item must be Back
 // This must be in main file, (HORRIBLE!!!)
-char *princ_menu[] = {"RSA", "ElGamal", "Diffie Hellman", "Help", "String Test", "Quit", NULL};
+char *princ_menu[] = {"RSA", "ElGamal", "Diffie Hellman", "Help", "Quit", NULL};
 char *enc_opt[] = {"Key Generation", "Encrypt", "Decrypt", "Sign", "Back", NULL};
 
 void freeBuf() {
@@ -175,7 +175,6 @@ FILE *getFile(const char *mod) {
 
     name = (char *) malloc (sizeof(char) * nsize);
 
-    printf ("\nVeuillez saisir le nom du fichier : ");
     do {
         c = getchar();
         if (csize >= nsize) {
@@ -217,7 +216,7 @@ FILE *getFile(const char *mod) {
  *  Description:  
  * =====================================================================================
  */
-char *readFile(FILE *f, size_t *s) {
+char *readFile(FILE *f, int *s) {
     char c, *result, *tmp;
     int nsize = 32, csize = 1;
 

@@ -40,19 +40,11 @@ int main(int argc, char **argv) {
     dhpbk_t dhpb;
     dhpvk_t dhpv_alice, dhpv_bob;
 
-    // Message 
-    int ma[] = {3, 3, 1, 3, 3, 3, 3, 3, 3, 3}, i, *mess;
-    int mb[] = {2, 2, 2, 2, 25, 227, 9, 8, 12, 26};
-    m.mess = ma;
-    m1.m = mb;
-    m.size = sizeof(ma)/sizeof(ma[0]);
-    m1.size = sizeof(mb)/sizeof(mb[0]);
-
     // Menu
-    int menu, submenu, loop = 1, au;
+    int menu, submenu, loop = 1, au, i, j;
 
     // Others
-    FILE *f;
+    FILE *f, *w, *wp;
 
     // }}}
 
@@ -119,26 +111,8 @@ int main(int argc, char **argv) {
                                 break;
                                 // }}}
                                 // {{{ SUB = 5 (Quit)
-                            case 6:
-                                loop --;
-                                break;
-                                // }}}
-                                // {{{ TEST
                             case 5:
-                                f = getFile("r");
-                                if (f) {
-                                    size_t s, r; 
-                                    int i;
-                                    mpz_t *tab;
-                                    char *tmp = readFile(f, &s);
-                                    tab = convertToInt(tmp, s, 2, &r);
-                                    fclose(f);
-                                    free(tmp);
-                                    convertToChar(tab, r, 2, &s);
-                                    for (i=0; i<r; i++)
-                                        mpz_clear(tab[i]);
-                                    free(tab);
-                                }
+                                loop --;
                                 break;
                                 // }}}
                         }
@@ -173,8 +147,27 @@ int main(int argc, char **argv) {
                                             "pvk : %Zd\n"
                                             "pbk : %Zd\n", pvk.p, pvk.q, pvk.n, pvk.k, pvk.pvk, pbk.pbk);
                                 }
-                                rsaEncrypt(pbk, m, &c);
-                                printf("Taille : %d\n", c.size);
+
+                                printf("Please choose file name to encrypt : ");
+                                f = getFile("r");
+
+                                if (f) {
+                                    printf("Please choose name of destination file : ");
+                                    w = getFile("w");
+                                    if (w) {
+                                        m.mess = readFile(f, &(m.size));
+                                        rsaEncrypt(pbk, m, &c);
+                                        for (i=0; i<c.size; i++)
+                                            gmp_fprintf(w, "%Zd ", c.mess[i]);
+                                        fclose(w);
+
+                                        for (i=0; i<c.size; i++)
+                                            mpz_clear(c.mess[i]);
+                                        free(c.mess);
+                                        free(m.mess);
+                                    }
+                                    fclose(f);
+                                }
                                 break;
 
                                 //for (i=0; i<csize; i++)
@@ -193,10 +186,34 @@ int main(int argc, char **argv) {
                                             "pvk : %Zd\n"
                                             "pbk : %Zd\n", pvk.p, pvk.q, pvk.n, pvk.k, pvk.pvk, pbk.pbk);
                                 }
-                                rsaDecrypt(pvk, c, &m);
-                                for (i=0; i<m.size; i++)
-                                    gmp_printf("%d ", m.mess[i]);
-                                printf("\n");
+//                                rsaDecrypt(pvk, c, &m);
+/*                                 for (i=0; i<m.size; i++)
+ *                                     gmp_printf("%d ", m.mess[i]);
+ *                                 printf("\n");
+ */
+                                printf("Please choose file name to decrypt : ");
+                                f = getFile("r");
+
+                                if (f) {
+                                    printf("Please choose name of destination file : ");
+                                    w = getFile("w");
+                                    if (w) {
+                                        char *tmp_str = readFile(f, &i);
+                                        c.mess = convertToCryptInt(tmp_str, i, &(c.size));
+                                        for (i=0; i<c.size; i++)
+                                            gmp_printf("%Zd \n", c.mess[i]);
+                                        rsaDecrypt(pvk, c, &m);
+                                        fprintf(w, "%s", m.mess);
+                                        free(m.mess);
+                                        fclose(w);
+
+                                        for (i=0; i<c.size; i++)
+                                            mpz_clear(c.mess[i]);
+                                        free(c.mess);
+                                        free(tmp_str);
+                                    }
+                                    fclose(f);
+                                }
                                 break;
                                 // }}}
                                 // {{{ SUB = 4 (Signature)
@@ -229,8 +246,37 @@ int main(int argc, char **argv) {
                                             "a : %Zd\n"
                                             "g : %Zd\n",egpv.p, egpv.a, egpb.alpha);
                                 }
-                                egEncrypt(egpb, m1, &c1);
-                                printf("Taille : %d\n", c1.size);
+
+                                printf("Please choose file name to encrypt : ");
+                                f = getFile("r");
+
+                                if (f) {
+                                    printf("Please choose name of destination file (part 1) : ");
+                                    w = getFile("w");
+                                    printf("Please choose name of destination file (part 2) : ");
+                                    wp = getFile("w");
+                                    if (w && wp) {
+                                        m1.m = readFile(f, &(m1.size));
+                                        egEncrypt(egpb, m1, &c1);
+                                        for (i=0; i<c1.size; i++)
+                                            gmp_fprintf(w, "%Zd ", c1.y2[i]);
+                                        fclose(w);
+
+                                        gmp_fprintf(wp, "%Zd ", c1.y1);
+                                        fclose(wp);
+
+                                        for (i=0; i<c1.size; i++)
+                                            mpz_clear(c1.y2[i]);
+
+                                        mpz_clear(c1.y1);
+                                        free(c1.y2);
+                                        free(m1.m);
+                                    }
+                                    fclose(f);
+                                }
+/*                                 egEncrypt(egpb, m1, &c1);
+ *                                 printf("Taille : %d\n", c1.size);
+ */
                                 break;
                                 // }}}
                                 // {{{ SUB = 3 (Decryption)
@@ -240,15 +286,51 @@ int main(int argc, char **argv) {
                                     eg_key_generated = 1;
                                     egKeyGen(&egpv, &egpb);
                                     gmp_printf("p : %Zd\n"
-                                            "a : %Zd\n"
+                                            "a : %Zd\n"   
                                             "g : %Zd\n",egpv.p, egpv.a, egpb.alpha);
+                                }
+
+                                printf("Please choose file name to decrypt (part 1) : ");
+                                f = getFile("r");
+                                printf("Please choose file name to decrypt (part 2) : ");
+                                wp = getFile("r");
+
+                                if (f && wp) {
+                                    printf("Please choose name of destination file : ");
+                                    w = getFile("w");
+                                    if (w) {
+                                        mpz_t *a;
+                                        char *tmp_str = readFile(f, &i);
+                                        c1.y2 = convertToCryptInt(tmp_str, i, &(c.size));
+                                        free(tmp_str);
+                                        tmp_str = readFile(wp, &i);
+                                        a = convertToCryptInt(tmp_str, i, &i);
+                                        mpz_set(c1.y1, a[0]);
+                                        mpz_clear(a[0]);
+                                        free(a);
+                                        free(tmp_str);
+                                        for (i=0; i<c.size; i++)
+                                            gmp_printf("%Zd \n", c1.y2[i]);
+                                        egDecrypt(egpv, c1, &m1);
+                                        fprintf(w, "%s", m1.m);
+                                        free(m1.m);
+                                        fclose(w);
+
+                                        for (i=0; i<c.size; i++)
+                                            mpz_clear(c1.y2[i]);
+                                        mpz_clear(c1.y1);
+                                        free(c1.y2);
+                                    }
+                                    fclose(f);
+                                    fclose(wp);
                                 }
                                 //for (i=0; i<csize; i++)
                                 //   gmp_printf("c[%d] = %Zd\n", i, c[i]);
 
-                                egDecrypt(egpv, c1, &m1);
-                                for (i=0; i<m1.size; i++)
-                                    gmp_printf("%d ", m1.m[i]);
+/*                                 egDecrypt(egpv, c1, &m1);
+ *                                 for (i=0; i<m1.size; i++)
+ *                                     gmp_printf("%d ", m1.m[i]);
+ */
                                 break;
                                 // }}}
                                 // {{{ SUB = 4 (Signature)

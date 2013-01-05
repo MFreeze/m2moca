@@ -71,6 +71,6 @@ FILE *getFile(const char *mod);
  *  Description:  
  * =====================================================================================
  */
-char *readFile(FILE *f, size_t *s);
+char *readFile(FILE *f, int *s);
 
 #endif

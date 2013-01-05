@@ -273,7 +273,7 @@ void rnClear();
  *  Description:  
  * =====================================================================================
  */
-mpz_t *convertToInt(char *str, size_t str_size, int block_size, size_t *ret_size);
+mpz_t *convertToInt(char *str, int str_size, int block_size, int *ret_size);
 
 /* 
  * ===  FUNCTION  ======================================================================
@@ -281,7 +281,14 @@ mpz_t *convertToInt(char *str, size_t str_size, int block_size, size_t *ret_size
  *  Description:  
  * =====================================================================================
  */
-char *convertToChar(mpz_t *toconv, size_t arr_size, int block_size, size_t *ret_size);
+char *convertToChar(mpz_t *toconv, int arr_size, int block_size, int *ret_size);
 
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  convertToCryptInt
+ *  Description:  
+ * =====================================================================================
+ */
+mpz_t *convertToCryptInt(char *str, int str_size, int *ret_size);
 #endif
 

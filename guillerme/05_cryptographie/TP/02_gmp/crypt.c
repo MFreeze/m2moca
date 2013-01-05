@@ -25,7 +25,6 @@ int seed_initialized = 0;
  *  Miscellaneous functions
  *-----------------------------------------------------------------------------*/
 int isGenerator(mpz_t p, mpz_t g) {
-    gmp_printf("%Zd\n", g);
     if (!mpz_cmp_ui(g, 0))
         return 0;
     mpz_t temp, count;
@@ -73,10 +72,8 @@ void rsaKeyGen(rsapvk_t *pvk, rsapbk_t *pbk) {
     mpz_init(tmp);
 
     // Integer used for random numbers
-    if (!seed_initialized) {
+    if (!seed_initialized)
         rnInit();
-        printf("\n\n%d\n", seed_initialized);
-    }
 
     do {
         mpz_urandomb(pvk->p, seed, RSA_KEY_SIZE);        
@@ -174,10 +171,8 @@ void egClearKey(egpvk_t *pvk, egpbk_t *pbk){
 
 void egKeyGen(egpvk_t *pvk, egpbk_t *pbk) {
     // Useful for random generation
-    if (!seed_initialized) {
+    if (!seed_initialized)
 		rnInit();
-        printf("%d\n", seed_initialized);
-    }
 
     // Temporary variables
     mpz_t tmp;
@@ -216,10 +211,8 @@ void egKeyGen(egpvk_t *pvk, egpbk_t *pbk) {
 
 void egEncrypt(egpbk_t k, egdm_t m, egem_t *c) {
     // Useful for random generation
-    if (!seed_initialized) {
+    if (!seed_initialized)
 		rnInit();
-        printf("%d\n", seed_initialized);
-    }
 
     // Temporary variables
     mpz_t tmp;
@@ -232,7 +225,7 @@ void egEncrypt(egpbk_t k, egdm_t m, egem_t *c) {
 
     // Memory initialization
     mpz_init(c->y1);
-    c->y2 = convertToInt(m.mess, m.size, k.k, &l);
+    c->y2 = convertToInt(m.m, m.size, k.k, &l);
     c->size = l;
 
     mpz_powm(c->y1, k.alpha, tmp, k.p);
@@ -248,13 +241,9 @@ void egEncrypt(egpbk_t k, egdm_t m, egem_t *c) {
 }
 
 void egDecrypt(egpvk_t k, egem_t c, egdm_t *m) {
-    int *decrypt = (int *) calloc(c.size * k.k, sizeof(int));
-    int i, j;
-
-    mpz_t tmp, q, base, inv;
+    int i;
+    mpz_t tmp, inv;
     mpz_init(tmp);
-    mpz_init(q);
-    mpz_init(base);
     mpz_init(inv);
 
     mpz_powm(tmp, c.y1, k.a, k.p);
@@ -262,24 +251,14 @@ void egDecrypt(egpvk_t k, egem_t c, egdm_t *m) {
 
     for (i=0; i<c.size; i++) {
         // Decryption
-        mpz_mul(tmp, c.y2[i], inv);
-        mpz_mod(tmp, tmp, k.p);
-
-        // Invert string transformation
-        for(j = 0; j<k.k; j++) {
-            mpz_set_ui(q, 0);
-            mpz_ui_pow_ui(base, NB_CHAR, k.k - j - 1);
-            mpz_fdiv_qr(q, tmp, tmp, base);
-            decrypt[i*k.k + j] = mpz_get_ui(q);
-        }
+        mpz_mul(c.y2[i], c.y2[i], inv);
+        mpz_mod(c.y2[i], c.y2[i], k.p);
     }
 
-    m->m = decrypt;
-    m->size = c.size * k.k;
+    m->m = convertToChar(c.y2, c.size, k.k, &i);
+    m->size = i;
 
     mpz_clear(tmp);
-    mpz_clear(q);
-    mpz_clear(base);
     mpz_clear(inv);
 }
 // }}}
@@ -316,10 +295,8 @@ void dhClearPubKey(dhpbk_t *k) {
 
 void dhGenPubKey(dhpvk_t *pvk, dhpbk_t *pbk) {
     // Integer used for random numbers
-    if (!seed_initialized) {
+    if (!seed_initialized)
         rnInit();
-        printf("%d\n", seed_initialized);
-    }
 
     do {
         mpz_urandomb(pbk->p, seed, DH_KEY_SIZE);        
@@ -339,10 +316,8 @@ void dhGenPubKey(dhpvk_t *pvk, dhpbk_t *pbk) {
 }
 
 void dhGenPubKeyFromAnother(dhpbk_t *pbk, dhpvk_t *pvk) {
-    if (!seed_initialized) {
+    if (!seed_initialized)
 		rnInit();
-        printf("%d\n", seed_initialized);
-    }
 
     mpz_set(pvk->p, pbk->p);
     mpz_set(pvk->g, pbk->g);
@@ -380,7 +355,7 @@ void rnClear() {
  *  Description:  
  * =====================================================================================
  */
-mpz_t *convertToInt(char *str, size_t str_size, int block_size, size_t *ret_size) {
+mpz_t *convertToInt(char *str, int str_size, int block_size, int *ret_size) {
     mpz_t *result, tmp;
     int res_size = str_size / block_size + 1, pts = 0, pta = -1, i;
     unsigned long int pow = block_size;
@@ -415,7 +390,7 @@ mpz_t *convertToInt(char *str, size_t str_size, int block_size, size_t *ret_size
  *  Description:  
  * =====================================================================================
  */
-char *convertToChar(mpz_t *arr, size_t arr_size, int block_size, size_t *ret_size) {
+char *convertToChar(mpz_t *arr, int arr_size, int block_size, int *ret_size) {
     char *result;
     int res_size = arr_size * block_size + 1, i, j;
 
@@ -432,8 +407,57 @@ char *convertToChar(mpz_t *arr, size_t arr_size, int block_size, size_t *ret_siz
         }
     }
 
+    *ret_size = res_size;
     result[res_size - 1] = '\0';
-    printf("%s\n", result);
     return result;
 }		/* -----  end of function convertToChar  ----- */
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  convertToCryptInt
+ *  Description:  
+ * =====================================================================================
+ */
+mpz_t *convertToCryptInt(char *str, int str_size, int *ret_size) {
+    mpz_t *result;
+
+    int count = 0, i = 0, j = 0;
+    char *tmp = 0;
+
+    while (str[i] != '\0') {
+        if (str[i] == ' ')
+            count ++;
+        i++;
+    }
+
+    if (str[strlen(str) - 1] != ' ')
+        count ++;
+
+    result = (mpz_t *) malloc (sizeof(mpz_t) * count);
+
+    i = 0;
+
+    while (str[i] != '\0') {
+        int nsize = 32, csize = 1;
+        tmp = (char *) malloc (sizeof(char) * nsize);
+        while(str[i] != ' ' && str[i] != '\0') {
+            if (csize == nsize) {
+                nsize = nsize << 2;
+                tmp = (char *) realloc (tmp, nsize * sizeof(char));
+            }
+            tmp[csize - 1] = str[i];
+            csize ++; i ++;
+        }
+        tmp[csize - 1] = '\0';
+        i ++; 
+        mpz_init(result[j]);
+        mpz_set_str(result[j], tmp, 10);
+        j++;
+
+        free(tmp);
+    }
+
+    *ret_size = j;
+    return result;
+} /* -----  end of function convertToCryptInt  ----- */
 // }}}
