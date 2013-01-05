@@ -16,6 +16,12 @@
  * =====================================================================================
  */
 
+//TODO: 
+// * Random number management                       DONE
+// * Echange de clé de diffie hellman avec gmp
+// * Interface utilisateur (ncurse??)
+// * Signatures
+
 #include <gmp.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,10 +30,11 @@
 #include <math.h>
 
 #ifndef CRYPT_H
-#define CRYPT_H
+#define CRYPT_H 0
 
 #define NB_TURN 10
-#define EG_KEY_SIZE 28
+#define EG_KEY_SIZE 14
+#define DH_KEY_SIZE 14
 #define RSA_KEY_SIZE 256
 
 // Number of supported characters
@@ -55,7 +62,7 @@ typedef struct rsaEncryptedMessage {
 } rsaem_t;
 
 typedef struct rsaDecryptedMessage {
-    int *mess;
+    char *mess;
     int size;
 } rsadm_t;
 
@@ -127,7 +134,7 @@ typedef struct egEncryptedMessage {
 } egem_t;
 
 typedef struct egDecryptedMessage {
-    int *m;
+    char *m;
     int size;
 } egdm_t;
 
@@ -145,7 +152,7 @@ void egInitKey(egpvk_t *pvk, egpbk_t *pbk);
  *  Description:  
  * =====================================================================================
  */
-void edClearKey(egpvk_t *pvk, egpbk_t *pbk);
+void egClearKey(egpvk_t *pvk, egpbk_t *pbk);
 
 /* 
  * ===  FUNCTION  ======================================================================
@@ -174,4 +181,107 @@ void egDecrypt(egpvk_t k, egem_t c, egdm_t *m);
 /*-----------------------------------------------------------------------------
  *  Diffie Hellman
  *-----------------------------------------------------------------------------*/
+
+typedef struct dhPrivateKey {
+    mpz_t a, key, p, g;
+} dhpvk_t;
+
+typedef struct dhPublicKey {
+    mpz_t p, g, pow;
+} dhpbk_t;
+
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  dhInitKey
+ *  Description:  
+ * =====================================================================================
+ */
+void dhInitPrivKey(dhpvk_t *k);
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  dhInitPubKey
+ *  Description:  
+ * =====================================================================================
+ */
+void dhInitPubKey(dhpbk_t *k);
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  dhClearPrivKey
+ *  Description:  
+ * =====================================================================================
+ */
+void dhClearPrivKey(dhpvk_t *k);
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  dhClearPubKey
+ *  Description:  
+ * =====================================================================================
+ */
+void dhClearPubKey(dhpbk_t *k);
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  dhGenPubKey
+ *  Description:  
+ * =====================================================================================
+ */
+void dhGenPubKey(dhpvk_t *pvk, dhpbk_t *pbk);
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  dhGenPubKeyFromAnother
+ *  Description:  
+ * =====================================================================================
+ */
+void dhGenPubKeyFromAnother(dhpbk_t *pbk, dhpvk_t *pvk);
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  dhGenPrivKey
+ *  Description:  
+ * =====================================================================================
+ */
+void dhGenPrivKey(dhpvk_t *pvk, dhpbk_t pbk);
+
+/*-----------------------------------------------------------------------------
+ *  Random Number Management
+ *-----------------------------------------------------------------------------*/
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  rnInit
+ *  Description:  
+ * =====================================================================================
+ */
+void rnInit();
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  rnClear
+ *  Description:  
+ * =====================================================================================
+ */
+void rnClear();
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  convertToInt
+ *  Description:  
+ * =====================================================================================
+ */
+mpz_t *convertToInt(char *str, size_t str_size, int block_size, size_t *ret_size);
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  convertToChar
+ *  Description:  
+ * =====================================================================================
+ */
+char *convertToChar(mpz_t *toconv, size_t arr_size, int block_size, size_t *ret_size);
+
 #endif
+

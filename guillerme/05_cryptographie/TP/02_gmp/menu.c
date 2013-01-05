@@ -3,10 +3,10 @@
  *
  *       Filename:  menu.c
  *
- *    Description:  Implementation of menu.h 's functions
+ *    Description:  Implementation file of MMI routines
  *
  *        Version:  1.0
- *        Created:  02/12/2012 14:05:26
+ *        Created:  04/01/2013 23:59:42
  *       Revision:  none
  *       Compiler:  gcc
  *
@@ -18,124 +18,230 @@
 
 #include "menu.h"
 
-void cleanBuffer(char *selString) {
-    char *p = strchr(selString, '\n'), c;
-    if (!p)
-        while((c = getchar()) != '\n' && c != EOF) {}
-}
+// Hierarchy :
+// \__ RSA
+// | \__ Key Generation
+// | \__ Encrypt
+// | \__ Decrypt
+// | \__ Sign
+// \__ El Gamal
+// | \__ Key Generation
+// | \__ Encrypt
+// | \__ Decrypt
+// | \__ Sign
+// \__ Diffie Hellman
+//
 
-void printMenu(int *choice) {
-    char buffer[50];
+// It could be a good idea to use function pointer 
+
+#define NB_SUBMENU 2 // RSA and El Gamal
+#define NB_MENU 1 // Main menu
+
+char ***hierarchy = NULL;
+// Always NULL, at the end AND last item must be Back
+// This must be in main file, (HORRIBLE!!!)
+char *princ_menu[] = {"RSA", "ElGamal", "Diffie Hellman", "Help", "String Test", "Quit", NULL};
+char *enc_opt[] = {"Key Generation", "Encrypt", "Decrypt", "Sign", "Back", NULL};
+
+void freeBuf() {
+    int c;
     do {
-        printf("\n*=====================================*\n"
-               "|       Please choose an action       |\n"
-               "*=====================================*\n"
-               "\n"
-               "1. [Diffie Hellman] Key computation \n"
-               "2. [RSA] Key computation \n"
-               "3. [RSA] Encryption \n"
-               "4. [RSA] Decryption \n"
-               "\n"
-               "Your choice : ");
-        fgets(buffer,sizeof(buffer),stdin);
-        cleanBuffer(buffer);
-        *choice = atoi(buffer);
-        printf("%d\n", *choice);
-    } while (*choice <= 0 || *choice > 4);
+        c = getchar();
+    } while (c != '\n' && c != EOF);
 }
 
+// {{{ Man Machine Interface init and clean
 /* 
  * ===  FUNCTION  ======================================================================
- *         Name:  yesOrNo
- *  Description:  aimed at grabbing a yes or no answer to a question
- * =====================================================================================
- */
-int yesOrNo(WIN ask, char *qu) {
-    char ans;
-    char buffer[150];
-    sprintf(buffer, "%s [yn]", qu);
-    do {
-        mvwprintw(ask.win, 1, 2, buffer);
-        wclrtoeol(ask.win);
-        defineBorder(ask);
-        wrefresh(ask.win);
-        ans = tolower(wgetch(ask.win));
-    } while (ans != 'y' && ans!='n');
-    return (ans == 'y');
-}		/* -----  end of function yesOrNo  ----- */
-
-void createWindow(WIN *w) {	
-	w->win = newwin(w->height, w->width, w->starty, w->startx);
-	box(w->win, 0 , 0);	
-    defineBorder(*w);
-	wrefresh(w->win);	
-}
-
-void destroy_win(WIN w) {	
-    wclear(w.win);
-	wrefresh(w.win);
-	delwin(w.win);
-}
-
-void initWin(WIN *win, int h, int w, int sx, int sy, char ls, char rs, char us, char ds, char c1, char c2, char c3, char c4) {
-    win->height = h; 
-    win->width = w; 
-    win->ls = ls; 
-    win->rs = rs; 
-    win->us = us; 
-    win->ds = ds;
-    win->c1 = c1;
-    win->c2 = c2;
-    win->c3 = c3;
-    win->c4 = c4; 
-    win->startx = sx;
-    win->starty = sy;
-}
-
-void printOptions(WIN win, char *opt[]) {
-    int cursor = 0;
-    werase(win.win);
-    defineBorder(win);
-    mvwprintw(win.win, cursor, 2, opt[cursor]);
-    cursor++;
-    while(opt[cursor]) {
-        mvwprintw(win.win, cursor + 1, 2, opt[cursor]);
-        cursor++;
-    }
-}
-/* 
- * ===  FUNCTION  ======================================================================
- *         Name:  requestWindow
+ *         Name:  initMMI
  *  Description:  
  * =====================================================================================
  */
-void requestWindow(WIN ask, char *request, char *buffer) {
-    mvwprintw(ask.win, 1, 2, request);
-    wclrtoeol(ask.win);
-    defineBorder(ask);
-    wrefresh(ask.win);
-    wgetstr(ask.win, buffer);
-}		/* -----  end of function requestWindow  ----- */
+void initMMI(int *menu, int *submenu) {
+    // Memory Allocation
+    if (!hierarchy) {
+        hierarchy = (char ***) calloc (NB_SUBMENU + NB_MENU, sizeof(char **));
+        if (!hierarchy) {
+            fprintf(stderr, "Erreur lors de l'initialisation du menu.\n");
+            exit(EXIT_FAILURE);
+        }
+    }
 
+    *menu = 0;
+    *submenu = 0;
+
+    // Hierarchy[0] is always the principal menu
+    hierarchy[0] = princ_menu;
+    // Then Hierarchy contains the items proposing a submenu
+    hierarchy[1] = enc_opt;
+    hierarchy[2] = enc_opt;
+}		/* -----  end of function initMMI  ----- */
 
 /* 
  * ===  FUNCTION  ======================================================================
- *         Name:  printWindow
+ *         Name:  clearMMI
+ *  Description:  Memory cleaning
+ * =====================================================================================
+ */
+void clearMMI() {
+    free(hierarchy);
+}
+// }}}
+
+// {{{ Menu routines
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  printAppropMenu
+ *  Description:  Print Appropriate menu according to given parameters
+ * =====================================================================================
+ */
+void printAppropMenu(int menu) {
+    int i = 0;
+    if (menu >= 0 && menu < NB_MENU + NB_SUBMENU) {
+        printf("\n");
+        while (hierarchy[menu][i]) {
+            printf("%d - %s\n", i+1, hierarchy[menu][i]);
+            i++;
+        }
+        printf("\n");
+    }
+}
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  askUser
+ *  Description:  ask user for action it returns -1 for an error, 0 for a move in the 
+ *                hierarchy, 1 on other case
+ * =====================================================================================
+ */
+int askUser(int *menu, int *submenu) {
+    int choice = -1;
+    char tmp_choice = 0;
+    int nb_choice = 0;
+    
+    if (*menu >= NB_SUBMENU + NB_MENU || *menu < 0)
+        return -1;
+
+    while (hierarchy[*menu][nb_choice++]) {}
+
+    switch (*menu) {
+        case 0:
+            while (choice <= 0 || choice >= nb_choice) {
+                printAppropMenu(*menu);
+                printf("\nYour choice : ");
+                tmp_choice = getchar();
+                choice = atoi(&tmp_choice);
+                freeBuf();
+            }
+            if (choice <= NB_SUBMENU) {
+                *menu = choice;
+                return 0;
+            }
+            *submenu = choice;
+            return 1;
+            break;
+        case 1:
+        case 2:
+            while (choice <= 0 || choice >= nb_choice) {
+                printAppropMenu(*menu);
+                printf("\nYour choice : ");
+                tmp_choice = getchar();
+                choice = atoi(&tmp_choice);
+                freeBuf();
+            }
+            if (choice == nb_choice - 1) {
+                *menu = 0;
+                return 0;
+            }
+            *submenu = choice;
+            return 1;
+        break;
+    }
+}
+// }}}
+
+// {{{ Parsers
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  getFile
  *  Description:  
  * =====================================================================================
  */
-int printWindow(WIN win, int *cpt, char *s) {
-    if (*cpt >= win.height - 3) {
-        wmove(win.win, 1, 2);
-        wdeleteln(win.win);
-        wmove(win.win, win.height -2, 2);
-        wdeleteln(win.win);
-        defineBorder(win);
-        mvwprintw(win.win, *cpt, 2, s);
+FILE *getFile(const char *mod) {
+    char c, *name, *tmp;
+    int nsize = 32, csize = 1;
+    FILE *result;
+
+    name = (char *) malloc (sizeof(char) * nsize);
+
+    printf ("\nVeuillez saisir le nom du fichier : ");
+    do {
+        c = getchar();
+        if (csize >= nsize) {
+            nsize = nsize << 1;
+            tmp = (char *) realloc (name, sizeof(char) * nsize);
+            if (tmp)
+                name = tmp;
+            else {
+                free(name);
+                return NULL;
+            }
+        }
+        name[csize - 1] = c;
+        csize ++;
+    } while(c != EOF && c != '\n');
+    name[csize - 2] = '\0';
+
+    // File opening
+    errno = 0;
+    result = fopen(name, mod);
+    if (!result && errno) {
+        fprintf(stderr, "Erreur à l'ouverture du fichier %s (mode : %s). %s\n", name, mod, strerror(errno));
+        free(name);
+        return NULL;
     }
-    else {
-        mvwprintw(win.win, *cpt, 2, s);
-        (*cpt)++;
+    else if (!result) {
+        fprintf (stderr, "Erreur inconnue à l'ouverture du fichier %s (mode : %s).\n", name, mod);
+        free(name);
+        return NULL;
     }
-    return 1;
-}		/* -----  end of function printWindow  ----- */
+
+    free(name);
+	return result;
+}		/* -----  end of function getFile  ----- */
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  readFile
+ *  Description:  
+ * =====================================================================================
+ */
+char *readFile(FILE *f, size_t *s) {
+    char c, *result, *tmp;
+    int nsize = 32, csize = 1;
+
+    result = (char *) malloc (sizeof(char) * nsize);
+
+    do {
+        c = fgetc(f);
+        if (csize >= nsize) {
+            nsize = nsize << 1;
+            tmp = (char *) realloc (result, sizeof(char) * nsize);
+            if (tmp)
+                result = tmp;
+            else {
+                free(result);
+                return NULL;
+            }
+        }
+        result[csize - 1] = c;
+        csize ++;
+    } while(c != EOF);
+    result[csize - 2] = '\0';
+    *s = csize - 3;
+//    printf("%s\n",result);
+//    free(result);
+	return result;
+}		/* -----  end of function readFile  ----- */
+// }}}

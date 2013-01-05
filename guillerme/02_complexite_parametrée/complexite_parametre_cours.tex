@@ -593,7 +593,7 @@ configuration maximale acceptables est $6^k$ on va donc nettoyer la table et rec
 
 \subsubsection{Problèmes \emph{faciles}}
 
-On parle de problèmes faciles par rapport à la progreammation dynamique : 
+On parle de problèmes faciles par rapport à la programmation dynamique : 
 \begin{itemize}
     \item ensemble indépendant
     \item vertex cover
@@ -738,8 +738,90 @@ si et seulement si $K_{3,3} \not \lm G$ et $K_5 \not \lm G$.
 % Taille de max independant set, taille min feedback vertex set, taille min connected dominating set
 % sont ils fermés par contraction, mineur, les deux ?
 
+Supposons que l'on veuille répondre à la question $P(G) \leq K$ pour un graphe $G \in \mathcal{G}$.
+Supposons :
+\begin{enumerate}[A]
+    \item $\forall G \in \mathcal{G}, \bw(G) \leq \alpha \sqrt{P(G)}$ pour une constante $\alpha >
+        0$
+    \item $\forall G \in \mathcal{G}$ et étant donné une décomposition en branche optimale $(T,
+        \mu)$ de $G$ on peut calculer $P(G)$ en temps $2^{O(\omega(T,\mu))} n^{O(1)}$ (temps
+        simplement exponentiel)
+\end{enumerate}
 
+\begin{thrm}
+    Si on a $(A) + (B)$, alors on peut décider si $P(G) \leq K$ en temps $2^{O(\sqrt{k})} n^{O(1)}$
+    pour $G \in \mathcal{G}$ avec $n = |V(G)|$
+\end{thrm}
 
+\begin{proof}
+    Supposons que l'on ait une décomposition en branche $(T, \mu)$ optimal de $G$. On distingue deux
+    cas : \begin{enumerate}
+        \item Si $\bw(G) > \alpha \sqrt{k}$, alors d'après $(A)$ : \[
+                \alpha \sqrt{k} < \bw(G) \leq \alpha \sqrt{P(G)} \Rightarrow k < P(G)
+            \]
+        \item  Si $\bw(G) \leq \alpha \sqrt{k}$, d'après $(B)$, je peux calculer $P(G)$ en temps :
+            \[
+                2^{O(\omega(T, \mu))} n^{O(1)} = 2^{O(\sqrt{k})} . n^{O(1)}
+            \]
+    \end{enumerate}
+\end{proof}
+
+\subsubsection{Comment provuer la partie $(A)$?}
+
+\begin{thrm}[Robertson, Seymour, Thomas, 1994]
+    Soit $l \geq 1$, un entier, si $G$ est un graphe planaire, tel que $\bw(G) \geq l$, alors : \[
+        H_{\frac{l}{4} \times \frac{l}{4} \geq_m G
+    \]
+    Avec $H_{a \times a}$ la grille à $a \times a$ sommets.
+\end{thrm}
+
+La borne a été améliorée depuis : \[
+        H_{\frac{l}{3} \times \frac{l}{3} \geq_m G
+    \]
+
+Si $G$ est planaire : \[
+    \bw(G) \geq 3l \Rightarrow H_{l \times l} \geq_m G
+\]
+Par contre si $G$ est quelconque : \[
+    \bw(G) \geq 20^{2^{l^5}} \Rightarrow H_{l \times l} \geq_m G
+\]
+
+Mais la borne n'est pas optimale.
+
+\begin{ex}[\kvcover]
+\end{ex}
+
+\begin{df} 
+    Un paramètre $P$ est \emph{mineur bidimmensionnel} avec densité $\delta$ si : \begin{enumerate}
+        \item $P$ est fermé par mineurs
+        \item $P(H_{r \times r} \geq (\delta r)^2$
+    \end{enumerate}
+\end{df}
+
+\begin{lemma}
+    Si $P$ est un paramètre mineur bidimmensionnel, alors $P$ satisfait la propriété $(A)$ dans les
+    graphes planaires.
+\end{lemma}
+
+\begin{ex}
+    \begin{itemize}
+        \item[\vcover] \[
+                vc(H_{r \times r}) \geq \frac{r^2}{2} \rightarrow \delta \leq \frac{1}{\sqrt{2}}
+            \]
+        \item[\fvset] est bien fermé par mineur :
+            % fig 211212
+            \[
+                fvs(H_{r \times r}) \geq \frac{r^2}{4} \rightarrow \delta = \frac{1}{2}
+            \]
+        \item[\lpath] est bien fermé par mineur :
+            \[
+                lp(H_{r \times r}) = r^2 \rightarrow \delta = 1
+            \]
+        \item[\textsc{Minimum Maximal Matching}] consiste à rechercher un couplage
+            maximal\foontote{Que l'on ne peut plus étendre} de taille minimum.
+            % A FAIRE CHEZ SOI
+    \end{itemize}
+\end{ex}
 %}}}
 
 \end{document}
