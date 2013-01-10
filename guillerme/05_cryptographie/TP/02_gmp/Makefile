@@ -1,14 +1,23 @@
 CC=gcc
-OFLAGS=-c -lgmp -g
+LFLAGS= -lgmp -Wall
+CFLAGS= -c
+DFLAGS = 
+DEBUG = 0
 
-pgrm: crypt.o menu.o main.o
-	$(CC) -g -lgmp -o $@ $^
+ifeq (DEBUG, 1)
+	DFLAG += -g
+endif
 
-main.o: main.c
-	$(CC) $(OFLAGS) $^
+PGRM = crypt
 
-crypt.o: crypt.h crypt.c
-	$(CC) $(OFLAGS) $^
+$(PGRM): crypt.o menu.o main.o
+	$(CC) -o $@ $(DFLAGS) $(LFLAGS) $^
 
-menu.o: menu.h menu.c
-	$(CC) $(OFLAGS) $^
+%.o: %.h %.c
+	$(CC) $(DFLAGS) $(LFLAGS) $(CFLAGS) $^
+
+clean:
+	rm -rf *.o *~ *.h.gch
+
+sclean: clean
+	rm $(PGRM)

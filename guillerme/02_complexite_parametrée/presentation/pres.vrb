@@ -1,0 +1,48 @@
+\frametitle{\rmfamily{\scshape{Odd Cycle Transversal}}}
+    \dfpbp{\rmfamily{\scshape{Odd Cycle Transversal}}}{Un graphe $G=(V,E)$, un entier $k$}{Est il possible
+    de transformer $G$ en un graphe biparti en supprimant au plus $k$ sommets de $G$?}{$k$}
+
+    \vfill
+
+    \pause
+
+    \begin{columns}
+        \begin{column}[c]{0.45\linewidth}
+            \begin{figure}
+                \begin{center}
+                    \begin{tikzpicture}
+                        \node[vertex] (1) at (0,2) {$1$};
+                        \node[vertex] (2) at (2,2) {$2$};
+                        \node[vertex] (3) at (3,1) {$3$};
+                        \node[vertex] (4) at (2,0) {$4$};
+                        \node[vertex] (5) at (1,1) {$5$};
+                        \node[vertex] (6) at (0,0) {$6$};
+
+                        \draw[-] (1) to (2);
+                        \draw[-] (1) to (5);
+                        \draw[-] (1) to (6);
+
+                        \draw[-] (2) to (3);
+                        \draw[-] (2) to (4);
+
+                        \draw[-] (3) to (4);
+
+                        \draw[-] (4) to (5);
+                        \draw[-] (4) to (6);
+
+                        \draw[-] (5) to (6);
+                    \end{tikzpicture}
+                \end{center}
+                \caption{Exemple}
+            \end{figure}
+        \end{column}
+        \hfill
+
+        \pause
+
+        \begin{column}[c]{0.45\linewidth}
+            \begin{thrm}
+                OCT est \npc
+            \end{thrm}
+        \end{column}
+    \end{columns}

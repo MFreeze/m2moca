@@ -120,7 +120,7 @@ void rsaKeyGen(rsapvk_t *pvk, rsapbk_t *pbk) {
 
 void rsaEncrypt(rsapbk_t k, rsadm_t m, rsaem_t *c) {
     // Counters and size of encrypted message
-    int i = 0, j = 0, l = 0, tmp;
+    int i = 0, tmp;
 
     // Memory initialization
     c->mess = convertToInt(m.mess, m.size, k.k, &tmp);
@@ -221,7 +221,7 @@ void egEncrypt(egpbk_t k, egdm_t m, egem_t *c) {
     mpz_urandomb(tmp, seed, EG_KEY_SIZE);
 
     // Counters and size of encrypted message
-    int i = 0, j = 0, l = 0;
+    int i = 0, l = 0;
 
     // Memory initialization
     mpz_init(c->y1);
