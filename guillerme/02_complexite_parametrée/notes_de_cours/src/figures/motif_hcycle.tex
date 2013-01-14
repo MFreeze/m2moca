@@ -1,0 +1,15 @@
+\node[vertex] (u1) {$u_1$};
+\node[vertex, below=of u1] (v1) {$v_1$};
+
+\foreach \x [evaluate=\x as \y using (\x - 1)] in {2,...,6} {
+    \node[vertex, right=of u\y] (u\x)  {$u_{\x}$};
+    \node[vertex, right=of v\y] (v\x)  {$v_{\x}$};
+    \draw[edge] (u\y) to (u\x);
+    \draw[edge] (v\y) to (v\x);
+}
+
+\draw[edge] (u1) to (v3);
+\draw[edge] (v1) to (u3);
+\draw[edge] (u4) to (v6);
+\draw[edge] (v4) to (u6);
+

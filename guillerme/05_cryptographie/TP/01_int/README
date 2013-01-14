@@ -1,0 +1,6 @@
+Ce programme implémente RSA, ElGamal et l'échange de clés de Diffie Hellman, ainsi que l'algorithme
+d'exponentiation rapide.
+
+Il n'utilise pas gmp, mais de long int.
+
+Il nécessite ncurse pour fonctionner.

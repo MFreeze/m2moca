@@ -169,7 +169,9 @@ Le théorème de Courcelle et un outil de preuve d'existence d'algo FPT.
             % Ecrire un algo de programmation dynamique
     \end{enumerate}
 \end{exo}
-    
+
+% {{{ Logique monadique du second ordre
+
 \section{Logique monadique du second ordre}
 
 \subsection{Structure relationnelle}
@@ -232,6 +234,142 @@ $x=y, x\mathcal{R}y$ Relations d'équivalences entre les variables de l'univers
     Trouver une formule $MSOL_1$ pour exprimer la présence d'un vertex cover de taille $k$.
 \end{exo}
 
+% Programme du 14/12 :
+% Lemme de Buchi
+% Pumping Lemma (Lemme de l'étoile)
+% Correspondance automates finis <-> MSOL
+% Correspondance automates d'arbres <-> MSOL (Automates d'arbres <=> Prog Dyn)
+
+\subsection{Langages réguliers et MSOL}
+
+Un petit rappel : les chaînes de caractères de longueur $n$ sur $\Sigma$: \[
+    \tau_\Sigma < [n],\ \leq,\ \{P_a | a \in \Sigma \} >
+\]
+
+La relation $\leq$ est une relation binaire introduisant un ordre sur les caractères, la relation
+$[]$ est la relation d'indiçage ($[3]$ renvoie la lettre d'indice 3) et $P_a$ renvoie l'ensemble des
+indices des lettres $a$ dans la chaîne.
+
+% {{{ Théorème de Buchi
+\begin{thrm}[Buchi]
+    Les assertions suivantes sont équivalentes : \begin{enumerate}
+        \item $L$ est un langage régulier
+        \item $L$ est reconnaissable par un automate fini $\mathcal{A}$
+        \item $L$ est définissable en MSOL
+    \end{enumerate}
+\end{thrm}
+
+\begin{proof}
+    Il existe un algorithme étant donné une formule MSOL $\phi$ tel que $L = L(\phi)$ calcule
+    $\mathcal{A}$ et vice versa.
+    \begin{itemize}
+        \item[$2 \Rightarrow 3$] \emph{Intuition :} la formule \emph{devine} les états de l'automate
+            et décrit les fonctions de transition, les états initiaux, $\dots$
+
+            Posons l'hypothèse $\mathcal{A}$ tel que $L = L(\mathcal{A})$ un automate à $m$ états.
+            \[
+                \phi = \underbrace{\exists X_1 \dots \exists X_m}_A
+                \left ( \overbrace{\mbox{unique}}^B \wedge
+                \underbrace{\mbox{start}}_C \wedge
+                \mbox{transition} \wedge \overbrace{\mbox{accept}}^D \wedge
+                \underbrace{\mbox{non vide}}_E \right )
+            \]
+            Avec : \begin{itemize}
+                \item[$A$ :] On devine les états
+                \item[$B$ :] A chaque position de la chaine de caractère l'automate est dans une position unique
+                \item[$C$ :] $\mathcal{A}$ possède un état initial
+                \item[$D$ :] états finaux
+                \item[$E$ :] La chaine vide n'est pas acceptée
+            \end{itemize}
+
+            $X_i$ variable d'ensemble de positions de la chaîne de caractères, elle va contenir
+            l'ensemble des positions $j$ de la chaîne $s$, telles que avant de lire le caractère
+            $c_j$, $\mathcal{A}$ est dans l'état $e_i$. \\
+
+            \begin{itemize}
+                \item[\underline{unique} :] Les $X_i$ forment une partition des positions du mots, ce qui
+                    s'écrit : \[
+                        \forall x \left ( \bigvee_{i \in [m]} X_i x n ( \bigwedge_{1 \leq i < i' \leq m}
+                        (\neg X_i x \vee \neg X_i x )) \right )
+                    \]
+                \item[\underline{start} :] \[
+                        \forall x ( \forall y x \leq y \Rightarrow X_1 x )
+                    \]
+                \item[\underline{transition} :] \[
+                        \forall x \forall y \left ( x \leq y \wedge x \neq y \wedge \forall z ( z
+                        \leq x \vee y \leq z)\right ) \Rightarrow \bigvee_{(i, a, i') \in \Delta} (X_i x
+                        \wedge P_a x \wedge X_i y )
+                    \]
+                \item[\underline{accept} :] \[
+                        \forall x \left ( \forall z, z \leq x\right ) \Rightarrow \bigvee_{(i, a, i') \in
+                        \Delta i' \in F} (X_i x \wedge P_a x)
+                    \]
+                \item[\underline{non vide} :] \[
+                        \exists x x=x
+                    \]
+            \end{itemize}
+            On remarque que la formule est linéaire en la taille de l'automate.
+        \item[$2 \Leftarrow 3$] % Transformation 1412trans
+    \end{itemize}
+\end{proof}
+%}}}
+
+\subsubsection{Automates d'arbre}
+
+\begin{df}[Arbre binaire]
+    $T = \left < V_T, E_1, E_2, \lambda \right >$, avec $V_T$ l'ensemble des sommets de $T$, $E_0,
+    E_1$ les fils droits et gauches et $\lambda$ la fonction d'étiquette : $\lambda : T
+    \longrightarrow \Sigma$
+\end{df}
+
+% Fig 1412Arbre
+
+\begin{df}[Automate d'arbre binaire]
+    $\mathcal{A} = \left < S, \Sigma, \Delta, F \right >$, avec $S$ l'ensemble des états, $\Delta$
+    l'ensemble des transitions et $F$ les état finaux.
+
+    $\Delta_i : S \cup \{ \perp\} \times S \cup \{\perp\} \times \Sigma \longrightarrow S$ \\
+    $\perp \sim $ état initial qui correspond aux feuilles.
+\end{df}
+
+\begin{ex}
+    $S = \{S_0, S_1\}$, $\Sigma ) \{0, 1\}$, $F = \{S_0\}$ et : \[
+        \Delta : \begin{array}{rcl}
+            (\perp, \perp) & \xrightarrow{1} & S_1 \\
+            (\perp, \perp) & \xrightarrow{0} & S_0 \\
+            (S_i, \perp)   & \xrightarrow{j} & S_{(i + j) \mod 2} \\
+            (\perp, S_i)   & \xrightarrow{j} & S_{(i + j) \mod 2} \\
+            (S_i, S_j)     & \xrightarrow{k} & S_{(i+j+k) \mod 2} \\
+        \end{array}
+    \]
+    Cet automate reconnaît les arbres binaires étiquetés par un nombre pair de $1$.
+\end{ex}
+
+\begin{lemma}[Généralisation de Buchi]
+    Un langage d'arbre est reconnu par un automate d'arbre fini si et seulement so il est définit
+    par une formule MSOL
+\end{lemma}
+
+\begin{corol}
+    Si $\phi$ est une formule MSOL sur une structure d'arbre\footnote{Par abus de langage, on
+    utilisera arbre}, alors tester si un arbre vérifie $\phi$ est FPT paramétré par la longueur de
+    la formule.
+\end{corol}
+
+% }}}
+
+% {{{ Lemme de l'étoile
+\begin{lemma}[Lemme de l'étoile]
+    Si $L$ est un langage régulier, alors il existe un entier $P$ (appelé longueur de pompage) tel
+    que si $s \in L$ et $|s| \geq p$ alors $s = xyz$ \begin{enumerate}
+        \item $\forall i \geq 0,\ xy^iz \in L$
+        \item $|y|  > 0$
+        \item $|xy| \leq p$
+    \end{enumerate}
+\end{lemma}
+%}}}
+
+%{{{ Largeur de Branche
 \section{Largeur de branches}
 
 \subsection{Définitions et exemples}
@@ -413,7 +551,7 @@ Il s'agit de graphes dessinés sans croisement d'arêtes.
     Soit $G$ un graphe plan. Une \underline{sphere-cut décomposition} de $G$ est une décomposition
     en branches $(T, \mu)$ de $G$ avec la propriété supplémentaire suivante : \\
 
-    Pour toute arête $e \in E(T)$, il existe un noose, $O_e$ de $G$ tel que $\O_e \cap V(G) =
+    Pour toute arête $e \in E(T)$, il existe un noose, $O_e$ de $G$ tel que $O_e \cap V(G) =
     \mid(e)$
 \end{df}
 
@@ -455,7 +593,7 @@ configuration maximale acceptables est $6^k$ on va donc nettoyer la table et rec
 
 \subsubsection{Problèmes \emph{faciles}}
 
-On parle de problèmes faciles par rapport à la progreammation dynamique : 
+On parle de problèmes faciles par rapport à la programmation dynamique : 
 \begin{itemize}
     \item ensemble indépendant
     \item vertex cover
@@ -600,9 +738,91 @@ si et seulement si $K_{3,3} \not \lm G$ et $K_5 \not \lm G$.
 % Taille de max independant set, taille min feedback vertex set, taille min connected dominating set
 % sont ils fermés par contraction, mineur, les deux ?
 
+Supposons que l'on veuille répondre à la question $P(G) \leq K$ pour un graphe $G \in \mathcal{G}$.
+Supposons :
+\begin{enumerate}[A]
+    \item $\forall G \in \mathcal{G}, \bw(G) \leq \alpha \sqrt{P(G)}$ pour une constante $\alpha >
+        0$
+    \item $\forall G \in \mathcal{G}$ et étant donné une décomposition en branche optimale $(T,
+        \mu)$ de $G$ on peut calculer $P(G)$ en temps $2^{O(\omega(T,\mu))} n^{O(1)}$ (temps
+        simplement exponentiel)
+\end{enumerate}
 
+\begin{thrm}
+    Si on a $(A) + (B)$, alors on peut décider si $P(G) \leq K$ en temps $2^{O(\sqrt{k})} n^{O(1)}$
+    pour $G \in \mathcal{G}$ avec $n = |V(G)|$
+\end{thrm}
 
+\begin{proof}
+    Supposons que l'on ait une décomposition en branche $(T, \mu)$ optimal de $G$. On distingue deux
+    cas : \begin{enumerate}
+        \item Si $\bw(G) > \alpha \sqrt{k}$, alors d'après $(A)$ : \[
+                \alpha \sqrt{k} < \bw(G) \leq \alpha \sqrt{P(G)} \Rightarrow k < P(G)
+            \]
+        \item  Si $\bw(G) \leq \alpha \sqrt{k}$, d'après $(B)$, je peux calculer $P(G)$ en temps :
+            \[
+                2^{O(\omega(T, \mu))} n^{O(1)} = 2^{O(\sqrt{k})} . n^{O(1)}
+            \]
+    \end{enumerate}
+\end{proof}
 
+\subsubsection{Comment provuer la partie $(A)$?}
+
+\begin{thrm}[Robertson, Seymour, Thomas, 1994]
+    Soit $l \geq 1$, un entier, si $G$ est un graphe planaire, tel que $\bw(G) \geq l$, alors : \[
+        H_{\frac{l}{4} \times \frac{l}{4} \geq_m G
+    \]
+    Avec $H_{a \times a}$ la grille à $a \times a$ sommets.
+\end{thrm}
+
+La borne a été améliorée depuis : \[
+        H_{\frac{l}{3} \times \frac{l}{3} \geq_m G
+    \]
+
+Si $G$ est planaire : \[
+    \bw(G) \geq 3l \Rightarrow H_{l \times l} \geq_m G
+\]
+Par contre si $G$ est quelconque : \[
+    \bw(G) \geq 20^{2^{l^5}} \Rightarrow H_{l \times l} \geq_m G
+\]
+
+Mais la borne n'est pas optimale.
+
+\begin{ex}[\kvcover]
+\end{ex}
+
+\begin{df} 
+    Un paramètre $P$ est \emph{mineur bidimmensionnel} avec densité $\delta$ si : \begin{enumerate}
+        \item $P$ est fermé par mineurs
+        \item $P(H_{r \times r} \geq (\delta r)^2$
+    \end{enumerate}
+\end{df}
+
+\begin{lemma}
+    Si $P$ est un paramètre mineur bidimmensionnel, alors $P$ satisfait la propriété $(A)$ dans les
+    graphes planaires.
+\end{lemma}
+
+\begin{ex}
+    \begin{itemize}
+        \item[\vcover] \[
+                vc(H_{r \times r}) \geq \frac{r^2}{2} \rightarrow \delta \leq \frac{1}{\sqrt{2}}
+            \]
+        \item[\fvset] est bien fermé par mineur :
+            % fig 211212
+            \[
+                fvs(H_{r \times r}) \geq \frac{r^2}{4} \rightarrow \delta = \frac{1}{2}
+            \]
+        \item[\lpath] est bien fermé par mineur :
+            \[
+                lp(H_{r \times r}) = r^2 \rightarrow \delta = 1
+            \]
+        \item[\textsc{Minimum Maximal Matching}] consiste à rechercher un couplage
+            maximal\foontote{Que l'on ne peut plus étendre} de taille minimum.
+            % A FAIRE CHEZ SOI
+    \end{itemize}
+\end{ex}
+%}}}
 
 \end{document}
 

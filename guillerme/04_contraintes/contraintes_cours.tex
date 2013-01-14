@@ -1,3 +1,5 @@
+\documentclass[a4paper,11pt]{thesis}
+
 \input{library.tex}
 
 % Algo
@@ -17,6 +19,8 @@
 % Lire et comprendre l'article
 
 \begin{document}
+
+\chapter{Arc-Consistance}
 
 \section{Introduction}
 
@@ -200,7 +204,7 @@ Considérons la procédure \em{Forward Checking}\footnote{Harlick Elliott 80}
     \end{algorithmic}
 \end{algorithm}
 
-\subsection{Algorithme MAC\footnote{Maintaining Arc Consistency}}
+\subsection{Algorithme MAC (Maintaining Arc Consistency)}
 
 \begin{algorithm}
     \caption{Maintaining Arc Consistency}
@@ -258,12 +262,165 @@ dynamique.
 \begin{df}
     Soit une instance de contrainte globale $N = (X, D_X, \{c\})$ et sa décomposition $M = (X \cup Y, D_X +
     D_Y, \mathcal{C})$. On dit que $M$ préserve l'arcconsistance sur $N$ ssi pour tout $D'_X
-    \sqsubseted D_x$, $AC(X, D_X', \{c\}) = AC(X \cup Y, D'_x \cup D_y, \mathcal{C})$.
+    \subseteq D_x$, $AC(X, D_X', \{c\}) = AC(X \cup Y, D'_x \cup D_y, \mathcal{C})$.
 \end{df}
 
 \begin{df}
-    Checker$(C, D) =$ vrai ssi $\exist I$ sur $D^{X(c)} / c(I)$
+    Checker$(C, D) =$ vrai ssi $\exists I$ sur $D^{X(c)} / c(I)$
 \end{df}
 
+\section{Solveurs}
 
+Ils sont basés sur des évènements\footnote{Un évènement est une action sur le domaine}, chaque
+suppression de valeurs $v_i \in D(X_i)$ est un évènement sur $X_i$. On peut distinquer quatres types
+d'évènements :
+\begin{enumerate}
+    \item \emph{remvalue}$(X_i)$ : une valeur est supprimée de $D(X_i)$
+    \item \emph{incmin}$(X_i)$ : la plus petite valeur de $D(X_i)$ a été supprimée
+    \item \emph{decmax}$(X_i)$ : la plus grande valeur de $D(X_i)$ a été supprimée
+    \item \emph{instantiate}$(X_i)$ : le domaine de $D(X_i)$ est réduit à un singleton
+\end{enumerate}
+
+Ces évènements sont exclusifs.
+
+\begin{ex}
+    \begin{displaymath}
+        D(X) = \{1, 2, 3, 4, 7\}
+    \end{displaymath}
+    Envisageaons plusieurs cas :\begin{itemize}
+        \item si l'on supprime $\{2, 4\}$ alors \emph{remvalue} est mis à vrai
+        \item si l'on supprime $\{2, 7\}$ alors la suppression de $7$ alors \emph{decmax} et celle
+            de $2$ déclenche \emph{remvalue}
+        \item si l'on supprime $\{7\}$  :\emph{decmax}
+        \item suppression $\{1, 4, 7\}$ : \emph{incmin} pour $1$ et \emph{decmax} pour $\{4, 7\}$
+            (puisque le max passe de $7$ à $3$ en une fois)
+        \item suppression $\{1, 2, 4, 7\}$ : \emph{instantiate}
+    \end{itemize}
+\end{ex}\
+
+\begin{ex}[$X < Y$]
+    On s'intéresse à la fonction appelée lorsque le système est déjà arcconsistant en cas de
+    modification d'un des domaines
+    \begin{algorithm}[h!]
+        \caption{Contrainte $X < Y$}
+        \label{revise_xleqy}
+        \begin{algorithmic}[1]
+            \Function{Revise}{$X, X<Y,$ type}
+                \If{type = decmax$(Y)$}
+                    \State remove $v \in D(X) | v \geq \max(Y)$
+                \EndIf
+            \EndFunction
+            \Function{Revise}{$Y, X<Y,$ type}
+                \If{type = incmin$(Y)$}
+                    \State remove $v \in D(Y) | v \leq \min(Y)$
+                \EndIf
+            \EndFunction
+        \end{algorithmic}
+    \end{algorithm}
+\end{ex}
+
+\begin{ex}[$X \neq Y$]
+    On s'intéresse à la fonction appelée lorsque le système est déjà arcconsistant en cas de
+    modification d'un des domaines
+    \begin{algorithm}[h!]
+        \caption{Contrainte $X \neq Y$}
+        \label{revise_xneqy}
+        \begin{algorithmic}[1]
+            \Function{Revise}{$X, X<Y,$ type}
+                \If{type = instantiate$(Y)$}
+                    \State remove $v \in D(X) | v = Y$
+                \EndIf
+            \EndFunction
+            \Function{Revise}{$Y, X<Y,$ type}
+                \If{type = instantiate$(Y)$}
+                    \State remove $v \in D(Y) | v = Y$
+                \EndIf
+            \EndFunction
+        \end{algorithmic}
+    \end{algorithm}
+\end{ex}
+
+\section{Modèles duaux}
+
+\subsection{Le problème des $n$ reines}
+
+\subsubsection{Modèle 1}
+
+%fig cont1
+
+On a les contraintes suivantes :
+\begin{displaymath}
+    \left \lbrace \begin{array}{rcl}
+        \mbox{Ligne 1}(X_i, X_j) & \equiv & X_i \neq X_j \\
+        \mbox{Diag 1} (X_i, X_j) & \equiv & |X_i - X_j| \neq |i - j| \\
+    \end{array}
+    \right .
+\end{displaymath}
+
+\subsubsection{Modèle 2}
+
+\begin{displaymath}
+    \left \lbrace \begin{array}{rcl}
+        \mbox{Col 2}(Y_i, Y_j) & \equiv & Y_i \neq Y_j \\
+        \mbox{Diag 2} (Y_i, Y_j) & \equiv & |Y_i - Y_j| \neq |i - j| \\
+    \end{array}
+    \right .
+\end{displaymath}
+
+\subsubsection{Modèle 3}
+
+On a les domaines suivants :
+\begin{displaymath}
+    \left \lbrace \begin{array}{rcl}
+        X  & = & \{X_1, \dots, X_4, Y_1, \dots, Y_4 \} \\
+        D(X_i) = D(Y_i) & = & \{1, \dots, 4\} \forall i\\
+    \end{array}
+    \right .
+\end{displaymath}
+
+Sous les contraintes suivantes :
+\begin{displaymath}
+    \left \lbrace \begin{array}{rcl}
+        \mbox{Chann}(X_i, Y_j) & \equiv & (X_{i = j} \Leftrightarrow Y_{j = i})
+        \quad\mbox{Channelling constraints} \\
+        \mbox{Diag} (X_i, X_j) & \equiv & |X_i - X_j| \neq |i - j| \\
+    \end{array}
+    \right .
+\end{displaymath}
+
+\section{Plannification}
+
+\subsection{Water Bucket}
+
+On dispose de trois seaux de 8, 5 et 3 litres. Celui de 8 litres est plein, trouver la série
+d'actions permettant d'arriver à deux seaux contenant 4 litres.
+
+On pose : $X_1^0 = 8,\ X_2^0 = 0,\ X_3^0 = 0$, leur domaine de définition est donné par : $D(X_1^i) =
+\{0, \dots 8\}, D(X_2^i) = \{0, \dots 5\}, D(X_3^i) = \{0, \dots 3\}$, et les variables d'arrivée :
+$X_1^n = 4, X_2^n = 4, X_3^n = 0$.
+
+On définit une contrainte représentant la conservation du volume :\begin{displaymath}
+    \forall i \in \{1, \dots, n\}, \quad X_1^i + X_2^i + X_3^i = 9
+\end{displaymath}
+
+On définit ensuite les contraintes représentant les différentes actions : \begin{displaymath}
+    \forall p,q \in 1, 2, 3,\ \forall i \quad X_p^i = X_p^{i+1} \vee X_q^i = X_q^{i+1} \vee
+    X_p^{i+1} = 0 \vee X_p^{i+1} = \max(p) \vee X_q^{i+1} = 0 \vee X_q^{i+1} = \max(q)
+\end{displaymath}
+
+\section{Décomposition de contraintes}
+
+\subsection{lex}
+
+La contrainte lex est définie de la manière suivante :
+\begin{displaymath}
+    \lex(X_1, \dots, X_n, Y_1, \dots, Y_n) \equiv X <_{\lex} Y
+\end{displaymath}
+
+Est elle décomposable?
+
+Si l'on réussit à se ramener à quelque chose de Berge acyclique, c'est gagné.
+
+% fig contrainte1
+    
 \end{document}

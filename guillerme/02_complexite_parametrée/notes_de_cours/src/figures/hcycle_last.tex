@@ -1,0 +1,11 @@
+\node[tmp] at (3, 3.5) (s1) {$s_1$};
+\node[tmp] at (3, 1.5) (s2) {$s_2$};
+
+\foreach \y in {1, 2, 3, 4}{
+    \foreach \x/\lab in {0/fin, 6/deb}{
+        \node[tmp] at (\x, \y) (\lab\y) {$\y_{\lab}$};
+        \draw[edge] (\lab\y) to (s1);
+        \draw[edge] (\lab\y) to (s2);
+    }
+}
+

@@ -1,0 +1,171 @@
+Au cours de cette partie, le principe de décomposition arborescente sera présenté. Puis nous
+introduirons la notion de largeur arborescente, qui sera utilisée comme paramètre dans la
+section~\ref{hcycle_tw}.
+
+% {{{ TREEWIDTH QUESACO
+%% {{{ INTRODUCTION DE LA DECOMPOSITION ARBORESCENTE
+%%% {{{ Principe
+\section{Principe}
+
+Le principe de décomposition arborescente a été introduit pour la première fois par Seymour et
+Robertson~\cite{robalgorithmic} dans le cadre de la théorie des mineurs dans les graphes. Une
+décomposition arborescente est la décomposition d'un graphe en séparateurs de ce graphe connectés
+dans un arbre. De manière plus formelle, une décomposition arborescente se définit comme suit :
+
+\begin{ndf}[Décomposition arborescente]
+    Étant donné un graphe fini\footnote{Nous ne travaillerons que sur des graphes finis et non
+        orientés, même si la notion de de décomposition arborescente peut s'étendre aux graphes
+    orientés.} $G = (V, E)$, on appelle décomposition arborescente, la paire $(T, \{X_t : t \in T)$,
+    avec $T$ un arbre dont les n\oe uds $t$, que nous appellerons des \emph{sacs}, sont des sous
+    ensembles de sommets de $G$ $X_t \subset V$ vérifiant : 
+    \begin{enumerate}
+        \item $\forall i \in V$, $v$ appartient à au moins un sac de $T$
+        \item $\forall (uv) \in E$, il existe au moins un sac contenant $u$ \textbf{et} $v$
+        \item si deux sacs $k$ et $m$ contiennent le même sommet $u$ de $G$ alors tous les sacs $l$
+            de $T$ sur le chemin entre $k$ et $m$ contiennent aussi $u$, $k, l, m \in T$
+    \end{enumerate}
+\end{ndf}
+
+Il est important de remarquer qu'une décomposition arborescente n'est pas unique, si l'on considère
+le graphe $G = (V, E)$ dont une représentation est donnée à la figure~\ref{tw_g}, alors les arbres
+présentés à la figure~\ref{tw_trees} sont tous des décompositions arborescentes de $G$.
+
+% {{{ FIGURES
+\begin{figure}
+    \begin{center}
+        \begin{tikzpicture}
+            \input{src/figures/tw_g.tex}
+        \end{tikzpicture}
+        \caption{Un graphe $G = (V, E)$}
+        \label{tw_g}
+    \end{center}
+\end{figure}
+
+\begin{figure}
+    \begin{center}
+        \subfloat[$T_1$]{\label{fig:tw_t1}
+            \begin{tikzpicture}
+                \input{src/figures/tw_t1.tex}
+            \end{tikzpicture}
+        }
+        \subfloat[$T_2$]{\label{fig:tw_t2}
+            \begin{tikzpicture}
+                \input{src/figures/tw_t2.tex}
+            \end{tikzpicture}
+        }
+        \subfloat[$T_3$]{\label{fig:tw_t3}
+            \begin{tikzpicture}
+                \input{src/figures/tw_t3.tex}
+            \end{tikzpicture}
+        }
+        \caption{Différentes décompositions arborescentes}
+        \label{tw_trees}
+    \end{center}
+\end{figure}
+
+\begin{figure}
+    \begin{center}
+        \begin{tikzpicture}
+            \input{src/figures/tw_sep.tex}
+        \end{tikzpicture}
+        \caption{$\{4\}$ est un séparateur de $G$}
+        \label{tw_sep}
+    \end{center}
+\end{figure}
+
+\begin{figure}
+    \begin{center}
+        \begin{tikzpicture}
+            \input{src/figures/tw_bsep.tex}
+        \end{tikzpicture}
+        \caption{$\{2,\ ,3\ ,4\}$ est un séparateur de $G$}
+        \label{tw_bsep}
+    \end{center}
+\end{figure}
+
+% }}}
+
+En observant l'exemple donné, on peut mettre en évidence la notion de séparateur : toute arête de
+$T$ représente un séparateur de $G$. En effet prenons l'arête $e = (A, B),\ A, B \in T$ tels que
+$X_A = \{2, 3, 4\}$ et $X_B = \{4, 6, 7\}$ dans l'arbre $T_2$ de la sous-figure~\ref{fig:tw_t2},
+appelons $T_A$ et $T_B$ les sous-arbres induits de la suppression de l'arête $e$ dans $T_2$ tels que
+$A \in T_A$ et $B \in T_B$, le séparateur associé à $e$ et l'ensemble de sommet de $G$ défini par
+$S_e = X_A \cap X_B$, donc $S_e = \{4\}$. En effet, en retirant le sommet $4$ de $G$ on obtient deux
+composantes connexes, l'une formée par les sommets contenus dans les sacs de $T_A$ privé de $4$, et
+l'autre formée par les sommets contenus dans les sacs de $T_B$ privé de $4$. Ceci est mis en
+évidence à la figure~\ref{tw_sep}. De la même manière, tout sac interne de $T$ est un séparateur de
+$G$, puisque supprimer un sac revient à supprimer toutes les arêtes adjacentes à ce sac et donc tous
+les séparateurs associés à ces arêtes ainsi que le n\oe uds seulement contenus dans le sac supprimé
+(cf figure~\ref{tw_bsep}). Nous noterons donc les deux propriétés suivantes :
+
+\begin{nprop}
+    \label{esep}
+    Étant donné un graphe $G=(V_G,E_G)$ et une de ses décompositions arborescentes $\mathcal{T} =(T, \{X_t
+    : t \in T\})$, toute arête $e=(AB) \in T$ définit un séparateur $S_e$ pour $G$ donné par $S_e =
+    X_A \cup X_B$.
+\end{nprop}
+
+\begin{nprop}
+    \label{nsep}
+    Étant donné un graphe $g=(V_G, E_G)$ et $\mathcal{T} = (T, \{X_t : t \in T\}$ une décomposition
+    arborescente de $G$, tout sac interne de $T$ définit un séparateur de $G$.
+\end{nprop}
+
+Le but d'une telle opération est de ramener un graphe quelconque à un arbre dans lequel, comme nous
+l'avons vu en section~\ref{tree_why}, de nombreux problèmes sont plus simples à résoudre. De plus,
+la notion de décomposition arborescente permet de définir une notion très intéressante que l'on
+appelle la largeur arborescente.
+%%% }}}
+%% }}}
+%% {{{ DEFINITION FORMELLE DE LA TREEWIDTH
+\section{Largeur arborescente}
+
+La largeur arborescente est une notion introduite par Robertson et Seymour~\cite{robalgorithmic}
+descendant directement du principe de décomposition arborescente, en effet, la largeur arborescente
+d'une décomposition arborescente est égale à la taille de son plus gros sac moins $1$ et la largeur
+arborescente d'un graphe $G=(V,E)$ donné est égale à la plus petite valeur choisie parmi les
+largeurs arborescentes de l'ensemble de ses décompositions. Autrement dit :
+
+\begin{ndf}
+    Étant donné un graphe $G=(V,E)$ et $\Theta$ l'ensemble de ses décompositions arborescentes, si l'on
+    désigne par $s_t$ l'ensemble des sacs de la décomposition arborescente $t \in T$, alors la
+    largeur arborescente est définie par : \[
+        \tw(G) = \min_{T\in \Theta}(\tw(t)) = \min_{T\in \Theta}(\max_{t \in T}(|X_t| - 1))
+    \]
+\end{ndf}
+
+On peut alors définir le problème de décision associé :
+
+\dfpb{\twidth}{$G=(V,E)$ un graphe et $k$ un entier}{Est ce que le graphe $G$ possède une
+décomposition arborescente $T$ telle que $\tw(t) \leq k$?}
+
+\begin{nrmq}
+    Ce problème a été démontré \npc~\cite{Arn87}.
+\end{nrmq}
+
+De manière plus intuitive, la largeur arborescente mesure la ressemblance entre le graphe $G$ pour
+lequel cette valeur est calculée et un arbre. C'est pourquoi lorsque cette valeur est faible,
+certains algorithmes sont efficaces pour résoudre des problèmes \npc s tels que \hcycle comme nous
+le verrons plus loin.
+
+\begin{nlemma}
+    \label{tw_approx}
+    Une $4-$approximation de la largeur arborescente peut être calculée en temps polynomial.
+\end{nlemma}
+
+L'algorithme a été présenté par Diestel et al~\cite{Die00}.
+
+\subsection*{Notations}
+
+Dans la suite de ce document, nous utiliserons les notations suivantes. Soit une décomposition
+arborescente $\mathcal{T} = (T, \{X_t : t \in T\})$, si l'on enracine $\mathcal{T}$ alors on désignera par :
+\begin{itemize}
+    \item $V_t$ l'ensemble des sommets présents dans les descendants de $t$
+    \item $G_t$ le sous graphe induit par $V_t$ que l'on peut aussi noter $G[V_t]$
+\end{itemize}
+
+
+
+%% }}}
+% }}}
+

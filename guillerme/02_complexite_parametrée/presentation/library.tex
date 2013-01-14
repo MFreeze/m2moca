@@ -21,11 +21,11 @@
 
 % {{{ RÉDUCTION DES MARGES
 %\usepackage{fullpage}
-\usepackage[top=2.5cm, bottom=2.5cm, left=3.5cm, right=3.5cm]{geometry}
+%\usepackage[top=2.5cm, bottom=2.5cm, left=3.5cm, right=3.5cm]{geometry}
 % }}}
 
 % {{{ MATHÉMATIQUES
-\usepackage[fleqn]{amsmath}
+\usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{bbm}
 \usepackage{amssymb}
@@ -62,20 +62,20 @@
 % {{{ THÉORÈMES, lEMMES -- NUMÉROTATION PERSONNALISÉE
 \theoremstyle{plain}
 \newtheorem{thrm}{Théorème}[section]
-\newtheorem{lemma}{Lemme}[subsection]
+\newtheorem{lemm}{Lemme}[subsection]
 \newtheorem{corol}{Corollaire}[section]
 % }}}
 
 % {{{ THÉORÈMES, lEMMES -- NUMÉROTATION CLASSIQUE
 \newtheorem{nthrm}{Théorème}
-\newtheorem{nlemma}{Lemme}
+\newtheorem{nlemm}{Lemme}
 \newtheorem{ncorol}{Corollaire}
 \newtheorem{npb}{Problème}
 % }}}
 
 % {{{ THÉORÈMES, lEMMES -- NON NUMÉROTÉS
 \newtheorem*{thrm*}{Théorème}
-\newtheorem*{lemma*}{Lemme}
+\newtheorem*{lemm*}{Lemme}
 \newtheorem*{corol*}{Corollaire}
 % }}}
 
@@ -100,19 +100,19 @@
 
 % {{{ AUTRES -- NUMÉROTATION PERSONNALISÉE
 \theoremstyle{remark}
-\newtheorem{note}{Note}[subsubsection]
+\newtheorem{nota}{Note}[subsubsection]
 \newtheorem{pr}{Proposition}[subsection]
 \newtheorem{rmq}{Remarque}[subsubsection]
 % }}}
 
 % {{{ AUTRES -- NUMÉROTATION CLASSIQUE
-\newtheorem{nnote}{Note}
+\newtheorem{nnota}{Note}
 \newtheorem{npr}{Proposition}
 \newtheorem{nrmq}{Remarque}
 % }}}
 
 % {{{ AUTRES -- NON NUMÉROTÉS
-\newtheorem*{note*}{Note}
+\newtheorem*{nota*}{Note}
 \newtheorem*{pr*}{Proposition}
 \newtheorem*{rmq*}{Remarque}
 % }}}
@@ -166,6 +166,7 @@
 \newcommand{\wiset}{\textsc{WEIGHTED INDEPENDANT SET} }
 \newcommand{\fvset}{\textsc{FEEDBACK VERTEX SET} }
 \newcommand{\kvcover}{\textsc{K-Vertex Cover} }
+\newcommand{\oct}{\textrm{\textsc{Odd Cycle Transversal}} }
 
 % }}}
 
@@ -187,10 +188,7 @@
 }
 
 \newcommand{\dfpbp}[4]{
-    ~\\
-    \hrule
-    \begin{npb}
-        #1
+    \begin{npb}[#1]
         \begin{itemize}
             \itemindent 10mm
             \item[\textbf{Données :}] #2
@@ -198,8 +196,6 @@
             \item[\textbf{Question :}] #3
         \end{itemize}
     \end{npb}
-    \hrule
-    ~\\
 }
 % }}}
 

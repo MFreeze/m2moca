@@ -1,0 +1,227 @@
+% {{{ RAPPEL SUR LE CYCLE HAMILTONIEN
+%% {{{ CYCLE HAMILTONIEN DEFINITION DU PROBLEME
+Avant toute chose, définissons de manière formelle le problème sur lequel nous allons travailler.
+
+\dfpb{\hcycle}{$G(V, E)$, un graphe non orienté}{Existe-t-il un chemin $H_G$ de $G$, tel
+que tous les sommets de $G$ sont visités par $H_G$ une seule fois et revenant à son point de départ ?}
+%% }}}
+
+%% {{{ NP-COMPLETUDE
+\section{$NP-$complétude}
+\label{hcycle_npc}
+\begin{nthrm}
+    Le problème \hcycle est \npc
+\end{nthrm}
+
+\begin{proof}
+    La preuve sera menée en trois parties. Dans un premier temps, nous décrirons une
+    réduction de \vcover à ce problème, puis nous démontrerons qu'une solution existe pour \vcover
+    si et seulement si le graphe construit admet un cycle Hamiltonien. Enfin nous clôturerons cette
+    preuve par la preuve que cette réduction se fait en temps polynomial.
+
+    Définissons dans un premier temps le problème \vcover que nous allons utiliser.
+
+    \dfpb{\vcover}{$G(V, E)$ un graphe non orienté et $k$ un entier}{Existe-t-il un ensemble $VC$ de
+        sommets de $V$ de taille $k$ tel que toute arête de $E$ est adjacente à au moins un sommet
+    de $VC$ ?}
+
+    Ce problème a été démontré \npc~\cite{karp}, dans ce même article Karp démontre aussi
+    la $NP-$complétude de \hcycle. %Décrire rapidement la technique utilisée par Karp
+    La technique de réduction que nous utilisons consiste à remplacer les
+    arêtes du graphe de départ $G$, pour lequel une couverture est cherchée, par un motif
+    particulier dans le graphe d'arrivée $G'$, pour lequel nous cherchons un cycle Hamiltonien.
+    Il existe trois façons de parcourir ce motif de façon à ce que tous les sommets ne soient
+    visités qu'une seule fois, correspondant à chacune des trois façons de couvrir l'arête $(uv)$
+    ainsi remplacée. Donc pour une arête $(uv) \in E$, le chemin
+    Hamiltonien décrit à la figure~\ref{motif_u} représente le cas où $u$ appartient au \vcover de
+    taille $k$, celui de la figure~\ref{motif_v} représente le cas où $v$ appartient au \vcover de
+    taille $k$ et enfin la figure~\ref{motif_uv} représente le cas où $u$ et $v$ appartiennent tous
+    deux au \vcover de taille $k$.
+
+    % {{{ MOTIFS DE REMPLACEMENT
+    \begin{figure}
+        \begin{center}
+            \begin{tikzpicture}
+                \input{src/figures/motif_hcycle.tex}
+            \end{tikzpicture}
+            \caption{Motif de remplacement d'une arête}
+            \label{motif_npc}
+        \end{center}
+    \end{figure}
+
+    \begin{figure}
+        \begin{center}
+            \begin{tikzpicture}
+                \input{src/figures/motif_hcycle_u.tex}
+            \end{tikzpicture}
+            \caption{Cas 1 : $u$ appartient au \vcover}
+            \label{motif_u}
+        \end{center}
+    \end{figure}
+
+    \begin{figure}
+        \begin{center}
+            \begin{tikzpicture}
+                \input{src/figures/motif_hcycle_v.tex}
+            \end{tikzpicture}
+            \caption{Cas 2 : $v$ appartient au \vcover}
+            \label{motif_v}
+        \end{center}
+    \end{figure}
+
+    \begin{figure}
+        \begin{center}
+            \begin{tikzpicture}
+                \input{src/figures/motif_hcycle_uv.tex}
+            \end{tikzpicture}
+            \caption{Cas 3 : $u$ et $v$ appartiennent au \vcover}
+            \label{motif_uv}
+        \end{center}
+    \end{figure}
+    % }}}
+
+    Il s'agit maintenant de relier les motifs entre eux, pour ce faire considérons deux arêtes
+    $(uv)$ et $(uw)$ de $E$ adjacentes toutes deux au sommet $u$. Chacune de ces arêtes est remplacée
+    par le motif présenté précédemment, appelons $U_v$ l'ensemble des sommets $\{u_1, u_2, \dots,
+    u_6\}$ du motif correspondant à l'arête $(uv)$ et $U_w$ l'ensemble des sommets $\{u_1, u_2,
+    \dots, u_6\}$ du motif correspondant à l'arête $(uw)$. Dans la construction finale, $U_v$ et
+    $U_w$ sont reliés entre eux par une arête, comme présenté figure~\ref{hcycle_couple}. Et l'on
+    fait de même pour tous les sommets et arêtes de $G'$. Chaque sommet $v$ de $G$ est alors représenté
+    par une chaîne dans $G'$ composée de $6*d(v)$ sommets.
+
+    Pour illustrer la transformation, considérons le graphe $G = (V, E)$ dont une représentation est
+    donnée à la figure~\ref{hcycle_graphe_g}. La figure~\ref{hcycle_graphe_gprime} représente le
+    graphe obtenu après transformation des arêtes. On peut ainsi se rendre compte qu'il existe un
+    \vcover de taille $k$ si et seulement si il existe $k$ chemins partant du côté gauche et
+    arrivant du côté droit passant par l'ensemble des sommets du graphe $G'$.
+
+    Pour arriver à une recherche de cycle Hamiltonien dans le graphe $G'$ correspondant à un \vcover de taille
+    $k$, il suffit de rajouter $k$ sommets $s_1, s_2, \dots, s_k$ reliant le côté droit au côté
+    gauche, de sorte qu'une fois arrivé au bout de la chaîne représentant un sommet, il est possible
+    de retourner du côté gauche sur une nouvelle chaîne représentant un autre sommet.
+
+    La dernière phase de la transformation, pour un \vcover de taille $2$ est détaillée
+    figure~\ref{hcycle_last}, les sommets $1_{deb}$ et $1_{fin}$ désignant respectivement le premier
+    et le dernier n\oe ud de la chaîne représentant le sommet $1$. 
+
+    La recherche d'un vertex cover de taille $k$ dans $G$ nous amène donc alors à al recherche d'un
+    chemin Hamiltonien dans le graphe $G'$ dont une représentation est donnée à la
+    figure~\ref{hcycle_finish}.
+
+    % {{{ TRANSFORMATION
+    \begin{figure}
+        \begin{center}
+            \begin{tikzpicture}[scale=0.8, every node/.style={transform shape}]
+                \input{src/figures/hcycle_couple.tex}
+            \end{tikzpicture}
+            \caption{Liaison de deux motifs représentant deux arêtes adjacentes à un même sommet}
+            \label{hcycle_couple}
+        \end{center}
+    \end{figure}
+
+    \begin{figure}
+        \begin{center}
+            \begin{tikzpicture}
+                \input{src/figures/hcycle_graphe_g.tex}
+            \end{tikzpicture}
+            \caption{Exemple de transformation : le graphe $G$}
+            \label{hcycle_graphe_g}
+        \end{center}
+    \end{figure}
+
+    \begin{figure}
+        \begin{center}
+            \begin{tikzpicture}[scale=0.6, every node/.style={transform shape}, tmp/.style={inner
+                    sep=0mm, node distance=3mm}]
+                \input{src/figures/hcycle_graphe_gprime.tex}
+            \end{tikzpicture}
+            \caption{Exemple de transformation : le graphe $G'$ obtenu après transformation de $G$}
+            \label{hcycle_graphe_gprime}
+        \end{center}
+    \end{figure}
+
+    \begin{figure}
+        \begin{center}
+            \begin{tikzpicture}[scale=2, tmp/.style={vertex, minimum size=10mm}]
+                \input{src/figures/hcycle_last.tex}
+            \end{tikzpicture}
+            \caption{Exemple de transformation : la dernière phase}
+            \label{hcycle_last}
+        \end{center}
+    \end{figure}
+
+    \begin{figure}
+        \begin{center}
+            \begin{tikzpicture}[scale=0.6, every node/.style={transform shape}, tmp/.style={inner
+                    sep=0mm, node distance=3mm}]
+                \input{src/figures/hcycle_finish.tex}
+            \end{tikzpicture}
+            \caption{Exemple de transformation : le graphe résultant de la transformation de $G$}
+            \label{hcycle_finish}
+        \end{center}
+    \end{figure}
+
+    % }}}
+
+    ~\\
+    Supposons à présent que nous ayons un \hcycle $H$ dans le graphe $G'$, nous avons construit le
+    motif de façon à ce que, venant d'un sommet $s_i$, la chaîne correspondant au sommet $u$ choisi
+    est entièrement traversée jusqu'à un autre sommet $s_j$. Ce procédé est itéré jusqu'à la
+    couverture de tous les sommets $s$, sélectionnant ainsi $k$ sommet dans le graphe $G$. Puisque
+    tous les sommets de $G'$ sont couverts, toutes les arêtes de $G$ le sont aussi, on obtient alors
+    une couverture dans le graphe $G$.
+
+    ~\\
+    Dans l'autre sens, supposons que l'on ait une couverture $VC = {v_1, v_2, \dots, v_k}$ de $G$,
+    il est alors possible de construire un chemin Hamiltonien dans $G'$ de la manière suivante :
+    \begin{enumerate}
+        \item partir de $s_1$ et choisir le sommet $v_1$ de la couverture
+        \item parcourir le chemin correspondant à $v_1$ et pour chaque arête $(v_1h)$ de $G$, si $h
+            \in VC$ alors parcourir seulement le côté $v_1$ de l'arête, sinon parcourir les deux
+            côtés simultanément
+        \item connecter la chaîne $v_1$ à $s_2$ et recommencer pour tous les sommets de $VC$
+    \end{enumerate}
+    En connectant la dernière chaîne au sommet $s_1$, on obtient un cycle Hamiltonien.
+
+    ~\\
+    Il existe donc un \vcover de taille $k$ dans $G$ si et seulement si il existe un $\hcycle$ dans
+    le graphe $G'$ construit, de plus la réduction étant polynomial en temps et en espace, \hcycle
+    est donc bien \npc.
+
+\end{proof}
+%% }}}
+
+\section{Noyaux}
+\label{hcycle_kbounds}
+
+Dans cette partie du cours, nous présentons quelques résultats quant à l'existence d'un noyau pour
+le problème \hcycle paramétré par des paramètres non standards. Je n'ai malheureusement pas le temps
+de rentrer dans les détails.
+
+\subsection{Paramétrisation par le nombre maximum de feuilles de $G$}
+
+\dfpbp{\phcycle{Max Leaf Number}}{Un graphe $G = (V,E)$ et un entier $l$}{Si $l$ est le nombre
+maximal de feuilles d'un arbre couvrant de $G$, déterminer si $G$ possède un cycle
+Hamiltonien.}{$l$}
+
+\begin{nthrm}
+    Le problème \phcycle{Max Leaf Number} admet un noyau polynomial.
+\end{nthrm}
+
+Ceci a été démontré par Fellows, Lokshtanov, Misra, Mnich, Rosamond et Saurabh~\cite{Fell09}.
+
+\subsection{Paramétrisation par la largeur arborescente}
+
+Il s'agit là du problème pour lequel nous allons détaillé un algorithme de programmation dynamique.
+Exposons le de manière formelle.
+
+\dfpbp{\phcycle{Treewidth}}{Un graphe $G = (V,E)$ et une décomposition arborescente $\Tau$ et un
+entier $k$}{Si $k$ est la largeur arborescente de $\Tau$, déterminer si $G$ possède un cycle
+Hamiltonien.}{$k$}
+
+\begin{nthrm}
+    Le problème \phcycle{Treewidth} n'admet pas de noyau polynomial sauf si $NP \subseteq Co-NPpoly$
+\end{nthrm}
+
+% }}}
+

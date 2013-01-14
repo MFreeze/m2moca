@@ -1,0 +1,18 @@
+\node[vertex, draw=red, fill=red!50] (1) {$1$};
+\node[vertex, dotted, fill=black!20, below=of 1] (2) {$2$};
+\node[vertex, dotted, fill=black!20, below left=of 2] (3) {$3$};
+\node[vertex, below right=of 2, dotted, fill=black!20] (4) {$4$};
+\node[vertex, draw=green, fill=green!50, below right=of 3] (5) {$5$};
+\node[vertex, draw=blue, fill=blue!50, above right=of 4] (6) {$6$};
+\node[vertex, draw=blue, fill=blue!50, below right=of 4] (7) {$7$};
+
+\draw[edge, dotted] (1) to (2);
+\draw[edge, dotted] (2) to (3);
+\draw[edge, dotted] (3) to (5);
+\draw[edge, dotted] (4) to (5);
+\draw[edge, dotted] (2) to (4);
+\draw[edge, dotted] (3) to (4);
+
+\draw[edge, dotted] (4) to (6);
+\draw[edge, dotted] (4) to (7);
+\draw[edge, blue] (6) to (7);
