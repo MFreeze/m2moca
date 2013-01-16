@@ -1,0 +1,303 @@
+\begin{figure}
+    \begin{center}
+        \begin{tikzpicture}[scale=0.45, >=latex, every place/.style={transform shape}, every
+        transition/.style={transform shape, minimum width=2mm, minimum height=7mm}]
+        
+            \foreach \lab/\Etok/\Oatok/\Obtok in {0/1/0/0, 1/0/1/0, 2/1/0/0, 3/1/0/0, 4/1/0/0, 5/0/0/1,
+            6/1/0/0}{
+                \node[place, tokens=\Oatok, label=$O_{a\lab}$] at (\lab * 4    ,  4) (Oa\lab) {};
+                \node[place, tokens=\Obtok, label=$O_{b\lab}$] at (\lab * 4    , -4) (Ob\lab) {};
+                \node[place, tokens=\Etok,  label=$E_{\lab}$ ] at (\lab * 4 + 2,  0) (E\lab)  {};
+            }
+
+            \foreach \x/\y/\z in {0/1/2, 1/2/3, 2/3/4, 3/4/5, 4/5/6}{
+                \node[transition] at (\x * 4 + 2,  4) (ta\x) {}
+                    edge[pre]  (Oa\x)
+                    edge[pre]  (E\y)
+                    edge[pre, <->]  (E\z)
+                    edge[post] (Oa\y)
+                    edge[post] (E\x);
+                \node[transition] at (\x * 4 + 2, -4) (tb\x) {}
+                    edge[pre]  (Ob\x)
+                    edge[pre]  (E\y)
+                    edge[pre, <->]  (E\z)
+                    edge[post] (Ob\y)
+                    edge[post] (E\x);
+            }
+
+            \node[transition] at (22,  4) (ta5) {}
+                edge[pre]  (Oa5)
+                edge[pre]  (E6)
+                edge[post] (E5)
+                edge[post] (Oa6);
+            \node[transition] at (22, -4) (tb5) {}
+                edge[pre]  (Ob5)
+                edge[pre]  (E6)
+                edge[post] (E5)
+                edge[post] (Ob6);
+                
+            \node[transition] at (26,  4) (ta6) {}
+                edge[pre]  (Oa6)
+                edge[post] (E6);
+            \node[transition] at (26, -4) (tb6) {}
+                edge[pre]  (Ob6)
+                edge[post] (E6);
+
+            \draw[pre, <->] (ta5) to (22, 6) to (-1, 6) to (-1, 2) to (E0);
+            \draw[pre, <->] (tb5) to (22, -6) to (-1, -6) to (-1, -2) to (E0);
+
+            \draw[post] (ta6) to (26, 6.5) to (-1.5, 6.5) to (-1.5, 4) to (Oa0);
+            \draw[pre]  (ta6) to (27, 4) to (27, 7) to (-2, 7) to (-2, 3.5) to (E0);
+            \draw[pre, <->]  (ta6) to (27, 4) to (27, 7) to (-2, 7) to (-2, 3.5) to (E1);
+            \draw[post] (tb6) to (26,-6.5) to (-1.5,-6.5) to (-1.5,-4) to (Ob0);
+            \draw[pre]  (tb6) to (27,-4) to (27,-7) to (-2,-7) to (-2,-3.5) to (E0);
+            \draw[pre, <->]  (tb6) to (27,-4) to (27,-7) to (-2,-7) to (-2,-3.5) to (E1);
+        \end{tikzpicture}
+    \end{center}
+    \caption{Représentation du contrôle de train par un réseau de Petri comptant trois places par
+    secteur}
+    \label{qu1exo8}
+\end{figure}
+            
+\begin{figure}
+    \begin{center}
+        \begin{tikzpicture}[scale=0.45, >=latex, every place/.style={transform shape}, every
+        transition/.style={transform shape, minimum width=2mm, minimum height=7mm}]
+        
+            \foreach \lab/\Etok/\Otok in {0/green/white, 1/white/red, 2/green/white, 3/green/white,
+                4/green/white, 5/white/blue, 6/green/white}{
+                \node[place, colored tokens=\Otok, label=$O_{\lab}$] at (\lab * 4    ,  4) (O\lab) {};
+                \node[place, colored tokens=\Etok,  label=$E_{\lab}$ ] at (\lab * 4 + 2,  0) (E\lab)  {};
+            }
+
+            \foreach \x/\y/\z in {0/1/2, 1/2/3, 2/3/4, 3/4/5, 4/5/6}{
+                \node[transition] at (\x * 4 + 2,  4) (t\x) {}
+                    edge[pre]  (O\x)
+                    edge[pre]  node[auto] {$f$} (E\y)
+                    edge[pre, <->]  node[auto] {$f$} (E\z)
+                    edge[post] (O\y)
+                    edge[post] node[auto] {$f$} (E\x);
+            }
+
+            \node[transition] at (22,  4) (t5) {}
+                edge[pre]  (O5)
+                edge[pre]  (E6)
+                edge[post] (E5)
+                edge[post] (O6);
+            \node[transition] at (26, 4) (t6) {}
+                edge[pre]  (O6)
+                edge[post] (E6);
+
+            \draw[pre, <->] (t5) to (22, 6) to node[auto] {$f$} (-1, 6) to (-1, 2) to (E0);
+
+            \draw[post] (t6) to (26,6.5) to (-1.5,6.5) to (-1.5,4) to (O0);
+            \draw[pre, <->]  (t6) to (27,4) to (27,-1) to node[auto] {$f$} (6,-1) to (E1);
+            \draw[pre]  (t6) to (28,4) to (28,-2) to node[auto] {$f$} (2,-2) to (E0);
+        \end{tikzpicture}
+        \begin{displaymath}
+            f:\left \lbrace \begin{array}{rcl}
+                f(\textcolor{red}{a}) & = &  \textcolor{green}{e} \\
+                f(\textcolor{blue}{b}) & = & \textcolor{green}{e} \\
+            \end{array}
+            \right .
+        \end{displaymath}
+    \end{center}
+    \caption{Représentation du contrôle de train par un réseau de Petri comptant deux places par
+    secteur}
+    \label{qu1bexo8}
+\end{figure}
+            
+\begin{figure}
+    \begin{center}
+        \begin{tikzpicture}[>=latex]
+            \foreach \x/\tok [evaluate=\x as \y using (\x * 360)/7 + 90] in {0/green, 1/red,
+            2/green, 3/green, 4/green, 5/blue, 6/green}{
+                \node[place, colored tokens=\tok, label=$p_{\x}$] at (\y:5cm) (p\x) {};
+            }
+            \foreach \x/\z/\v [evaluate=\x as \y using ((\x + 0.5) * 360)/7 + 90] in {0/2/1,
+                1/3/2, 2/4/3, 3/5/4, 4/6/5, 5/0/6, 6/1/0}{
+                \node[transition, label=$t_{\x}$] at (\y:5cm) (t\x) {}
+                    edge[pre, bend left] node[auto] {$g$} (p\z)
+                    edge[pre, bend left] node[auto] {$f$} (p\x)
+                    edge[pre, bend left] node[auto] {$g$} (p\v)
+                    edge[post, bend right=90] node[auto] {$g$} (p\z)
+                    edge[post, bend right] node[auto] {$f$} (p\v)
+                    edge[post, bend right] node[auto] {$g$}(p\x);
+            }
+        \end{tikzpicture}
+        \begin{displaymath}
+            f: \left \lbrace \begin{array}{rcl}
+                f(\textcolor{red}{a})  & = & \textcolor{red}{a} \\
+                f(\textcolor{blue}{b}) & = & \textcolor{blue}{b} 
+            \end{array} \right . \qquad \qquad
+            g: \left \lbrace \begin{array}{rcl}
+                g(\textcolor{red}{a})  & = & \textcolor{green}{e} \\
+                g(\textcolor{blue}{b}) & = & \textcolor{green}{e} 
+            \end{array} \right .
+        \end{displaymath}
+    \end{center}
+    \caption{Représentation du contrôle de train par un réseau de Petri comptant une place par
+    secteur}
+    \label{qu2exo8}
+\end{figure}
+
+\begin{figure}
+    \begin{center}
+        \begin{tikzpicture}[>=latex]
+            \foreach \x/\tok [evaluate=\x as \y using (\x * 360)/7 + 90] in {0/white, 1/red,
+            2/white, 3/white, 4/white, 5/blue, 6/white}{
+                \node[place, colored tokens=\tok, label=$p_{\x}$] at (\y:5cm) (p\x) {};
+            }
+            \foreach \x/\z/\v [evaluate=\x as \y using ((\x + 0.5) * 360)/7 + 90] in {0/2/1,
+                1/3/2, 2/4/3, 3/5/4, 4/6/5, 5/0/6, 6/1/0}{
+                \node[transition, label=$t_{\x}$] at (\y:5cm) (t\x) {}
+                    edge[pre, bend left, o-] (p\z)
+                    edge[pre] (p\x)
+                    edge[pre, bend right, o-] (p\v)
+                    edge[post, bend left] (p\v);
+            }
+        \end{tikzpicture}
+    \end{center}
+    \caption{Représentation du contrôle de train par un réseau de Petri comptant une place par
+    secteur avec arcs inhibiteurs}
+    \label{qu2bexo8}
+\end{figure}
+
+\begin{figure}
+    \begin{center}
+        \begin{tikzpicture}[>=latex, every transition/.style={minimum width=2mm, minimum height=7mm}]
+            \node[place, tokens=0, label=$E$, structured tokens={$e_0$, $e_2$, $e_3$, $e_4$, $e_6$}] at (0,0)  (E) {};
+            \node[place, tokens=0, label=$O$, structured tokens={$a_1$, $b_5$}] at (10, 0) (O) {};
+            \node[transition] at (5, 0) {Move to next sector}
+                edge[pre, bend right] (O)
+                edge[pre, bend right] node[auto] {$g$} (E)
+                edge[post, bend left] node[auto] {$h$} (E)
+                edge[post, bend left] node[auto] {$f$} (O); 
+        \end{tikzpicture}
+        \begin{displaymath}
+            f: \left \lbrace
+            \begin{array}{rcl}
+                f(a_i) & = & a_{(i + 1)} \\
+                f(b_i) & = & b_{(i + 1)} 
+            \end{array}
+            \right . \ 
+            g: \left \lbrace
+            \begin{array}{rcl}
+                g(a_i) & = & e_{(i + 1)} + e_{(i+2)}\\
+                g(b_i) & = & e_{(i + 1)} + e_{(i+2)}\\
+            \end{array}
+            \right . \ 
+            h: \left \lbrace
+            \begin{array}{rcl}
+                h(a_i) & = & e_{i} + e_{(i+2)}\\
+                h(b_i) & = & e_{i} + e_{(i+2)}\\
+            \end{array}
+            \right . 
+        \end{displaymath}
+    \end{center}
+    \caption{Représentation du contrôle de train par un réseau de Petri comprenant deux places et
+    une transition}
+    \label{qu3exo8}
+\end{figure}
+
+\begin{figure}
+    \begin{center}
+        \begin{tikzpicture}[>=latex]
+            \node[place, structured tokens={15}] at (0, 0) (a) {};
+            \node[transition, minimum width=2mm, minimum height=7mm] at (3, 0) {}
+                edge[pre, bend left] node[below] {$f$} (a)
+                edge[post, bend right] node[above] {$g$} (a);
+        \end{tikzpicture}
+    \end{center}
+    \begin{displaymath}
+        f : \left \lbrace
+        \begin{array}{rcl}
+            D_f & \rightarrow & V_f \\
+            f((1, x, y)) & = & (1, x, y)\\
+            f((2, x, y)) & = & (1, x, y)
+        \end{array}
+        \right . \qquad
+        g : \left \lbrace
+        \begin{array}{rcl}
+            D_f & \rightarrow & V_f \\
+            g((1, x, y)) & = & (1, x + 1, y) \\
+            g((2, x, y)) & = & (1, x, y + 1)
+        \end{array} 
+        \right .
+    \end{displaymath}
+    \caption{Représentation du contrôle de train par un réseau de Petri comprenant une place et une
+    transition}
+    \label{bonusexo8}
+\end{figure}
+
+Le but de cet exercice est de modéliser un système de contrôle de train par un réseau de Petri. Pour
+des raisons de sécurité, pour qu'un train puisse passer au secteur suivant, ce dernier doit être
+vide mais son succeseur doit l'être aussi. Une réprésentation de ce système peut être effectuée en
+considérant trois places par secteur, la première place $E$ indique si le secteur est vide et la
+seconde (respectivement la troisième) indique si le train $a$ (respectivement $b$) se trouve sur le
+secteur. Il doit donc y avoir exclusion mutuelle entre chacune des places d'un même secteur. La
+figure~\ref{qu1exo8} est une représentation possible de ce système.
+
+On cherche à présent à réduire le réseau étudié, pour ce faire, nous introduisons deux ensembles de
+couleurs, un pour les places $O_i$ : $O = \{a, b\}$ et un pour les places $E_i$ : $E = \{e\}$. Un
+jeton de couleur $a$ sur une place $O$ indique la présence du train $a$ dans le secteur associé, de
+la même manière un jeton de couleur $b$ représente le train $b$ et enfin un jeton de couleur $e$ sur
+une place $E$ indique que le secteur associé est libre de tout train. La figure~\ref{qu1bexo8}
+illustre une représentation de ce système.
+
+On s'aperçoit rapidement qu'il est possible de fusionner les places $O$ et les places $E$ sans
+ajouter de couleurs, puisque ces places sont en exclusion mutuelles. On peut alors représenter un
+secteur par une seule place la couleur du jeton indiquant l'absence de train, la présence du train
+$a$ ou la présence du train $b$, la figure~\ref{qu2exo8} en est la preuve. Il est même possible de
+réduire l'ensemble des couleurs utilisées à $\{a, b\}$ par l'utilisation d'arcs inhibiteurs (cf.
+figure~\ref{qu2bexo8}).
+
+Si l'on veut pousser la réduction un peu plus loin, on peut alors fusionner toutes les cellles $E$
+de la figure~\ref{qu2exo8} en une seule place et faire de même pour les places $O$. Les cinq jetons
+se trouvant dans la place $E$ ont alors une couleur appartenant à l'ensemble suivant : $C_E = \{e_0,
+e_1, e_2, e_3, e_4, e_5, e_6\}$, tandis que le jeton $a$ (respectivement $b$) représentant la
+position du train $a$ (respectivement $b$) présente une couleur appartenant à l'ensemble $C_a =
+\{a_0, a_1, a_2, a_3, a_4, a_5, a_6\}$ (respectivement $C_b = \{b_0, b_1, b_2, b_3, b_4, b_5,
+b_6\}$). Une représentation de ce système nous est donné par la figure~\ref{qu3exo8}.
+
+Nous clôturerons cet exercice en poussant la réduction du réseau à son paroxysme en le réduisant à
+un réseau de Petri à une place, une transition et un jeton. Définissons pour ce faire un ensemble de
+couleurs que nous appellerons $E = \{(w, x, y) / w \in \{1, 2\},\ x,y \in \{0, 1, \dots 6\}\}$. $x$
+représente alors la position du train $a$, $y$ celle du train $b$ et $w$ est utilisé pour générer un
+ensemble de couleurs supplémentaire pour la fonction $f$ de franchissement de la transition. En
+effet, pour pouvoir différencier quel train passe au secteur suivant lors du franchissement de la
+transition il faut doubler le nombre de couleurs, ainsi $f((1, x, y))$ fait avancer le train $a$ au
+secteur suivant et $f((2, x, y))$ fait avancer le train $b$. Si l'on appelle $E_1$ (respectivement
+$E_2$) l'ensemble $\{(1, x, y) / x,y \in \{0, 1, \dots, 6\}\}$ (respectivement $\{(2, x, y) / x,y
+\in \{0, 1, \dots, 6\}\}$), il est alors important de noter que le jeton ne prendra comme couleur
+que des couleurs appartenant à $E_1$, $E_2$ ne servant que pour étoffer le dommaine de définition de
+$f$. Définissons quelques ensembles remarquables :
+\begin{itemize}
+    \item $E_{w1} = E_{11} \cup E_{21} = \{(1, x, y) / x = y \} \cup \{(2, x, y) / x = y \}$
+        est l'ensemble des couleurs représentant des positions de trains telles que le train $a$ et
+        le train $b$ se trouvent sur le même tronçon, qui sont des positions interdites et qui
+        doivent donc être retirées du domaine de définition et de valeurs de $f$
+    \item $E_{w2} = E_{12} \cup E_{22} = \{(1, x, y) / x = y - 1\} \cup \{(2, x, y) / x = y -
+        1 \}$ est l'ensemble des couleurs représentant des positions de trains telles que le train
+        $a$ se trouve sur le tronçon précédent celui du train $b$, qui sont elles aussi une
+        interdites puisque le train $a$ ne peut avancer si les deux secteurs suivants ne sont pas
+        vides. $E_{w2}$ est donc à retirer du domaine de définition et de valeurs de $f$
+    \item $E_{w3} = E_{13} \cup E_{23} = \{(1, x, y) / x = y + 1\} \cup \{(2, x, y) / x = y +
+        1 \}$ est l'ensemble des couleurs représentant des positions de trains telles que le train
+        $b$ se trouve sur le tronçon précédent celui du train $a$. Ces positions étant interdites,
+        il faut enlever $E_{w3}$ du domaine de définition et de valeurs de $f$
+    \item $E_{w4} = E_{14} \cup E_{24} = \{(1, x, y) / x = y - 2\} \cup \{(2, x, y) / x = y - 2 \}$
+        est l'ensemble des couleurs représentant des positions de trains telles que le train $a$ se
+        trouve sur l'antépénultième secteur avant celui de $b$. Il s'agit d'une position autorisée
+        mais pour laquelle le déplacement du train $a$ est interdit, il faut donc retirer $E_{14}$
+        du domaine de définition de la fonction $f$ de consommation.
+    \item $E_{w5} = E_{15} \cup E_{25} = \{(1, x, y) / x = y + 2\} \cup \{(2, x, y) / x = y + 2 \}$
+        est l'ensemble des couleurs représentant des positions de trains telles que le train $b$ se
+        trouve sur l'antépénultième secteur avant celui de $a$. Il s'agit d'une position autorisée
+        mais pour laquelle le déplacement du train $b$ est interdit, il faut donc retirer $E_{25}$
+        du domaine de définition de la fonction $f$ de consommation.
+\end{itemize}
+
+On peut alors définir le domaine de définition de f $D_f = \overline{E_{w1} \cup E_{w2} \cup E_{w3}
+\cup E_{14} \cup E_{25}}$ ainsi que le domaine des valeurs de g $V_g = \overline{E_{w1} \cup E_{w2}
+\cup E_{w3}} \cap E_1$. Le réseau obtenu est représenté sur la figure~\ref{bonusexo8}.

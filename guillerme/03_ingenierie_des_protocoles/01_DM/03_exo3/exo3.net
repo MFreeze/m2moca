@@ -1,0 +1,12 @@
+tr r1 [0,w[ c1 d1 -> c0 d1 cp1
+tr a1 [0,w[ d1 cp1 -> d0
+tr e1 [0,w[ cp1 f0 -> d0
+tr t1 [0,w[ f0 -> p1
+tr t2 [0,w[ p1 c0 -> p1 f1 c1
+tr tn0 [0,w[ d0 -> pn0
+tr tn1 [0,w[ c0 pn0 -> pn0 cp0*2
+tr tn2 [0,w[ pn0 -> pn1
+tr tn3 [0,w[ cp0 pn1 -> pn1 c0
+tr tn4 [0,w[ pn1 -> f0
+net exo3
+

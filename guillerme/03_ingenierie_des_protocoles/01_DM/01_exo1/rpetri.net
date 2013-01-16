@@ -1,0 +1,9 @@
+tr t1 [0,w[ p1 -> p2 p3
+tr t2 [0,w[ p2 -> p4
+tr t3 [0,w[ p3 -> p5
+tr t4 [0,w[ p4 -> p6
+tr t5 [0,w[ p5 -> p7
+tr t6 [0,w[ p6 p7 -> p1
+pl p1 (1)
+net rpetri
+

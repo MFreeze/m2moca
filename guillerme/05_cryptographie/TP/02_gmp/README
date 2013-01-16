@@ -1,0 +1,7 @@
+Ce programme implémente RSA, ElGamal et l'échange de clé de Diffie Hellman.
+Malheureusement, il ne permet pas encore la signature de messages.
+
+Ici le texte à chiffrer doit se trouver dans un fichier et le résultat est placé dans un fichier de
+sortie spécifié par l'utilisateur.
+
+Ce programme nécessite une installation de la librairie gmp.

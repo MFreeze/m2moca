@@ -1,0 +1,154 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage[utf8]{inputenc} 
+\usepackage[frenchb]{babel}
+\usepackage{fullpage}
+\usepackage[T1]{fontenc} 
+\usepackage{graphicx} 
+\usepackage[final]{pdfpages}
+\usepackage{amsmath, amssymb, wasysym, amsthm}
+\usepackage{listingsutf8}
+\usepackage{lmodern}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{algorithm,algorithmic}
+
+
+\newtheorem{mydef}{Définition}
+\newtheorem{thm}{Théorème}
+\newtheorem{lem}{Lemme}
+\newtheorem{cor}{Corollaire}
+\newtheorem{pro}{Problème}
+
+\title{Note de cours complexité paramétrée \\FPT/Kernelization/Vertex cover}
+\author{MEJDOUB Amal} 
+\date {semestre 1 : 2012-2013}
+
+\begin{document} 
+
+\maketitle
+
+\pagebreak
+
+
+\tableofcontents
+
+\pagebreak
+\section{Introduction}
+Les problèmes NP complets n'admettent pas d'algorithmes polynomiaux. Par contre, il existe des algorithmes exponentiels pour les résoudre de manière exacte. L'explosion exponentiel est du à la taille des données de l'instance du problème. Pour restreindre l'explosion combinatoire, il existe des algorithmes FPT (Fixed Parametrized Tractable) pour ces problèmes paramétré par la taille de la solution $k$.
+Différentes techniques permettent de concevoir des algorithmes FPT (Fixed Parametrized Tractable), les techniques traitées dans cette note de cours sont:
+\begin{itemize}
+\item Kernelization
+\item Arbre de recherche borné 
+\item Compression itérative
+\end{itemize}
+\section{Fixed Parametrized Tractable}
+\begin{mydef}
+Un problème paramétré $(Q,k)$ appartient à la classe FPT (Fixed Parametrized Tractable) si est seulement s'il existe un algorithme qui étant donnée une instance $x$ de $(Q,k)$, décide si $x \in Q$ en temps $f(k).n^{\theta(1)}$.
+\end{mydef}
+\section{kernelization}
+\begin{mydef}
+La kernelization(noyau) consiste à réduire une instance $(x,k)$ d'un problème paramétré $(Q,k)$ en une instance équivalente $(x^{'},k^{'})$ de taille bornée par l'instance d'origine.
+\end{mydef}
+\section{Noyau et FPT}
+\begin{thm}
+Un problème paramétré $(Q,k)$ est dans la classe FPT si et seulement s'il admet un noyau.
+\end{thm}
+\begin{proof}
+$\Longrightarrow$ soit $x$ une instance de taille $n$ du problème paramétré $(Q,k)$, puisque le problème $(Q,k)$ est FPT alors on peut décider $x$ en temps $f(k).n^{O(1)}$. Deux cas se présentent:
+\begin{itemize}
+\item si la taille de $\vert x \vert \geqslant f(k(x))$ alors l'algorithme retourne une instance positive si $x \in Q$, une instance négative sinon.
+\item si la taille de $\vert x \vert < f(k(x))$, alors l'instance est déjà un noyau.\\
+Dans les deux cas, on obtient un noyau en temps polynomial.
+\end{itemize}
+$\Longleftarrow$ soit $(x,k(x))$ un noyau alors les résultats suivantes sont vrai:
+\begin{itemize}
+\item $\vert k(x) \vert \leqslant f (k(x))$ 
+\item $x \in Q \Leftrightarrow k(x) \in Q$, 
+\end{itemize}
+Décider si $(x,k(x))$ est un noyau se fait en temps $h(\vert k(x)\vert) \leqslant h(f(k(x)))$. Donc le problème $(Q,k)$ appartient à la classe FPT.
+\end{proof}
+\section{Noyau quadratique pour vertex cover paramétré par la taille de la solution}
+\textbf{K-vertex cover(k-VC)}
+\begin{itemize}
+\item Donnée: un graphe $G=(V,E)$
+\item Paramètre: $k$
+\item Question: Existe t-il une couverture de sommets $S$ de taille $\vert S \vert \leqslant \vert k \vert$
+\end{itemize}
+Étant donnée un graphe $G$, on peut retirer les observations suivantes:\\
+\textbf{Règle 1~:~} Supprimer de $G$ tous les sommets isolés $ \Rightarrow (G,k)$ est équivalent à $(G \setminus \lbrace x \rbrace,k)$
+\begin{proof}
+Soit $(G \setminus \lbrace x \rbrace,k)$ l'instance réduite par la Règle 1. $ \Rightarrow$ Si $S$ est une couverture par sommets dans $(G \setminus \lbrace x\rbrace )$ de taille au plus $k$, alors $S$ est aussi une couverture par sommets de taille au plus $k$ de $G$ . \\
+$\Leftarrow$ si $G$ admet une couverture par sommets $S$ de taille au plus $k$, alors $S$ est également une couverture par sommets de $(G \setminus \lbrace x \rbrace)$ car le sommet $x$ est de degré 0.\\
+La recherche des sommets isolés peut se faire en temps polynomial.
+\end{proof}
+\textbf{Règle 2~:~ Sunflower} Si un sommet $x$ est de degré $d(x) > k$ $ \Rightarrow x$ appartient à la solution et on obtient le graphe $(G \setminus \lbrace x \cup \eta(x) \rbrace,k-1)$ 
+\begin{proof}
+Soit le graphe $(G \setminus \lbrace x \cup \eta(x) \rbrace,k-1)$ obtenu en supprimant le sommet $x$ de degré $>$ à $k$ du graphe $G$. 
+$ \Rightarrow $ Si $(G \setminus \lbrace x \cup \eta(x) \rbrace)$ admet une couverture par sommets $S$ de taille $k-1$ alors $S \cup \lbrace u \cup \eta(x) \rbrace$ est une couverture par sommets de $G$ de taille $k$. \\
+$ \Leftarrow $ si $G$ possède une couverture par sommets de taille au plus $k$ alors toute solution contient le sommet $x$ (sinon, on doit prendre les voisins de $x$ et dans ce cas $ \vert S \vert \geqslant k$ et donc n'existe pas une solution).\\
+La recherche des sommets de degré $d(x)>k$ peut se faire en temps polynomial.
+\end{proof}
+\begin{lem}
+Si $G$ possède un vertex cover de taille $k$, alors le graphe réduit possède au plus $k^{2} + k$ sommets et au plus 
+$k^{ 2}$ arêtes.
+\end{lem}
+\begin{proof}
+En appliquant de manière itérative la règle 2 sur le graphe $G$, chaque sommet $\in S$ possède au plus $k$ voisins ($k^{'}\leqslant k$) dans le graphe réduit. Puisque la couverture de sommets est de taille $k$ alors la taille du graphe réduit est au plus $k^{2}$. Par conséquent, le nombre de sommets est borné par $k+k^{2}$.    
+\end{proof}
+\subsection{Arbre de recherche borné pour vertex cover}
+Soit un graphe $G=(V,E)$ et $S$ une couverture de $G$ de taille $k$. Pour chaque arête $(u,v) \in E$ on construit deux graphes $G \setminus \lbrace u \rbrace $ et $G \setminus \lbrace v \rbrace $. L'algorithme suivant permet d'obtenir un arbre de recherche pour vertex cover de profondeur $k$:
+\begin{center}
+\begin{algorithm}[h!]
+\caption{Arbre de recherche borné pour vertex cover}\label{algo_unification}
+\algsetup{indent=2em,linenodelimiter= }
+\begin{algorithmic}[1]
+\STATE Entrée : un graphe $G$ et un entier $k$
+\STATE Sortie : Vrai si et seulement si $G$ possède une couverture par sommets de taille $\leqslant k $
+\STATE Si $E(G) = \emptyset$, renvoyer Vrai
+\STATE Si $k = 0$, renvoyer Faux
+\STATE Choisir arbitrairement une arête $\lbrace u,v \rbrace$ de $G$
+\STATE Construire $G_{1} = G \setminus \lbrace u \rbrace$ et $G_{2} = G \setminus \lbrace v \rbrace$
+\STATE Renvoyer $VC (G_{1},k - 1)$ et $VC(G_{2},k - 1)$.
+\end{algorithmic}
+\end{algorithm}
+\end{center}
+Il est clair de voir que l'algorithme est bien un algorithme FPT de complexité $2^{k} .n^{O(1)}$
+\begin{proof}
+Si $G$ possède une couverture $S$ de taille $k$, alors soit $u \in S$ soit $v \in S$ (soit les deux).
+Si $u \in S$, alors $S \setminus \lbrace u \rbrace$ est une couverture par sommets pour $G \setminus \lbrace u \rbrace$. Sa taille est $\leqslant k-1$ si bien que $VC(G_{1},k-1)$ est Vrai. Il en va de même si $v \in S$. Et donc $VC(G_{1},k-1)$ ou $VC(G_{2},k-1)$ est Vrai.
+\end{proof}
+\section{Compression itérative pour vertex cover}
+La compression itérative est une technique qui permet d'établir des algorithmes FPT. La phase de compression consiste à calculer une solution de taille k (si elle existe) à partir d'une solution de taille $k+1$. Dans cette partie, on présente un algorithme FPT pour vertex cover dont la complexité est de $O(2^{k+1}.m)$. L'idée est de calculer un vertex cover pour $G_{i+1}$ en utilisant les informations données par une solution de $G_{i}$.\\
+Pou cela, soit $S$ un vertex cover de taille $k$ pour $G_{i}$ , alors $S^{'} = S \cup {v_{i+1}}$ est un vertex cover de taille $k+1$ pour $G_{i+1}$. Soit $(S_{0}^{'}, S_{1}^{'})$ une partition de $S^{'}$ avec:
+\begin{itemize}
+\item $S_{0}^{'}$ : l'ensemble des sommets qui seront absents dans $S^{''}$
+\item $S_{1}^{'}$ : l'ensemble des sommets qui seront gardés dans $S^{''}$
+\end{itemize}
+Le facteur $2^{k+1}$ est donnée par toutes les possibilités de partition de l'ensemble $S^{'}$. L'algorithme suivant permet de calculer un vertex cover de taille $k$ pour le graphe $G_{i+1}$. 
+\begin{center}
+\begin{algorithm}[h!]
+\caption{Arbre de recherche borné pour vertex cover}\label{algo_unification}
+\algsetup{indent=2em,linenodelimiter= }
+\begin{algorithmic}[1]
+\STATE $S_{0}^{''} = 0$
+\FORALL {$(u,v) \in E_{i+1}$} 
+\IF {$u \in S_{0}$  $v \in S_{0}$} 
+     \STATE compression impossible 
+\ENDIF
+\IF {$u \in S_{0}^{'}$ $v \in V_{i+1} \setminus S^{'}$} 
+     \STATE $S_{0}^{''} = S_{0}^{''} \cup \lbrace v \rbrace$ 
+\ENDIF
+\IF {$v \in S_{0}^{'}$ $u \in V_{i+1} \setminus S^{'}$} 
+     \STATE $S_{0}^{''} = S_{0}^{''} \cup \lbrace u \rbrace$ 
+\ENDIF
+\IF {$\vert S_{0}^{'} \cup S_{0}^{''} \vert \leqslant k $} 
+     \STATE $S^{''}= S_{1}^{'} \cup S_{0}^{''} $  
+\ENDIF
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
+\end{center}
+\section{Conclusion}
+Il n'existe pas toujours des algorithmes FPT pour les problèmes paramétrés par la taille de la solution. Citons par exemple l'ensemble dominant dont la complexité dépend de la taille de la donnée, ce dernier admet un algorithme FPT paramétré par vertex cover. \\
+La meilleur borne existante pour vertex cover est linéaire, donnée en transformant le problème classique de vertex cover en un programmation entière. 
+\end{document}

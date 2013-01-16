@@ -1,0 +1,270 @@
+\begin{figure}
+    \begin{center}
+        \begin{tikzpicture}[every transition/.style={minimum width=7mm, minimum height=2mm}, >=latex]
+            \node[place, tokens=1, label=Producteur] at (0, 0) (P) {};
+            \node[place] at (0, -4) (int1) {};
+
+            \node[place, label=Buffer] at (2, -4) (buff) {};
+
+            \node[place, label=Consommateur, tokens=1] at (4, 0) (C) {};
+            \node[place] at (4, -4) (int2) {};
+
+            \node[transition, label=Produire] at (0, -2) (prod) {}
+                edge[pre] (P)
+                edge[post] (int1);
+            \node[transition, label=Envoyer] at (0, -6) (send) {}
+                edge[pre] (int1)
+                edge[post] (buff);
+
+            \node[transition, label=Recevoir] at (4, -2) (rec) {}
+                edge[pre] (buff)
+                edge[pre] (C)
+                edge[post] (int2);
+            \node[transition, label=Consommer] at (4, -6) (cons) {}
+                edge[pre] (int2);
+
+            \draw[post] (send) to (-1.5, -6) to (-1.5, 0) to (P);
+            \draw[post] (cons) to (5.5, -6) to (5.5, 0) to (C);
+        \end{tikzpicture}
+    \end{center}
+    \caption{Producteur et consommateur}
+    \label{pnetpcexo5}
+\end{figure}
+    
+\begin{figure}
+    \begin{center}
+        \begin{tikzpicture}[every transition/.style={minimum width=7mm, minimum height=2mm}, >=latex]
+            \node[place, structured tokens=$p$, label=Producteurs] at (0, 0) (P) {};
+            \node[place] at (0, -4) (int1) {};
+            \node[place, label=Buffer] at (2, -4) (buff) {};
+
+            \node[place, label=Consommateurs, structured tokens=$c$] at (4, 0) (C) {};
+            \node[place] at (4, -4) (int2) {};
+
+            \node[transition, label=Produire] at (0, -2) (prod) {}
+                edge[pre] (P)
+                edge[post] (int1);
+            \node[transition, label=Envoyer] at (0, -6) (send) {}
+                edge[pre] (int1)
+                edge[post] (buff);
+
+            \node[transition, label=Recevoir] at (4, -2) (rec) {}
+                edge[pre] (buff)
+                edge[pre] (C)
+                edge[post] (int2);
+            \node[transition, label=Consommer] at (4, -6) (cons) {}
+                edge[pre] (int2);
+
+            \draw[post] (send) to (-1.5, -6) to (-1.5, 0) to (P);
+            \draw[post] (cons) to (5.5, -6) to (5.5, 0) to (C);
+        \end{tikzpicture}
+    \end{center}
+    \caption{Producteurs et consommateurs}
+    \label{pnetpcsexo5}
+\end{figure}
+    
+\begin{figure}
+    \begin{center}
+        \begin{tikzpicture}[every transition/.style={minimum width=7mm, minimum height=2mm}, >=latex]
+            \node[place, structured tokens=$p$, label=Producteurs] at (0, 0) (P) {};
+            \node[place] at (0, -4) (int1) {};
+
+            \node[place, label=Contrôleur] at (2, -3) (control) {};
+            \node[place, label=Buffer] at (2, -5) (buff) {};
+
+            \node[place, label=Consommateurs, structured tokens=$c$] at (4, 0) (C) {};
+            \node[place] at (4, -4) (int2) {};
+
+            \node[transition, label=Produire] at (0, -2) (prod) {}
+                edge[pre] (P)
+                edge[post] (int1);
+            \node[transition, label=Envoyer] at (0, -6) (send) {}
+                edge[pre] (int1)
+                edge[pre] (control)
+                edge[post] (buff);
+
+            \node[transition, label=Recevoir] at (4, -2) (rec) {}
+                edge[pre] (buff)
+                edge[pre] (C)
+                edge[post] (control)
+                edge[post] (int2);
+            \node[transition, label=Consommer] at (4, -6) (cons) {}
+                edge[pre] (int2);
+
+            \draw[post] (send) to (-1.5, -6) to (-1.5, 0) to (P);
+            \draw[post] (cons) to (5.5, -6) to (5.5, 0) to (C);
+        \end{tikzpicture}
+    \end{center}
+    \caption{Producteurs et consommateurs avec capacité du Buffer limitée}
+    \label{pnetpcbexo5}
+\end{figure}
+    
+\begin{figure}
+    \begin{center}
+        \begin{tikzpicture}[every transition/.style={minimum width=7mm, minimum height=2mm}, >=latex]
+            \node[place, structured tokens=$p$, label=Producteurs] at (0, 0) (P) {};
+            \node[place] at (0, -4) (int1) {};
+
+            \node[place, label=$B_1$] at (2, -8) (buff1) {};
+            \node at (2, -4) (buff) {$\dots$};
+            \node[place, label=$B_b$] at (2, 0) (buffb) {};
+
+            \node[place, label=Consommateurs, structured tokens=$c$] at (4, 0) (C) {};
+            \node[place] at (4, -4) (int2) {};
+
+            \node[transition, label=Produire] at (0, -2) (prod) {}
+                edge[pre] (P)
+                edge[post] (int1);
+            \node[transition, label=Envoyer] at (0, -6) (send) {}
+                edge[pre] (int1)
+                edge[pre, bend right, >=o] (buff1)
+                edge[post, bend left] (buff1);
+
+            \node[transition] at (2, -6) (b1) {}
+                edge[pre] (buff1)
+                edge[pre, >=o, bend right] (buff)
+                edge[post, bend left] (buff);
+
+            \node[transition] at (2, -2) (bb) {}
+                edge[pre] (buff)
+                edge[pre, bend left, >=o] (buffb)
+                edge[post, bend right] (buffb);
+
+            \node[transition, label=Recevoir] at (4, -2) (rec) {}
+                edge[pre] (buffb)
+                edge[pre] (C)
+                edge[post] (int2);
+            \node[transition, label=Consommer] at (4, -6) (cons) {}
+                edge[pre] (int2);
+
+            \draw[post] (send) to (-1.5, -6) to (-1.5, 0) to (P);
+            \draw[post] (cons) to (5.5, -6) to (5.5, 0) to (C);
+        \end{tikzpicture}
+    \end{center}
+    \caption{Producteurs et consommateurs avec capacité du Buffer limitée et arcs inhibiteurs}
+    \label{pnetpcbexo5}
+\end{figure}
+
+\begin{figure}
+    \begin{center}
+        \begin{tikzpicture}[scale=0.9, >=latex, every node/.style={transform shape}, every
+        transition/.style={minimum width=7mm, minimum height=2mm, transform shape}]
+            \node[place, structured tokens=$p$, label=Producteurs] at (0, 0) (P) {};
+            \node[place] at (0, -4) (int1) {};
+
+            \node[place, label=$B_1$] at (1.5, -4) (b1) {};
+            \node[place, label=$B_2$] at (4.5, -4) (b2) {};
+            \node[place, label=$B_b$] at (10.5,-4) (bb) {};
+
+            \node[place, label=$C_1$, tokens=1] at (1.5, -6) (c1) {};
+            \node[place, label=$C_2$, tokens=1] at (4.5, -2) (c2) {};
+            \node[place, label=$C_b$, tokens=1] at (10.5,-2) (cb) {};
+
+            \node at (7.5, -4) (d1) {$\dots$};
+            \node at (7.5, -2) (d2) {$\dots$};
+
+            \node[place, label=Consommateurs, structured tokens=$c$] at (12, 0) (C) {};
+            \node[place] at (12, -4) (int2) {};
+
+            \node[transition, label=Produire] at (0, -2) (prod) {}
+                edge[pre] (P)
+                edge[post] (int1);
+            \node[transition, label=Envoyer] at (0, -6) (send) {}
+                edge[pre] (c1)
+                edge[pre] (int1)
+                edge[post] (b1);
+
+            \node[transition, label=Recevoir] at (12, -2) (rec) {}
+                edge[pre] (C)
+                edge[pre] (bb)
+                edge[post] (cb)
+                edge[post] (int2);
+            \node[transition, label=Consommer] at (12, -6) (cons) {}
+                edge[pre] (int2);
+
+            \tikzset{every transition/.style={minimum width=2mm, minimum height=7mm, transform shape}};
+            \node[transition] at (3, -4) (tb1) {}
+                edge[pre] (b1)
+                edge[pre] (c2)
+                edge[post] (c1)
+                edge[post] (b2);
+
+            \node[transition] at (6, -4) (tb2) {}
+                edge[pre] (b2)
+                edge[pre] (d2)
+                edge[post] (c2)
+                edge[post] (d1);
+
+            \node[transition] at (9, -4) (tbb) {}
+                edge[pre] (d1)
+                edge[pre] (bb)
+                edge[post] (d2)
+                edge[post] (cb);
+
+            \draw[post] (send) to (-1.5, -6) to (-1.5, 0) to (P);
+            \draw[post] (cons) to (13.5, -6) to (13.5, 0) to (C);
+        \end{tikzpicture}
+    \end{center}
+    \caption{Producteurs et consommateurs avec capacité du Buffer limitée sans arcs inhibiteurs}
+    \label{pnetfinexo5}
+\end{figure}
+
+    
+Considérons le réseau de petri de la figure~\ref{pnetpcexo5} représentant un système de production -
+consommation, avec un producteur et un consommateur. On cherche à étendre le système étudié à $p$
+producteurs et $p$ consommateurs. Pour ce faire, il suffit de modifier le nombre de jetons présents
+dans les places Producteurs et Consommateurs de façon à en avoir $p$ sur la première et $c$ sur la
+seconde comme représenté sur la figure~\ref{pnetpcsexo5}.
+
+Si l'on veut limiter le nombre de ressources présentes simultanément dans le Buffer, il faut
+représenter ce dernier non plus par une seule place, mais par deux distinctes : une pour accueillir
+les ressources produites que nous appellerons toujours le Buffer, la seconde contenant $b$ jetons
+Considérons le réseau de petri de la figure~\ref{pnetpcexo5} représentant un système de production -
+consommation, avec un producteur et un consommateur. On cherche à étendre le système étudié à $p$
+producteurs et $p$ consommateurs. Pour ce faire, il suffit de modifier le nombre de jetons présents
+dans les places Producteurs et Consommateurs de façon à en avoir $p$ sur la première et $c$ sur la
+seconde comme représenté sur la figure~\ref{pnetpcsexo5}.
+
+Si l'on veut limiter le nombre de ressources présentes simultanément dans le Buffer, il faut
+représenter ce dernier non plus par une seule place, mais par deux distinctes : une pour accueillir
+les ressources produites que nous appellerons toujours le Buffer, la seconde contenant $b$ jetons
+contrôlant l'envoi des ressources, que nous appellerons le Contrôleur, comme représenté
+à la figure~\ref{pnetpcbexo5}.
+
+Enfin, on cherche à ordonner la réception des ressources de manière à ce que ces dernières soient
+récupérées dans le même ordre qu'elles ont été envoyées. Il existe deux possibilités équivalentes
+l'une nécessitant l'introduction d'une nouvelle extension du modèle, à savoir les arcs inhibiteurs,
+l'autre demandant un plus grand nombre de places. Nous décrirons ici, les deux possibilités.\\
+Les arcs inhibiteurs sont des arcs permettant de modéliser le test à zéro, ce qui permet une plus
+grande expressivité. En effet, dans le modèle de base, si une transition est tirable lorsqu'une
+place est vide, elle l'est à prioris, aussi lorsqu'elle contient des jetons. Pour empêcher le tirage
+d'une transition lorsqu'une place est non vide, on utilise alors ces arcs : 
+\begin{center}
+    \begin{tikzpicture}[every transition/.style={minimum width=2mm, minimum height=7mm}, >=o]
+        \node[place, label=$p$] (p) {};
+        \node[transition, label=$t$, right=of p] (t) {}
+            edge[pre] (p);
+    \end{tikzpicture}
+\end{center}
+Ici la transition $t$ est tirable tant que $p$ ne contient aucun jeton.
+
+En utilisant cette extension, on obtient alors le réseau de la figure~\ref{pnetinibexo5}. Le Buffer
+est alors représenté par $b$ places et $b-1$ transitions. L'ordre de réception est le même que
+l'ordre d'envoi, en effet, il est impossible d'avoir plus d'un jeton par place à l'intérieur du
+buffer et il est impossible pour un producteur d'envoyer une ressource dans le Buffer tant que la
+première place est non vide, or pour libérer la première place, il faut que la seconde soit vide et
+pour vider la seconde, la troisième doit être libre de tous jetons et ainsi de suite. Donc pour
+envoyer un jeton dans le buffer il faut faire avancer tous les jetons consécutifs précédents d'une
+place et aucun jeton ne peut en dépasser un autre, l'ordre de réception est donc le même que celui
+d'envoi. De plus, il y a au maximum un jeton par place dans le Buffer, donc de manière générale, il
+y a au plus $b$ ressources dans ce dernier.
+
+Comme annoncé précédemment, il est possible de ne pas avoir recours aux arcs inhibiteurs en
+introduisant $b$ places supplémentaires. On découpe alors le buffer en $b$ \emph{chambres}, chacune
+de ces chambres étant constituée de $2$ places. Une de ces deux places possède un jeton lorsqu'une
+ressource se trouve dans la chambre\footnote{Elle joue alors le même rôle que la place
+correspondante dans le réseau avec arcs inhibiteurs.}, l'autre possède un jeton lorsque la chambre
+est vide de ressources\footnote{Cette place quant à elle joue le rôle de l'arc inhibiteur du réseau
+précédent, en permettant le test à zéro.}. Les deux places de chacune des chambres sont donc en
+exclusion mutuelles et permette de recréer le mécanisme mis en place dans le réseau précédent. La
+figure~\ref{pnetfinexo5} est une réprésentation du réseau de Petri que nous venons de décrire.

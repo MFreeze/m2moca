@@ -1,0 +1,238 @@
+\begin{figure}
+    \begin{center}
+        \begin{tikzpicture}[every transition/.style={minimum width=2mm, minimum height=7mm}, >=latex]
+            \node[place,label=$p_1$,tokens=1]                   (p1) {};
+            \node[transition, right=of p1, label=$t_1$]         (t1) {}
+                edge[pre] (p1);
+            \node[place, below right=of t1, label=$p_2$]        (p2) {}
+                edge[pre] (t1);
+            \node[place, above right=of t1, label=$p_3$]        (p3) {}
+                edge[pre] (t1);
+
+            \foreach \x/\y in {2/4, 3/5, 4/6, 5/7}{
+                \node[transition, right=of p\x, label=$t_{\x}$] (t\x) {}
+                    edge[pre] (p\x);
+                \node[place, right=of t\x, label=$p_{\y}$]      (p\y) {}
+                    edge[pre] (t\x);
+            }
+
+            \node[transition, above right=of p6, label=$t_6$]   (t6) {}
+                edge[pre] (p6)
+                edge[pre] (p7);    
+
+            \draw[post] (t6) to (11, 0)
+                to (11, -3)
+                to (-1, -3)
+                to (-1, 0)
+                to (p1);
+        \end{tikzpicture}
+    \end{center}
+    \caption{Réseau de Petri modélisant le système de commandes}
+    \label{pnetexo1}
+\end{figure}
+
+\begin{table}
+    \begin{center}
+        \begin{tabular}{c|c}
+            Place & Correspondance \\\hline
+            $p_1$ & $ \displaystyle \overline{Ag} \wedge \overline{Rg} \wedge \overline{Ad} \wedge \overline{Rd}$ \\
+            $p_2$ & $ Ag \wedge \overline{Rg}$ \\
+            $p_3$ & $ Ad \wedge \overline{Rd}$ \\
+            $p_4$ & $ \overline{Ad} \wedge Rd$ \\
+            $p_5$ & $ \overline{Ag} \wedge Rg$ \\
+            $p_6$ & $ \overline{Ag} \wedge \overline{Rg}$ \\
+            $p_7$ & $ \overline{Ad} \wedge \overline{Rd}$ \\
+        \end{tabular}
+    \end{center}
+    \caption{Table de correspondance \emph{Places - États du système}}
+    \label{tbexo1}
+\end{table}
+
+\begin{figure}
+    \begin{center}
+        \begin{tikzpicture}[>=latex]
+            \node (1) {$1000000$};
+            \node[below=of 1] (2) {$0110000$}
+                edge[pre] node[auto] {$t_1$} (1);
+            \node[below left=of 2] (3) {$0011000$}
+                edge[pre] node[auto] {$t_2$} (2);
+            \node[below right=of 2] (4) {$0100100$}
+                edge[pre] node[auto] {$t_3$} (2);
+            \node[below left=of 3] (5) {$0010010$}
+                edge[pre] node[auto] {$t_4$} (3);
+            \node[below right=of 3] (6) {$0001100$}
+                edge[pre] node[auto] {$t_3$} (3)
+                edge[pre] node[auto] {$t_2$} (4);
+            \node[below right=of 4] (7) {$0100001$}
+                edge[pre] node[auto] {$t_5$} (4);
+            \node[below right=of 5] (8) {$0000110$}
+                edge[pre] node[auto] {$t_3$} (5)
+                edge[pre] node[auto] {$t_4$} (6);
+            \node[below left=of 7] (9) {$0001001$}
+                edge[pre] node[auto] {$t_5$} (6)
+                edge[pre] node[auto] {$t_2$} (7);
+            \node[below right=of 8] (10) {$0000011$}
+                edge[pre] node[auto] {$t_5$} (8)
+                edge[pre] node[auto] {$t_4$} (9);
+
+            \draw[->] (10) to[out=0, in=270] (7, -4) to[out=90, in=0] (1);
+        \end{tikzpicture}
+    \caption{Graphe des marquages accessibles}
+    \label{gmaexo1}
+    \end{center}
+\end{figure}
+
+Considérons le réseau de Petri de la figure~\ref{pnetexo1} modélisant le problème. Chaque place
+représente un état du système, la table~\ref{tbexo1} liste les correspondances.
+
+On cherche à étudier les propriétés de ce système et s'assurer de sa fiabilité, pour ce faire,
+intéressons nous aux propriétés du réseau décrit précédemment, commençons par définir la matrice
+d'incidence de ce dernier :
+\begin{displaymath}
+    C = \left [ 
+    \begin{array}{cccccc}
+        -1 & 0 & 0 & 0 & 0 & 1 \\
+        1 & -1 & 0 & 0 & 0 & 0 \\
+        1 & 0 & -1 & 0 & 0 & 0 \\
+        0 & 1 & 0 & -1 & 0 & 0 \\
+        0 & 0 & 1 & 0 & -1 & 0 \\
+        0 & 0 & 0 & 1 & 0 & -1 \\
+        0 & 0 & 0 & 0 & 1 & -1 \\
+    \end{array} \right ]
+\end{displaymath}
+
+\begin{thrm}
+    Le réseau de la figure~\ref{pnetexo1} est cohérent.
+\end{thrm}
+
+\begin{proof}
+    Chaque n\oe ud du \gma ne comporte que des 0 et des 1 indiquant que, quelque soit la place du
+    réseau, celle ci ne peut recevoir qu'une seule marque.
+\end{proof}
+
+\begin{thrm}
+    Pour le système étudié, il y a exclusion mutuelle pour tous couples de places étiquetées par des
+    combinaisons booléennes incompatibles de signaux de sortie.
+\end{thrm}
+
+\begin{proof}
+    Une première preuve consiste à regarder tous les couples en question et à vérifier dans le \gma
+    que, quelque soit le marquage, elles sont en exclusion mutuelle. Mais nous utiliserons, pour
+    réaliser la preuve, les invariants du réseau et donc le calculs des $P-$flots associés au
+    réseau.
+
+    Les $P-$flots sont obtenus en résolvant le système d'équation décrit par la formule suivante : 
+    \begin{displaymath}
+        ~^tf \times C = 0
+    \end{displaymath}
+    où $f$ est un vecteur colonne de dimension 7. On obtient alors le systeme suivant :
+    \begin{displaymath}
+        \left \{ \begin{array}{ccccccccccccccl}
+            -f_1 & + &  f_2 & + &  f_3 &   &      &   &      &   &      &   &      & = & 0\\
+                 &   & -f_2 &   &      & + &  f_4 &   &      &   &      &   &      & = & 0\\
+                 &   &      &   & -f_3 &   &      & + &  f_5 &   &      &   &      & = & 0\\
+                 &   &      &   &      &   & -f_4 &   &      & + &  f_6 &   &      & = & 0\\
+                 &   &      &   &      &   &      &   & -f_5 &   &      & + &  f_7 & = & 0\\
+             f_1 &   &      &   &      &   &      &   &      & - &  f_6 & - &  f_7 & = & 0\\
+        \end{array}
+        \right .
+    \end{displaymath}
+    On obtient alors les égalités suivantes :
+    \begin{displaymath}
+        \left \{
+        \begin{array}{rcl}
+            f_2 & = & f_6 \\
+            f_3 & = & f_7 \\
+            f_4 & = & f_6 \\
+            f_5 & = & f_7 \\
+            f_1 & = & f_6 + f_7\\
+        \end{array}
+        \right .
+    \end{displaymath}
+    Ainsi tout vecteur de la forme : $~^t(f_6 + f_7, f_6, f_7, f_6, f_7, f_6, f_7)$ est solution du
+    système donné précédemment, on en déduit alors que toute combinaison linéaire des vecteurs : $a
+    = ~^t(1, 1, 0, 1, 0, 1, 0)$ et $b = ~^t(1, 0, 1, 0, 1, 0, 1)$ est solution du système. Et donc
+    les invariants nous sont donnés par : \begin{displaymath}
+        \left \{ \begin{array}{rcl}
+            p_1 + p_2 + p_4 + p_6 & = & 1 \\
+            p_1 + p_3 + p_5 + p_7 & = & 1 \\
+        \end{array}
+        \right .
+    \end{displaymath}
+    Ce système d'invariants nous assure que les couples $(p_1, p_i)\ \forall i \in \{2, \dots, 7\},$
+    $(p_2, p_4)$, $(p_2, p_6)$, $(p_3, p_5)$, $(p_3, p_7)$, $(p_4, p_6)$, $(p_5, p_7)$ sont en exclusions
+    mutuelle. Or il s'agit là des couples de places étiquetées par des combinaisons booléennes
+    incompatibles de signaux de sortie.
+\end{proof}
+
+\begin{rmq}
+    Les $P-$flots et les $P-$semiflots de ce réseau sont identiques.
+\end{rmq}
+
+\begin{proof}
+    Ceci est vrai puisque les $P-$flots calculés sont à valeur entières et positives.
+\end{proof}
+
+\begin{thrm}
+    Le réseau n'admet pas de blocage.
+\end{thrm}
+
+\begin{proof}
+    Le \gma ne présente aucun n\oe ud dont le degré sortant est nul.
+\end{proof}
+
+\begin{thrm}
+    Le réseau est un graphe d'événements.
+\end{thrm}
+
+\begin{proof}
+    Toute place possède une seule transition d'entrée et une seule transition de sortie. Donc par
+    définition, il s'agit d'un graphe d'événement dont les circuits élémentaires sont décrits à la
+    figure~\ref{ceexo1}.
+
+    \begin{figure}
+        \begin{center}
+            \begin{tikzpicture}[every transition/.style={minimum width=2mm, minimum height=7mm},
+            >=latex]
+                \node[place, tokens=1, label=$p_1$]         (p1) {};
+                \node[transition, right=of p1, label=$t_1$] (t1) {}
+                    edge[pre] (p1);
+                \node[place, right=of t1, label=$p_2$]      (p2) {}
+                    edge[pre] (t1);
+                \node[transition, below=of p2, label=$t_2$] (t2) {}
+                    edge[pre] (p2);
+                \node[place, below=of t2, label=$p_4$]      (p4) {}
+                    edge[pre] (t2);
+                \node[transition, left=of p4, label=$t_4$]  (t4) {}
+                    edge[pre] (p4);
+                \node[place, left=of t4, label=$p_6$]       (p6) {}
+                    edge[pre] (t4);
+                \node[transition, above=of p6, label=$t_6$]  (t6) {}
+                    edge[pre] (p6)
+                    edge[post] (p1);
+
+                \node[place, tokens=1, label=$p_1$] at (5, 0) (p1a) {};
+                \node[transition, right=of p1a, label=$t_1$](t1a) {}
+                    edge[pre] (p1a);
+                \node[place, right=of t1a, label=$p_3$]     (p3) {}
+                    edge[pre] (t1a);
+                \node[transition, below=of p3, label=$t_3$] (t3) {}
+                    edge[pre] (p3);
+                \node[place, below=of t3, label=$p_5$]      (p5) {}
+                    edge[pre] (t3);
+                \node[transition, left=of p5, label=$t_5$]  (t5) {}
+                    edge[pre] (p5);
+                \node[place, left=of t5, label=$p_7$]       (p7) {}
+                    edge[pre] (t5);
+                \node[transition, above=of p7, label=$t_7$]  (t7) {}
+                    edge[pre] (p7)
+                    edge[post] (p1a);
+
+            \end{tikzpicture}
+        \end{center}
+        \caption{Circuits élémentaires du réseau de Petri}
+        \label{ceexo1}
+    \end{figure}
+\end{proof}
+            
+On peut aussi remarquer que le réseau est vivant et réinitialisable.

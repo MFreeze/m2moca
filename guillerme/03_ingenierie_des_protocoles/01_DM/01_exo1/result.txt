@@ -1,0 +1,9 @@
+Play version 3.0.2 -- 07/04/12 -- LAAS/CNRS
+parsed net rpetri
+0.000s
+
+initial
+state 0: p1
+firable: t1
+
+? 

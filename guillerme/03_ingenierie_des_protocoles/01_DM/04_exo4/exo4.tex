@@ -1,0 +1,136 @@
+On peut représenter de deux manières le diagramme donné. La première d'entre elle est représentée à
+la figure~\ref{pnet1exo4} représentant chacune des tâches par uen transition, ainsi chaque place
+représente l'état intermédiaire entre la fin d'une tâche et le début d'une autre. La seconde est
+réprésentée par la figure~\ref{pnet2exo4} représentant chacune des tâches par des places, ainsi
+chaque transition marque la fin d'une tâche et le commencement d'une autre tâche.
+
+Il est aisé de remarquer, en observant les réseaux de la figure~\ref{pnetallexo4}, que la seconde
+représentation comporte non seulement moins de places et de transtions, mais paraît aussi plus
+intuitive. En effet, pour la première représentation, la transition est franchie une fois la tâche
+terminée, donc pour connaître la tâche en cours il faut se référer à la transition suivante, alors
+que pour la seconde réprésentation, la tâche en cours est immédiatement connue. De plus, la première
+représentation, donne une impresssion d'instantanéité des tâches, qui ne se révèle pas dans la
+seconde. 
+
+En conclusion, j'aurais tendance à provilégier la représentation des tâches par des places plutôt
+que par des transitions.
+
+\begin{figure}
+    \begin{center}
+        \subfloat[Première représentation du diagramme]{\label{pnet1exo4}
+        \begin{tikzpicture}[scale=0.6, every transition/.style={minimum width=7mm, minimum
+        height=2mm, transform shape}, every node/.style={transform shape},>=latex]
+            \node[place, tokens=1] (p0) {};
+
+            \node[transition, below=of p0, label=Excavation]        (t1) {}
+                edge[pre] (p0);
+            \node[place, below=of t1]                               (p1) {}
+                edge[pre] (t1);
+
+            \node[transition, below=of p1, label=Contreting]        (t2) {}
+                edge[pre] (p1);
+            \node[place, below=of t2]                               (p2) {}
+                edge[pre] (t2);
+
+            \node[transition, below=of p2, label=Bricklaying]       (t3) {}
+                edge[pre] (p2);
+            \node[place, below right=of t3]                         (p3) {}
+                edge[pre] (t3);
+            \node[place, below left=of t3]                          (p4) {}
+                edge[pre] (t3);
+
+            \node[transition, below=of p3, label=Roof] (t4) {}
+                edge[pre] (p3);
+            \node[place, below right=of t4]                         (p5) {}
+                edge[pre] (t4);
+            \node[place, below left=of t4]                          (p6) {}
+                edge[pre] (t4);
+
+            \node[transition, below=of p4, label=Windows and Doors]  (t5) {}
+                edge[pre] (p4);
+            \node[place, below left=of t5]                          (p7) {}
+                edge[pre] (t5);
+
+            \node[transition, below=of p5, label=Ceilings]          (t6) {}
+                edge[pre] (p5);
+            \node[place, below=of t6]                               (p8) {}
+                edge[pre] (t6);
+
+            \node[transition, below=of p6, label=Floors]            (t7) {}
+                edge[pre] (p6);
+            \node[place, below=of t7]                               (p9) {}
+                edge[pre] (t7);
+
+            \node[transition, below=of p7, label=Toilet]            (t8) {}
+                edge[pre] (p7);
+            \node[place, below=of t8]                               (pa) {}
+                edge[pre] (t8);
+
+            \node[transition, below=of p9, label=Kitchen]           (t9) {}
+                edge[pre] (p9);
+            \node[place, below=of t9]                               (pb) {}
+                edge[pre] (t9);
+
+            \node[transition, below=of pb, label=Furniture]         (ta) {}
+                edge[pre, bend right] (p8)
+                edge[pre, bend left] (pa)
+                edge[pre] (pb);
+            \node[place, below=of ta]                               (pc) {}
+                edge[pre] (ta);
+            \node at (7, 0) {};
+        \end{tikzpicture}}
+    \subfloat[Seconde représentation du diagramme]{\label{pnet2exo4} \hfill
+        \begin{tikzpicture}[scale=0.6, every transition/.style={minimum width=7mm, minimum
+        height=2mm, transform shape}, every node/.style={transform shape},>=latex]
+            \node[place, tokens=1, label=Excavation]                (p1) {};
+
+            \node[transition, below=of p1]                          (t1) {}
+                edge[pre] (p1);
+            \node[place, below=of t1, label=Contreting]             (p2) {}
+                edge[pre] (t1);
+
+            \node[transition, below=of p2]                          (t2) {}
+                edge[pre] (p2);
+            \node[place, below=of t2, label=Bricklaying]            (p3) {}
+                edge[pre] (t2);
+
+            \node[transition, below=of p3]                          (t3) {}
+                edge[pre] (p3);
+            \node[place, below left=of t3, label=Windows and Doors] (p4) {}
+                edge[pre] (t3);
+            \node[place, below right=of t3, label=Roof](p5) {}
+                edge[pre] (t3);
+
+            \node[transition, below=of p4]                          (t4) {}
+                edge[pre] (p4);
+            \node[place, below left=of t4, label=Toilet]            (p6) {}
+                edge[pre](t4);
+
+            \node[transition, below=of p5]                          (t5) {}
+                edge[pre] (p5);
+            \node[place, below left=of t5, label=Floors]            (p7) {}
+                edge[pre] (t5);
+            \node[place, below right=of t5, label=Ceilings]         (p8) {}
+                edge[pre] (t5);
+
+            \node[transition, below=of p7]                          (t6) {}
+                edge[pre] (p7);
+            \node[place, below=of t6, label=Kitchen]                (p9) {}
+                edge[pre] (t6);
+
+            \node[transition, below=of p9]                          (t7) {}
+                edge[pre] (p9)
+                edge[pre, bend left] (p6)
+                edge[pre, bend right] (p8);
+            \node[place, below=of t7, label=Furniture]              (pa) {}
+                edge[pre] node[auto] {$3$} (t7);
+            \node[transition, below=of pa]                          (t8) {}
+                edge[pre] (pa);
+            \node[place, below=of t8, label=End]                    (pb) {}
+                edge[pre] (t8);
+            \node at (-7,0) {};
+        \end{tikzpicture}}
+    \end{center}
+    \caption{Différentes représentations du diagramme}
+    \label{pnetallexo4}
+\end{figure}

@@ -1,0 +1,319 @@
+% {{{ PACKAGES
+% {{{ ENCODAGE ET POLICE
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{eurosym}
+% }}}
+
+% {{{ FIGURES
+\usepackage{graphicx}
+\usepackage{subfig}
+% }}}
+
+% {{{ INSERTION DE CODE
+\usepackage{moreverb}
+% }}}
+
+% {{{ INSERTION DE PDF
+\usepackage{pdfpages}
+% }}}
+
+% {{{ RÉDUCTION DES MARGES
+%\usepackage{fullpage}
+%\usepackage[top=2.5cm, bottom=2.5cm, left=3.5cm, right=3.5cm]{geometry}
+% }}}
+
+% {{{ MATHÉMATIQUES
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{bbm}
+\usepackage{amssymb}
+\usepackage{stmaryrd}
+% }}}
+
+% {{{ GRAPHES
+\usepackage{tikz}
+\usepackage{pgf}
+\usetikzlibrary{arrows,automata,shapes}
+% }}}
+
+% {{{ RESEAUX DE pETRI
+\usetikzlibrary{petri}
+% }}}
+
+% {{{ ARBRES
+\usetikzlibrary{trees}
+% }}}
+
+% {{{ DIAGRAMME DE GANTT
+\usepackage{pgfgantt}
+% }}}
+
+% {{{ ALGORITHMES
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+%\usepackage{algorithmic}
+%\usepackage{algorithmicx}
+% }}}
+% }}}
+
+% {{{ NEWTHEOREM
+% {{{ THÉORÈMES, lEMMES -- NUMÉROTATION PERSONNALISÉE
+\theoremstyle{plain}
+\newtheorem{thrm}{Théorème}[section]
+\newtheorem{lemm}{Lemme}[subsection]
+\newtheorem{corol}{Corollaire}[section]
+% }}}
+
+% {{{ THÉORÈMES, lEMMES -- NUMÉROTATION CLASSIQUE
+\newtheorem{nthrm}{Théorème}
+\newtheorem{nlemm}{Lemme}
+\newtheorem{ncorol}{Corollaire}
+\newtheorem{npb}{Problème}
+% }}}
+
+% {{{ THÉORÈMES, lEMMES -- NON NUMÉROTÉS
+\newtheorem*{thrm*}{Théorème}
+\newtheorem*{lemm*}{Lemme}
+\newtheorem*{corol*}{Corollaire}
+% }}}
+
+% {{{ DÉFINITIONS, pROPRIÉTÉS -- NUMÉROTATION PERSONNALISÉE
+\theoremstyle{definition}
+\newtheorem{df}{Définition}[subsection]
+\newtheorem{prop}{Propriété}[subsection]
+\newtheorem{conj}{Conjecture}[subsection]
+% }}}
+
+% {{{ DÉFINITIONS, pROPRIÉTÉS -- NUMÉROTATION CLASSIQUE
+\newtheorem{ndf}{Définition}
+\newtheorem{nprop}{Propriété}
+\newtheorem{nconj}{Conjecture}
+% }}}
+
+% {{{ DÉFINITIONS, pROPRIÉTÉS -- NON NUMÉROTÉS
+\newtheorem*{df*}{Définition}
+\newtheorem*{prop*}{Propriété}
+\newtheorem*{conj*}{Conjecture}
+% }}}
+
+% {{{ AUTRES -- NUMÉROTATION PERSONNALISÉE
+\theoremstyle{remark}
+\newtheorem{nota}{Note}[subsubsection]
+\newtheorem{pr}{Proposition}[subsection]
+\newtheorem{rmq}{Remarque}[subsubsection]
+% }}}
+
+% {{{ AUTRES -- NUMÉROTATION CLASSIQUE
+\newtheorem{nnota}{Note}
+\newtheorem{npr}{Proposition}
+\newtheorem{nrmq}{Remarque}
+% }}}
+
+% {{{ AUTRES -- NON NUMÉROTÉS
+\newtheorem*{nota*}{Note}
+\newtheorem*{pr*}{Proposition}
+\newtheorem*{rmq*}{Remarque}
+% }}}
+
+% {{{ EXEMPLES
+\newtheorem*{ex}{Exemple}
+\newtheorem*{exo}{Exercice}
+\newtheorem*{rappel}{Rappel}
+% }}}
+% }}}
+
+% {{{ OPÉRATEURS MATHÉMATIQUES
+\DeclareMathOperator{\poly}{\textbf{poly}}
+\DeclareMathOperator{\gap}{\mbox{gap}}
+\DeclareMathOperator{\Bg}{\mbox{Big}}
+\DeclareMathOperator{\Sml}{\mbox{Sml}}
+\DeclareMathOperator{\Diff}{\mbox{Diff}}
+\DeclareMathOperator{\card}{\mbox{Card}}
+\DeclareMathOperator{\Obj}{\mbox{Obj}}
+\DeclareMathOperator{\concat}{\bullet}
+\DeclareMathOperator{\sig}{\mbox{Sig}}
+\DeclareMathOperator{\ver}{\mbox{Ver}}
+\DeclareMathOperator{\dist}{\mbox{dist}}
+\DeclareMathOperator{\bw}{\mbox{branchwidth}}
+\DeclareMathOperator{\tw}{\mbox{tw}}
+\DeclareMathOperator{\lm}{\leq_m}
+\DeclareMathOperator{\lc}{\leq_c}
+\DeclareMathOperator{\lex}{\mbox{lex}}
+\DeclareMathOperator{\ord}{\mbox{ord}}
+% }}}
+
+% {{{ MACCROS
+% {{{ MACROS DIVERSES
+\newcommand{\npc}{$NP-$complet}
+\newcommand{\npd}{$NP-$difficile}
+\newcommand{\la}{largeur arborescente}
+\newcommand{\legendre}[2]{\left ( \frac{#1}{#2} \right )}
+\newcommand{\wqo}[0]{\emph{well-quasi-ordered}}
+\newcommand{\Tau}[0]{\mathcal{T} = (T, \{X_t : t \in T\})}
+\newcommand{\Taug}[0]{\mathcal{T}_G = (T, \{X_t : t \in T\})}
+\newcommand{\Taustar}[0]{\mathcal{T}^* = (T, \{X_t : t \in T\})}
+\newcommand{\Taugstar}[0]{\mathcal{T}_G^* = (T, \{X_t : t \in T\})}
+\newcommand{\pdsol}[1]{(X_{#1}^0, X_{#1}^1, X_{#1}^2, M_{#1})}
+% }}}
+                
+% {{{ NOM DE PROBLEMES
+\newcommand{\hcycle}{\textsc{HAMILTONIAN CYCLE} }
+\newcommand{\phcycle}[1]{\textsc{HAMILTONIAN CYCLE }paramétré par \textsc{#1} }
+\newcommand{\vcover}{\textsc{VERTEX COVER} }
+\newcommand{\twidth}{\textsc{TREE WIDTH} }
+\newcommand{\wiset}{\textsc{WEIGHTED INDEPENDANT SET} }
+\newcommand{\fvset}{\textsc{FEEDBACK VERTEX SET} }
+\newcommand{\kvcover}{\textsc{K-Vertex Cover} }
+\newcommand{\oct}{\textrm{\textsc{Odd Cycle Transversal}} }
+\newcommand{\dlp}{\textrm{\textsc{Discrete Logarithm Problem}} }
+
+% }}}
+
+% {{{ MISE EN PAGE
+
+\newcommand{\dfpbi}[3]{
+    \begin{npb}[#1]
+        \begin{itemize}
+            \itemindent 10mm
+            \item[\textbf{Données :}] #2
+            \item[\textbf{Problème :}] #3
+        \end{itemize}
+    \end{npb}
+}
+
+\newcommand{\dfpb}[3]{
+    \begin{npb}[#1]
+        \begin{itemize}
+            \itemindent 10mm
+            \item[\textbf{Données :}] #2
+            \item[\textbf{Question :}] #3
+        \end{itemize}
+    \end{npb}
+}
+
+\newcommand{\dfpbp}[4]{
+    \begin{npb}[#1]
+        \begin{itemize}
+            \itemindent 10mm
+            \item[\textbf{Données :}] #2
+            \item[\textbf{Paramètre :}] #4
+            \item[\textbf{Question :}] #3
+        \end{itemize}
+    \end{npb}
+}
+% }}}
+
+% }}}
+    
+% {{{ TIKZ
+%%% {{{ STYLE
+\tikzstyle{edge}=[
+	-,
+	draw=black
+]
+
+\tikzstyle{sized}=[
+    minimum width=9mm
+]
+
+\tikzstyle{tvertex}=[
+	node distance=15mm,
+    inner sep = 1mm
+]
+
+\tikzstyle{tvert}=[
+	node distance=5mm,
+    inner sep=1mm
+]
+
+\tikzstyle{tmvertex}=[
+    tvertex,
+    sized
+]
+
+\tikzstyle{tmvert}=[
+    tvert,
+    sized
+]
+
+\tikzstyle{mvertex}=[
+    tmvertex,
+	circle,
+	draw=black,
+	fill=black!50
+]
+
+\tikzstyle{mvert}=[
+    tmvert,
+	circle,
+	draw=black,
+	fill=black!50
+]
+
+\tikzstyle{vertex}=[
+    tvertex,
+	circle,
+	draw=black,
+	fill=black!50
+]
+
+\tikzstyle{vert}=[
+    tvert,
+	circle,
+	draw=black,
+	fill=black!50
+]
+
+\tikzstyle{treedec}=[
+	vertex,
+	node distance=15mm,
+	draw=red,
+	fill=red!50
+]
+
+\tikzstyle{treeedge}=[
+	edge,
+	draw=red
+]
+
+\tikzstyle{giedge}=[
+	edge,
+	draw=blue
+]
+
+\tikzstyle{bounding}=[
+	thick, %ultra
+	%dash pattern=on 1mm off 1mm,
+	densely dotted,
+	fill=blue!10,
+	draw=blue!70
+]
+
+\tikzstyle{patate}=[
+    rounded corners=5pt,
+    draw=black,
+    fill=black!50,
+    text width=12mm,
+    text centered
+]
+
+\tikzstyle{patatoid}=[
+    ellipse,
+    node distance=10mm,
+    draw=black
+]
+%%% }}}
+
+% {{{ DESSINS
+\newcommand{\base}[4]{
+    \draw[->] (0,0) to (0, #1);
+    \draw[->] (0,0) to (#2, 0);
+    
+    \node at (0, #1+2) {#3};
+    \node at (#2 + 2, -2) {#4};
+}
+% }}}
+%}}}
+
