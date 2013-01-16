@@ -48,16 +48,12 @@
         \item[1874 $\bullet$] Introduction du problème de factorisation par William Stanley
             Jevon
             \vfill
-            \pause
-        \item[1976 $\bullet$] Échange de clé de Whitfielf Diffie et Martin Edward Hellman
+        \item[1976 $\bullet$] Échange de clefs de Whitfielf Diffie et Martin Edward Hellman
             \vfill
-            \pause
         \item[1977 $\bullet$] RSA par Ron Rivest, Adi Shamir et Leonard Adleman
             \vfill
-            \pause
         \item[1985 $\bullet$] Taher ElGamal introduit un nouveau cryptosystème basé sur DLP
             \vfill
-            \pause
         \item[1985 $\bullet$] Neal Koblitz et Victor Saul Miller introduisent la
             cryptographie sur courbe elliptique
             \vfill
@@ -82,16 +78,12 @@
             \begin{itemize}
                 \item[\textcolor{green}{+}] Pas d'algorithmes sous exponentiels
                     \vfill
-                    \pause
                 \item[\textcolor{green}{+}] Groupe de plus petite taille
                     \vfill
-                    \pause
-                \item[\textcolor{green}{+}] Une clé plus petite
+                \item[\textcolor{green}{+}] Une clef plus petite
                     \vfill
-                    \pause
                 \item[\textcolor{green}{+}] Implémentations plus rapide
                     \vfill
-                    \pause
                 \item[\textcolor{red}{-}] Théorie un peu plus compliquée
             \end{itemize}
         \end{column}
@@ -125,7 +117,7 @@
 \begin{frame}
     \frametitle{Courbes elliptique sur $K$ avec $char(K) \neq 2,3$}
     \begin{df}
-        Soit un corps $K$ tel que $char(K) \neq 2, 3$ et soit un polynome cubique de la forme $x^3 +
+        Soit un corps $K$ tel que $char(K) \neq 2, 3$ et soit un polynôme cubique de la forme $x^3 +
         cx + d$ n'admettant aucune racines multiples. Une courbe elliptique $E$ sur $K$ est un
         ensemble de points $(x,y) \in K^2$ vérifiant l'équation :
         \[
@@ -135,7 +127,7 @@
     \end{df}
 
     \begin{thrm}
-        Soit $p(x) = ax^3 + bx^2 + cx + d$, un polynome dont les coefficients sont à valeur dans $K$, $p$ n'admet pas de
+        Soit $p(x) = ax^3 + bx^2 + cx + d$, un polynôme dont les coefficients sont à valeur dans $K$, $p$ n'admet pas de
         racines multiples ssi : \[
             \Delta =  b^2c^2 - 4ac^3 - 4b^3d - 27a^2d^2 + 18abcd \neq 0
         \]
@@ -207,7 +199,7 @@
     \end{df}
 
     \begin{rmq}
-        Dans ce cas, le polynome de droite peut avoir des racines multiples.
+        Dans ce cas, le polynôme de droite peut avoir des racines multiples.
     \end{rmq}
 \end{frame}
 
@@ -264,11 +256,11 @@
     \end{df}
 
     \begin{rmq}
-        Dans ce cas, le polynome de droite ne peut avoir des racines multiples.
+        Dans ce cas, le polynôme de droite ne peut avoir des racines multiples.
     \end{rmq}
 
     \begin{rmq}
-        Le polynome $p(x) = x^3 + bx^2 + cx + d$ n'a pas de racines multiples ssi : \[
+        Le polynôme $p(x) = x^3 + bx^2 + cx + d$ n'a pas de racines multiples ssi : \[
             b^2c^2 - 4 c^3 - 4b^3d - 27d^2 + 18 bcd \neq 0
         \]
     \end{rmq}
@@ -334,7 +326,7 @@
             \end{array}
         \]
         avec : \[
-            y = \left \lbrace \begin{array}{rcl}
+            \lambda = \left \lbrace \begin{array}{rcl}
                 \displaystyle \frac{y_2 - y_1}{x_2 - x_1} & \mbox{ si } & P \neq Q \\
                 \displaystyle \frac{3x_1^2 + a}{2y_1} & \mbox{ si } & P = Q \\
                 \end{array} \right.
@@ -370,13 +362,141 @@
     \end{figure}
 \end{frame}
 
-\begin{frame}
-    \frametitle{Rapport}
-    \dfpbi{\dlp}{Un groupe fini et cyclique $G$, $g$ et $h \in G$}{Trouver $a$ tel que $g^a = h$}
-\end{frame}
-
 \section{Applications aux cryptosystèmes}
 
+\subsection*{a}
 
+\begin{frame}
+    \frametitle{Le logarithme discret}
+    \dfpbi{\dlp}{Un groupe fini et cyclique $G$, $g$ et $h \in G$ tel que $h \in \langle g
+    \rangle$}{Trouver $a$ tel que $g^a = h$}
+    \vfill
+    \dfpbi{\ecdlp}{$E$ une courbe elliptique, $P = (x_p, y_p) \in E$, $Q = (x_q, y_q) \in \langle P
+    \rangle$, $n$ l'ordre de $P$}{Trouver $1 \leq k \leq n$ tel que $Q = kP$}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Diffie-Hellman}
+    \textbf{Données publiques :} $E$ une courbe elliptique sur $\mathbb{F}$, $Q$ un
+    point de $E$
+    \vfill
+    \begin{tikzpicture}[scale=0.7]
+        \node (alice) at ( 3,6.5) {\textbf{Alice}};
+        \node (bob)   at (12,6.5) {\textbf{Bob}};
+        \node (ali1)  at ( 3,  5) {Choisit un entier aléatoire $k_A$};
+        \node (bob1)  at (12,  5) {Choisit un entier aléatoire $k_B$};
+        \pause
+        \node (ali2)  at ( 3,3.5) {Calcule $Q_A = k_AQ$};
+        \node (bob2)  at (12,3.5) {Calcule $Q_B = k_BQ$};
+        \draw[->, red, very thick, >=latex] (ali1) to (ali2);
+        \draw[->, red, very thick, >=latex] (bob1) to (bob2);
+        \pause
+        \node (ali3)  at ( 3,  2) {Envoie $Q_A$ à Bob};
+        \node (bob3)  at (12,  2) {Envoie $Q_B$ à Alice};
+        \draw[->, red, very thick, >=latex] (ali2) to (ali3);
+        \draw[->, red, very thick, >=latex] (bob2) to (bob3);
+        \pause
+        \node (ali4)  at ( 3,0.5) {Calcule $K_A = k_AQ_B$};
+        \node (bob4)  at (12,0.5) {Calcule $K_B = k_BQ_A$};
+        \draw[->, red, very thick, >=latex] (bob3) to (ali4);
+        \draw[->, red, very thick, >=latex] (ali3) to (bob4);
+    \end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+    \frametitle{El Gamal : Chiffrement}
+    \textbf{Données publiques :} $E$ une courbe elliptique sur $\mathbb{F}$, $Q$ un
+    point de $E$ \\
+    \vfill
+    \textbf{Prérequis :} Alice et Bob se sont envoyés $k_AQ$ et $k_BQ$ \\
+    \vfill
+    \vfill
+    \begin{itemize}
+        \item Encodage du message : $M \in E$
+            \vfill
+        \item Bob choisit un entier $l$
+            \vfill
+        \item Envoie le couple $(lQ, M + l(k_AQ))$
+    \end{itemize}
+    \vfill
+\end{frame}
+
+\begin{frame}
+    \frametitle{El Gamal : Déchiffrement}
+    \textbf{Données publiques :} $E$ une courbe elliptique sur $\mathbb{F}$, $Q$ un
+    point de $E$ \\
+    \vfill
+    \textbf{Prérequis :} Alice et Bob se sont envoyés $k_AQ$ et $k_BQ$, Bob a envoyé $(lQ, M +
+    l(k_AQ))$ à Alice \\
+    \vfill
+    \vfill
+    \begin{itemize}
+        \item Calcule $T = l(k_AQ)$
+            \vfill
+        \item Calcule : \[
+                M + l(k_AQ) - T = M + l(k_AQ) - l(k_AQ) = M
+            \]
+    \end{itemize}
+    \vfill
+\end{frame}
+
+\section{Sécurité}
+
+\subsection*{a}
+
+\begin{frame}
+    \frametitle{Sécurité de \ecdlp}
+    \vfill
+    \begin{columns}
+        \begin{column}{0.40\linewidth}
+            \begin{itemize}
+                \item Algorithmes en approximativement $\sqrt{\pi n}/2$ opérations\\~
+                    \vfill
+                \item Pour une sécurité de $2^{80}$ opérations il faut travailler avec un corps
+                    d'ordre $2^{160}$, donc modulo un premier de 160 bits (1024 pour RSA)\\~
+                    \vfill
+                \item Il existe un algorithme polynomial pour des courbes elliptiques $E$ sur un corps
+                    $\mathbb{F}_p$ telle que $\#E = p$
+            \end{itemize}
+            \vfill
+        \end{column}
+        \begin{column}{0.50\linewidth}
+            \begin{table}
+                \begin{tabular}{ccc}
+                    Taille du corps & Taille de $n$ & $(\sqrt{\pi n})/2$ \\
+                    \hline
+                    163 & 160 & $2^{80}$ \\
+                    191 & 186 & $2^{93}$ \\
+                    239 & 234 & $2^{117}$ \\
+                    359 & 354 & $2^{177}$ \\
+                    431 & 426 & $2^{213}$
+                \end{tabular}
+                \caption{Nombre d'opération pour ECDLP avec Pollard $\rho$-méthode}
+            \end{table}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\section{Conclusion}
+
+\subsection*{a}
+
+\begin{frame}
+    \frametitle{Pour finir}
+    \vfill
+    \begin{itemize}
+        \item Méthodes présentant de nombreux avantages cryptographiques
+            \vfill
+        \item Utilisation paraissant adaptée aux cartes à puces et autres systèmes ayant peu de
+            puissance de calcul 
+            \vfill
+        \item Théorie plutôt jeune
+            \vfill
+        \item Technologie soumise à de nombreux brevets (plus de 130 détenus par Certicom ...)
+    \end{itemize}
+    \vfill
+    Demande un peu plus de maturité pour une application à grande échelle
+    \vfill
+\end{frame}
 
 \end{document}
