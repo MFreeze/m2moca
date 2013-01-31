@@ -33,7 +33,12 @@
     \titlepage
 \end{frame}
 
-\addtocounter{framenumber}{-1}
+\begin{frame}
+    \frametitle{Plan}
+    \tableofcontents
+\end{frame}
+
+\addtocounter{framenumber}{-2}
 \addtobeamertemplate{footline}{\insertframenumber/\inserttotalframenumber}
 
 \section{Introduction}
@@ -48,7 +53,7 @@
         \item[1874 $\bullet$] Introduction du problème de factorisation par William Stanley
             Jevon
             \vfill
-        \item[1976 $\bullet$] Échange de clefs de Whitfielf Diffie et Martin Edward Hellman
+        \item[1976 $\bullet$] Échange de clefs de Whitfield Diffie et Martin Edward Hellman
             \vfill
         \item[1977 $\bullet$] RSA par Ron Rivest, Adi Shamir et Leonard Adleman
             \vfill
@@ -431,10 +436,10 @@
     \vfill
     \vfill
     \begin{itemize}
-        \item Calcule $T = l(k_AQ)$
+        \item Calcule $T = (lQ)k_A$
             \vfill
         \item Calcule : \[
-                M + l(k_AQ) - T = M + l(k_AQ) - l(k_AQ) = M
+                M + l(k_AQ) - T = M + l(k_AQ) - (lQ)k_A = M
             \]
     \end{itemize}
     \vfill

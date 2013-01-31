@@ -22,6 +22,7 @@
 % {{{ RÉDUCTION DES MARGES
 %\usepackage{fullpage}
 \usepackage[top=2.5cm, bottom=2.5cm, left=3.5cm, right=3.5cm]{geometry}
+\usepackage{fancyhdr}
 % }}}
 
 % {{{ MATHÉMATIQUES
@@ -166,10 +167,27 @@
 \newcommand{\wiset}{\textsc{WEIGHTED INDEPENDANT SET} }
 \newcommand{\fvset}{\textsc{FEEDBACK VERTEX SET} }
 \newcommand{\kvcover}{\textsc{K-Vertex Cover} }
+\newcommand{\lpath}{\textsc{Longest Path} }
+\newcommand{\fisched}{\textsc{Flexible Interval Scheduling} }
 
 % }}}
 
 % {{{ MISE EN PAGE
+
+\newcommand{\dfopt}[3]{
+    ~\\
+    \hrule
+    \begin{npb}
+        #1
+        \begin{itemize}
+            \itemindent 5mm
+            \item[\textbf{Données :}] #2
+            \item[\textbf{Résultat :}] #3
+        \end{itemize}
+    \end{npb}
+    \hrule
+    ~\\
+}
 
 \newcommand{\dfpb}[3]{
     ~\\

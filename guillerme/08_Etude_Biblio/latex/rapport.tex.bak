@@ -1,0 +1,45 @@
+\documentclass[a4paper,11pt]{thesis}
+
+\input{library}
+
+\begin{document}
+% {{{ Page de garde
+\input{page_garde}
+% }}}
+
+% {{{ Première partie : sans tite pour l'instant
+% TODO Split en plusieurs fichiers
+% TODO Trouver les notations standard de l'ordonnancement
+
+\begin{ndf}[Tâche]
+    Une tâche est une entité élémentaire indivisible dont la réalisation nécessite une certaine
+    quantité de ressources, dans notre cas un certain temps de calcul d'une machine. Elle est
+    caractérisée par une date de début et une date de fin et donc représentable par un intervalle de
+    la forme $[s_j, f_j)$ avec $s_j < f_j$.
+\end{ndf}
+
+\begin{ndf}[Trou]
+    Étant donnés une machine $m$, un ensemble de tâches $T$ et un ordonnancement $O$ de ces tâches
+    sur $m$, un trou dans l'ordonnancement $O$ est une plage d'inactivité non nulle de la machine,
+    pendant laquelle les ressources de calcul de cette dernière sont disponible est peuvent être
+    utilisées à la réalisation d'une tâche. Un trou est caractérisé par une date de début $s_t$ et
+    une date de fin $f_t$ et est relatif à un ordonnacement et à une machine. Il est donc
+    représentable par un triplet composé d'un intervalle de la forme $[s_t, f_t]$ avec $s_t <
+    f_t$, d'un ordonnancement et d'une machine.
+\end{ndf}
+
+\begin{ndf}[Réservation]
+    Étant donné une machine $m$, une réservation sur $m$ est une plage d'activité ou
+    d'inactivité de la machine pendant laquelle les ressources de calcul de cette dernière sont
+    indisponibles. Une réservation est caractérisée par une date de début $s_r$ et une date de fin
+    $t_r$ et est relatif à une machine donnée. Elle est donc représentable par un couple composé
+    d'une machine $m$ et d'un intervalle de la forme $[s_r, t_r]$ avec $s_r < t_r$.
+\end{ndf}
+
+\dfopt{\fisched}
+    {Un ensemble de $m$ machines, un ensemble $T$ de tâches $j = [s_j, f_j)$, un ensemble $R$ de
+        réservations $r = (m_i, [s_r, t_r]),\ 1 \leq i \leq m$}
+    {Un ordonnancement $O$ des tâches sur les $m$ machines maximisant le trou minimum}
+% }}}
+
+\end{document}
