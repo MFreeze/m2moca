@@ -54,6 +54,7 @@
 % {{{ ALGORITHMES
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode}
+\usepackage{ifthen}
 %\usepackage{algorithmic}
 %\usepackage{algorithmicx}
 % }}}
@@ -334,3 +335,102 @@
 % }}}
 %}}}
 
+% {{{ Ordonnacement
+\newenvironment{ordo}[4][12]
+% 1 : Max
+% 2 : Nbre de machines
+% 3 : Pas en abscisse
+% 4 : xmax
+{
+    \begin{center}
+    \begin{tikzpicture}
+        \pgfmathparse{#3/#4 * #1} \let\xpas\pgfmathresult
+        \pgfmathparse{int(#4/#3)} \let\nbpas\pgfmathresult
+        \pgfmathparse{\xpas/#3} \let\unitxpas\pgfmathresult
+        
+        \draw[thick] (#1+1,0) -- (0,0) -- (0,#2) -- (#1+1,#2);
+
+        \node[below] at (0, 0) {$0$};
+
+        \foreach \x in {1,...,\nbpas}{
+            \pgfmathparse{\x * \xpas} \let\abscisse\pgfmathresult
+            \pgfmathparse{int(\x * #3)} \let\xlabel\pgfmathresult
+
+            \node[below] at (\abscisse, 0) {$\xlabel$};
+            \draw[dotted] (\abscisse,0) to (\abscisse,#2);
+        }
+
+        \foreach \y in {1,...,#2}{
+            \pgfmathparse{\y - 0.5} \let\ordlabel\pgfmathresult
+
+            \node[left] at (0, \ordlabel) {$M_\y$};
+            \draw[dotted] (0, \y) to (#1+1, \y);
+        }
+}
+{\end{tikzpicture}\end{center}}
+
+\newenvironment{ordok}[4][12]
+% 1 : Max
+% 2 : Nbre de machines avant ...
+% 3 : Pas en abscisse
+% 4 : xmax
+{
+    \begin{center}
+    \begin{tikzpicture}
+        \pgfmathparse{#3/#4 * #1} \let\xpas\pgfmathresult
+        \pgfmathparse{int(#4/#3)} \let\nbpas\pgfmathresult
+        \pgfmathparse{\xpas/#3} \let\unitxpas\pgfmathresult
+        
+        \draw[thick] (#1+1,0) -- (0,0) -- (0,#2+2) -- (#1+1,#2+2);
+
+        \node[below] at (0, 0) {$0$};
+
+        \foreach \x in {1,...,\nbpas}{
+            \pgfmathparse{\x * \xpas} \let\abscisse\pgfmathresult
+            \pgfmathparse{int(\x * #3)} \let\xlabel\pgfmathresult
+
+            \node[below] at (\abscisse, 0) {$\xlabel$};
+            \draw[dotted] (\abscisse,0) to (\abscisse,#2);
+            \draw[dotted] (\abscisse,#2+1) to (\abscisse,#2+2);
+        }
+
+        \foreach \y in {1,...,#2}{
+            \pgfmathparse{\y - 0.5} \let\ordlabel\pgfmathresult
+
+            \node[left] at (0, \ordlabel) {$M_\y$};
+            \draw[dotted] (0, \y) to (#1+1, \y);
+        }
+
+        \node[left] at (0, #2 + 0.6) {$\vdots$};
+        \node[left] at (0, #2 + 1.5) {$k$};
+        \draw[dotted]  (0, #2 + 1) to (#1+1, #2 + 1);
+}
+{\end{tikzpicture}\end{center}}
+
+% TODO Vérifier que le nombre de machines est suffisant
+\newcommand{\newtask}[4]{
+    % 1 : Durée de la tâche
+    % 2 : Numéro de machine
+    % 3 : Date de début
+    % 4 : Label de la tâche
+    \pgfmathparse{#3*\unitxpas} \let\initx\pgfmathresult
+    \pgfmathparse{#2-0.9}       \let\inity\pgfmathresult
+    \pgfmathparse{#1*\unitxpas} \let\longx\pgfmathresult
+
+    \fill[black!30] (\initx, \inity) rectangle +(\longx, 0.8);
+    \node at (\initx + \longx/2, \inity + 0.4) {#4};
+}
+
+\newcommand{\newresa}[3]{
+    % 1 : Durée de la tâche
+    % 2 : Numéro de machine
+    % 3 : Date de début
+    % 4 : Label de la tâche
+    \pgfmathparse{#3*\unitxpas} \let\initx\pgfmathresult
+    \pgfmathparse{#2-0.9}       \let\inity\pgfmathresult
+    \pgfmathparse{#1*\unitxpas} \let\longx\pgfmathresult
+
+    \fill[black] (\initx, \inity) rectangle +(\longx, 0.8);
+}
+
+% }}}
