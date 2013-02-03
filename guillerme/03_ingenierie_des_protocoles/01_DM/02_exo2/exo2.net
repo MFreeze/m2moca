@@ -1,0 +1,21 @@
+tr t0 : {Décroche}         [0,w[ p0    -> p1
+tr t1 : {Raccroche}        [0,w[ p1    -> p0
+tr t2 : {Sélection}        [0,w[ p1    -> p2
+tr t3 : {Raccroche}        [0,w[ p2    -> p0
+tr t4 : {Acceptation}      [0,w[ p2 p3 -> p5 p4
+tr t8 : {Confirmation}     [0,w[ p8    -> p3
+tr t5 : {Raccroche}        [0,w[ p5 p4 -> p0 p8
+tr t6 : {Libère}           [0,w[ p5 p4 -> p6 p7
+tr t7 : {Raccroche}        [0,w[ p7 p6 -> p0 p8
+pl p0 : {Repos}        (1)
+pl p1 : {Attente}
+pl p2 : {Attente}
+pl p3 : {Repos}        (1)
+pl p5 : {Communication}
+pl p4 : {Communication}
+pl p8 : {Attente}
+pl p7 : {Faux Appel}
+pl p6 : {Faux Appel}
+
+net exo2
+

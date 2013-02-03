@@ -1,0 +1,8 @@
+t 205.0 50.0 t1 c 0 w n P ne
+p 115.0 50.0 p0 0 n
+t 25.0 50.0 t0 c 0 w n V ne
+e t0 p0 1 n
+e p0 t1 1 n
+h sema
+
+

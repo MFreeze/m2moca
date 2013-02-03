@@ -1,0 +1,61 @@
+\begin{figure}
+    \begin{center}
+        \begin{tikzpicture}[every transition/.style={minimum width=10mm, minimum height=5mm},
+        >=latex, every place/.style={minimum width=1cm}, scale=0.7, every node/.style={transform shape}]
+            \node[place, label=$P_1$, tokens=1] (p1) at (3, 6) {};
+            \node[place, label=$P_2$, tokens=2] (p2) at (12, 6) {};
+            \node[transition, label=$t_5$] (t5) at (0, 4) {$[0,3]$};
+            \node[transition, label=$t_1$] (t1) at (6, 4) {$[4,9]$};
+            \node[transition, label=$t_2$] (t2) at (9, 4) {$[0,2]$};
+            \node[transition, label=$t_3$] (t3) at (15, 4) {$[1,3]$};
+            \node[place, label=$P_3$] (p3) at (3, 2) {};
+            \node[place, label=$P_4$] (p4) at (9,2) {};
+            \node[place, label=$P_5$] (p5) at (15, 2) {};
+            \node[transition, label=$t_4$] (t4) at (3, 0) {$[0,2]$};
+
+            \draw (p1) edge[post] (t5)
+                edge[post] (t1);
+            \draw (p3) edge[pre] (t1)
+                edge[post] (t5)
+                edge[pre, bend right] (t4)
+                edge[post, bend left] (t4);
+            \draw (p2) edge[pre] (t2)
+                edge[pre] (t3)
+                edge[post, bend right] node[above left] {$2$} (t1);
+            \draw (p4) edge[pre, bend left] (t1)
+                edge[post] (t2);
+            \draw (p5) edge[pre, in=270, out=200] (t1)
+                edge[post] (t3);
+        \end{tikzpicture}
+    \end{center}
+    \caption{Un réseau temporel}
+    \label{exo10fig1}
+\end{figure}
+
+\begin{figure}
+    \begin{center}
+        \begin{tikzpicture}
+            \node (n1) at (3, 8) {$P_1P_2^2$};
+            \node (n2) at (3, 6) {$P_3P_4P_5$};
+            \node (n3) at (0, 4) {$P_2P_3P_5$};
+            \node (n4) at (6, 4) {$P_4P_5$};
+            \node (n5) at (3, 2) {$P_2P_5$};
+            \node (n6) at (3, 0) {$P_2^2$};
+
+            \draw (n2) edge[pre] node[right] {$t_1$} (n1)
+                edge[post] node[above left] {$t_2$} (n3)
+                edge[post] node[above right] {$t_5$} (n4)
+                edge[loop below] node[below] {$t_4$} ();
+            \draw (n3) edge[post] node[below left] {$t_5$} (n5)
+                edge[loop right] node[right] {$t_4$} ();
+            \draw (n4) edge[post] node[below right] {$t_5$} (n5);
+            \draw (n6) edge[pre] node[left] {$t_3$} (n5);
+        \end{tikzpicture}
+    \end{center}
+    \caption{Graphe de classe}
+    \label{exo10fig2}
+\end{figure}
+
+Considérons le graphe temporel de la figure~\ref{exo10fig1}, le graphe de classes est donné par la
+figure~\ref{exo10fig2} auquel il faudrait ajouter une descriptions des états à l'aide de systèmes
+d'inéquations.

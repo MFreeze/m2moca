@@ -1,0 +1,47 @@
+p 250.0 50.0 p0 1 n Repos ne
+p 245.0 175.0 p1 0 n Attente e
+t 325.0 115.0 t0 c 0 w n {Décroche} e
+t 165.0 115.0 t1 c 0 w n Raccroche n
+t 245.0 245.0 t2 c 0 w n {Sélection} e
+p 245.0 325.0 p2 0 n Attente e
+t 65.0 185.0 t3 c 0 w n Raccroche e
+p 465.0 325.0 p3 1 n Repos ne
+t 355.0 400.0 t4 c 0 w n Acceptation ne
+p 465.0 485.0 p5 0 n Communication ne
+p 245.0 485.0 p4 0 n Communication ne
+t 620.0 490.0 t8 c 0 w n Confirmation ne
+t 355.0 485.0 t5 c 0 w n Raccroche s
+t 355.0 590.0 t6 c 0 w n {Libère} s
+p 465.0 590.0 p8 0 n Attente ne
+t 350.0 680.0 t7 c 0 w n Raccroche s
+p 475.0 680.0 p7 0 n {Faux Appel} e
+p 240.0 680.0 p6 0 n {Faux Appel} w
+e p0 t0 1 n
+e t0 p1 1 n
+e p1 t1 1 n
+e t1 p0 1 n
+e p1 t2 1 n
+e t2 p2 1 n
+e p2 0.4944503337 86.05230967 t3 0.75 67.0 1 n
+e t3 0.2457568737 75.02666193 p0 0.506559374 97.08243919 1 n
+e p3 t4 1 n
+e p2 t4 1 n
+e t4 p4 1 n
+e t4 p5 1 n
+e p4 t5 1 n
+e p4 t6 1 n
+e p5 t5 1 n
+e p5 t6 1 n
+e t5 p8 1 n
+e t5 0.1126004134 381.580922 p0 0.9971153416 331.0543762 1 n
+e t8 0.2433723777 72.0624729 p3 0.9944503337 86.05230967 1 n
+e p8 0.006197707244 77.0584194 t8 0.7349894684 74.33034374 1 n
+e t6 p7 1 n
+e t6 p6 1 n
+e p6 t7 1 n
+e p7 t7 1 n
+e t7 p8 1 n
+e t7 0.4607749987 327.9085238 p0 0.4866009494 237.8423848 1 n
+h exo2
+
+

@@ -1,0 +1,9 @@
+net ProdEtCons2
+tr t0 : {Produire}           p0    -> p1
+tr t1 : {Envoyer}            p1 p5 -> p0 p2
+tr t2 : {Recevoir} 	     p3 p2 -> p4 p5
+tr t3 : {Consommer}  	     p4    -> p3
+pl p0 : {Producteur}    (10)
+pl p2 : {Buffer}
+pl p3 : {Consommateur}  (10)
+pl p5 : {Controleur}     (5)

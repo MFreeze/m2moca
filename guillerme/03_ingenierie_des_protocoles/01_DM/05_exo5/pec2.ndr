@@ -1,0 +1,25 @@
+t 65.0 165.0 t0 c 0 w n Produire ne
+p 65.0 250.0 p1 0 n
+t 65.0 355.0 t1 c 0 w n Envoyer ne
+p 65.0 55.0 p0 10 n Producteur ne
+p 155.0 240.0 p2 0 n Buffer ne
+p 155.0 160.0 p5 5 n Controleur ne
+t 255.0 160.0 t2 c 0 w n Recevoir ne
+p 255.0 50.0 p3 10 n Consommateur ne
+p 255.0 240.0 p4 0 n
+t 255.0 350.0 t3 c 0 w n Consommer ne
+e p0 t0 1 n
+e t0 p1 1 n
+e p5 t1 1 n
+e p1 t1 1 n
+e t1 p2 1 n
+e t1 0.3706206943 77.1038261 p0 0.6233592855 68.59300256 1 n
+e p2 t2 1 n
+e p3 t2 1 n
+e t2 p5 1 n
+e t2 p4 1 n
+e p4 t3 1 n
+e t3 0.1183723777 101.9117265 p3 0.9120797975 85.7554663 1 n
+h pec2
+
+

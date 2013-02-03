@@ -1,0 +1,53 @@
+\begin{figure}
+    \begin{center}
+        \begin{tikzpicture}[every transition/.style={minimum width=4mm, minimum height=10mm},
+        >=latex, every place/.style={minimum width=1cm}, scale=0.7, every node/.style={transform shape}]
+            \node[place] (compteur) at (3, 0) {};
+            \node[transition, label=$V$] (V) at (0, 0) {};
+            \node[transition, label=$P$] (P) at (6, 0) {};
+
+            \draw (compteur) edge[pre] (V)
+                edge[post] (P);
+        \end{tikzpicture}
+    \end{center}
+    \caption{Représentation d'un sémaphore à l'aide d'un réseau de Petri}
+    \label{exo7fig1}
+\end{figure}
+
+    \begin{figure}
+\begin{minipage}[c]{0.6\linewidth}
+            \begin{tikzpicture}[every transition/.style={minimum width=4mm, minimum height=10mm},
+            >=latex, every place/.style={minimum width=1cm}, scale=0.7, every node/.style={transform shape}]
+                \node[place, structured tokens=0] (compteur) at (3, 0) {$u$};
+                \node[transition, label=$V$] (V) at (0, 0) {};
+                \node[transition, label=$P$] (P) at (6, 0) {};
+
+                \draw (compteur) edge[post, bend left] node[auto] {$f$} (V)
+                    edge[pre, bend right] node[auto] {$g$} (V)
+                    edge[post, bend left] node[auto] {$f$} (P)
+                    edge[pre, bend right] node[auto] {$h$} (P);
+            \end{tikzpicture}
+\end{minipage}
+\hfill
+\begin{minipage}[c]{0.3\linewidth}
+    \[
+        \begin{array}{rcl}
+            f(x) & = & x \\
+            g(x) & = & x+1 \\
+            h(x) & = & x-1 \\
+        \end{array}
+    \]
+\end{minipage}
+        \caption{Représentation d'un sémaphore à l'aide d'un réseau de Petri coloré}
+        \label{exo7fig2}
+\end{figure}
+
+Dans le cas du réseau de Petri non coloré représenté à la figure~\ref{exo7fig1},
+les opérations $P$ et $V$ peuvent être simultanées à condition que la place contienne d'ores et
+déjà un jeton. Si ce n'est pas le cas, alors seule la transition $V$ et tirable et donc $P$ et $V$
+ne peuvent être tirées en même temps. De plus l'opération $V$, peut être concurrente à elle même
+alors l'opération $P$ ne peut être concurrent à elle même que si le nombre de jetons présents dans
+la place est suffisant.
+
+Dans le cas du réseau de Petri coloré représenté à la figure~\ref{exo7fig2}, toutes les opérations
+sont séquentielles et ne peuvent être exécutées simultanément.

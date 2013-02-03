@@ -1,0 +1,25 @@
+net train
+
+tr ta0 e1 e2 oa0 -> e0 e2 oa1
+tr ta1 e2 e3 oa1 -> e1 e3 oa2
+tr ta2 e3 e4 oa2 -> e2 e4 oa3
+tr ta3 e4 e5 oa3 -> e3 e5 oa4
+tr ta4 e5 e6 oa4 -> e4 e6 oa5
+tr ta5 e6 e0 oa5 -> e5 e0 oa6
+tr ta6 e0 e1 oa6 -> e6 e1 oa0
+
+tr tb0 e1 e2 ob0 -> e0 e2 ob1
+tr tb1 e2 e3 ob1 -> e1 e3 ob2
+tr tb2 e3 e4 ob2 -> e2 e4 ob3
+tr tb3 e4 e5 ob3 -> e3 e5 ob4
+tr tb4 e5 e6 ob4 -> e4 e6 ob5
+tr tb5 e6 e0 ob5 -> e5 e0 ob6
+tr tb6 e0 e1 ob6 -> e6 e1 ob0
+
+pl oa1 (1)
+pl ob5 (1)
+pl e0  (1)
+pl e2  (1)
+pl e3  (1)
+pl e4  (1)
+pl e6  (1)

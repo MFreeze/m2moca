@@ -1,0 +1,3 @@
+net sema
+tr t0 : V -> p0
+tr t1 : P p0 ->

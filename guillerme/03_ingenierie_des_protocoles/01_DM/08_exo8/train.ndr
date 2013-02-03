@@ -1,0 +1,122 @@
+p 20.0 70.0 oa0 0 n
+p 20.0 250.0 ob0 0 n
+t 60.0 250.0 tb0 0 w n
+p 100.0 250.0 ob1 0 n
+t 140.0 250.0 tb1 0 w n
+p 180.0 250.0 ob2 0 n
+t 220.0 250.0 tb2 0 w n
+p 260.0 250.0 ob3 0 n
+t 300.0 250.0 tb3 0 w n
+p 340.0 250.0 ob4 0 n
+t 380.0 250.0 tb4 0 w n
+p 420.0 250.0 ob5 1 n
+t 460.0 250.0 tb5 0 w n
+p 500.0 250.0 ob6 0 n
+t 540.0 250.0 tb6 0 w n
+t 60.0 70.0 ta0 0 w n
+p 100.0 70.0 oa1 1 n
+t 140.0 70.0 ta1 0 w n
+p 140.0 160.0 e1 0 n
+p 180.0 70.0 oa2 0 n
+t 220.0 70.0 ta2 0 w n
+p 260.0 70.0 oa3 0 n
+t 300.0 70.0 ta3 0 w n
+p 340.0 70.0 oa4 0 n
+t 380.0 70.0 ta4 0 w n
+p 420.0 70.0 oa5 0 n
+t 460.0 70.0 ta5 0 w n
+p 500.0 70.0 oa6 0 n
+p 300.0 160.0 e3 1 n
+p 380.0 160.0 e4 1 n
+p 460.0 160.0 e5 0 n
+p 540.0 160.0 e6 1 n
+p 60.0 160.0 e0 1 n
+p 220.0 160.0 e2 1 n
+t 540.0 70.0 ta6 0 w n
+e oa0 ta0 1 n
+e e2 ta0 1 n
+e ta0 oa1 1 n
+e ta0 e2 1 n
+e ta0 e0 1 n
+e oa1 ta1 1 n
+e e3 ta1 1 n
+e ta1 oa2 1 n
+e ta1 e3 1 n
+e ta1 e1 1 n
+e oa2 ta2 1 n
+e e4 ta2 1 n
+e ta2 oa3 1 n
+e ta2 e4 1 n
+e ta2 e2 1 n
+e oa3 ta3 1 n
+e e5 ta3 1 n
+e ta3 oa4 1 n
+e ta3 e5 1 n
+e ta3 e3 1 n
+e oa4 ta4 1 n
+e e6 ta4 1 n
+e ta4 oa5 1 n
+e ta4 e6 1 n
+e ta4 e4 1 n
+e oa5 ta5 1 n
+e e0 ta5 1 n
+e ta5 oa6 1 n
+e ta5 e0 1 n
+e ta5 e5 1 n
+e oa6 ta6 1 n
+e e1 ta6 1 n
+e ta6 0.4262081913 134.1640786 oa0 0.07379180879 134.1640786 1 n
+e ta6 e1 1 n
+e ta6 e6 1 n
+e ob0 tb0 1 n
+e e2 tb0 1 n
+e tb0 ob1 1 n
+e tb0 e2 1 n
+e tb0 e0 1 n
+e ob1 tb1 1 n
+e e3 tb1 1 n
+e tb1 ob2 1 n
+e tb1 e3 1 n
+e tb1 e1 1 n
+e ob2 tb2 1 n
+e e4 tb2 1 n
+e tb2 ob3 1 n
+e tb2 e4 1 n
+e tb2 e2 1 n
+e ob3 tb3 1 n
+e e5 tb3 1 n
+e tb3 ob4 1 n
+e tb3 e5 1 n
+e tb3 e3 1 n
+e ob4 tb4 1 n
+e e6 tb4 1 n
+e tb4 ob5 1 n
+e tb4 e6 1 n
+e tb4 e4 1 n
+e ob5 tb5 1 n
+e e0 tb5 1 n
+e tb5 ob6 1 n
+e tb5 e0 1 n
+e tb5 e5 1 n
+e ob6 tb6 1 n
+e e1 tb6 1 n
+e tb6 0.575899698 135.070352 ob0 0.9262081913 134.1640786 1 n
+e tb6 e1 1 n
+e tb6 e6 1 n
+e e2 ta1 1 n
+e e2 tb1 1 n
+e e3 ta2 1 n
+e e3 tb2 1 n
+e e4 ta3 1 n
+e e4 tb3 1 n
+e e5 ta4 1 n
+e e5 tb4 1 n
+e e6 ta5 1 n
+e e6 tb5 1 n
+e e0 tb6 1 n
+e e0 ta6 1 n
+e e1 ta0 1 n
+e e1 tb0 1 n
+h train small
+
+

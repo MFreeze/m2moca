@@ -69,7 +69,7 @@
             \node[place, structured tokens=$p$, label=Producteurs] at (0, 0) (P) {};
             \node[place] at (0, -4) (int1) {};
 
-            \node[place, label=Contrôleur] at (2, -3) (control) {};
+            \node[place, label=Contrôleur, structured tokens=$z$] at (2, -3) (control) {};
             \node[place, label=Buffer] at (2, -5) (buff) {};
 
             \node[place, label=Consommateurs, structured tokens=$c$] at (4, 0) (C) {};
@@ -248,7 +248,7 @@ d'une transition lorsqu'une place est non vide, on utilise alors ces arcs :
 \end{center}
 Ici la transition $t$ est tirable tant que $p$ ne contient aucun jeton.
 
-En utilisant cette extension, on obtient alors le réseau de la figure~\ref{pnetinibexo5}. Le Buffer
+En utilisant cette extension, on obtient alors le réseau de la figure~\ref{pnetpcbexo5}. Le Buffer
 est alors représenté par $b$ places et $b-1$ transitions. L'ordre de réception est le même que
 l'ordre d'envoi, en effet, il est impossible d'avoir plus d'un jeton par place à l'intérieur du
 buffer et il est impossible pour un producteur d'envoyer une ressource dans le Buffer tant que la
