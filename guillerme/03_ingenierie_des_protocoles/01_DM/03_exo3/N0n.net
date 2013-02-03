@@ -1,0 +1,11 @@
+tr t02 [0,w[ pp0 -> f0
+tr t03 [0,w[ p0 c0 -> p0 cp0*2
+tr t04 [0,w[ pp0 cp0 -> c0 pp0
+tr t01 [0,w[ p0 -> pp0
+tr t00 [0,w[ d0 -> p0
+
+pl d0 (1)
+pl c0 (1)
+
+net N0n
+

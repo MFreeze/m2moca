@@ -1,0 +1,29 @@
+Struct version 3.0.2 -- 07/04/12 -- LAAS/CNRS
+
+parsed net N0n
+
+6 places, 5 transitions
+
+net N0n
+tr t00 d0 -> p0 
+tr t01 p0 -> pp0 
+tr t02 pp0 -> f0 
+tr t03 c0 p0 -> cp0*2 p0 
+tr t04 cp0 pp0 -> c0 pp0 
+pl c0 (1)
+pl d0 (1)
+
+0.003s
+
+P-SEMI-FLOWS GENERATING SET ------------------------------------- 
+
+not invariant
+
+d0 f0 p0 pp0
+
+0.000s
+
+ANALYSIS COMPLETED  --------------------------------------------- 
+
+
+

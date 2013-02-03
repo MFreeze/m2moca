@@ -1,0 +1,28 @@
+p 685.0 270.0 f0 0 n
+t 580.0 270.0 t02 0 w n
+p 480.0 270.0 pp0 0 n
+t 360.0 270.0 t01 0 w n
+p 235.0 270.0 p0 0 n
+t 120.0 270.0 t00 0 w n
+p 30.0 270.0 d0 1 n
+t 235.0 150.0 t03 0 w n
+t 480.0 150.0 t04 0 w n
+p 360.0 150.0 cp0 0 n
+p 360.0 50.0 c0 1 n
+e pp0 t02 1 n
+e t02 f0 1 n
+e c0 t03 1 n
+e p0 t03 1 n
+e t03 cp0 2 n
+e t03 p0 1 n
+e cp0 t04 1 n
+e pp0 t04 1 n
+e t04 pp0 1 n
+e t04 c0 1 n
+e p0 t01 1 n
+e t01 pp0 1 n
+e d0 t00 1 n
+e t00 p0 1 n
+h N0n
+
+
