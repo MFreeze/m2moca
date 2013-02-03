@@ -1,0 +1,74 @@
+\begin{figure}
+    \begin{center}
+        \begin{tikzpicture}[every transition/.style={minimum width=4mm, minimum height=10mm},
+        >=latex, every place/.style={minimum width=1cm}, scale=0.7, every node/.style={transform shape}]
+            \node[place, label=Inactif] (inactif) at (9, 20) {$u$};
+            \node[transition, label=Decroche] (decr) at (9, 18) {};
+            \node[transition, label=Raccroche] (r1) at (12, 18) {};
+            \node[place, label=Continu] (cont) at (9, 16) {$u$};
+            %\node[transition, label=Raccroche] (r2) at (6, 16) {};
+            \node[transition, label=Compose] (comp) at (9, 14) {};
+            \node[transition, label=Raccroche] (r3) at (3, 12) {};
+            \node[transition, label=Raccroche] (r4) at (6, 12) {};
+            \node[place, label=Sans Tonalite] (notone) at (9, 12) {$u$};
+            \node[place, label=Requete] (req) at (12, 12) {$u \times u$};
+            \node[transition, label=Raccroche] (r5) at (15, 12) {};
+            \node[transition, label=Est inactif] (ein) at (6, 10) {};
+            \node[transition, label=Est actif] (ea) at (12, 10) {};
+            \node[place, label=Court] (court) at (15, 10) {$u$};
+            \node[place, label=Appel] (appel) at (3, 8) {$u\times u$};
+            \node[place, label=Long] (long) at (6, 8) {$u$};
+            \node[place, label=Sonne] (sonne) at (9, 8) {$u$};
+            \node[transition, label=Réponds] (rep) at (6, 6) {};
+            \node[place, label=Connexion] (con1) at (3, 4) {$u$};
+            \node[place, label=Connecté] (con2) at (9, 4) {$u\times u$};
+            \node[transition, label=$x$ Raccroche] (rx) at (3, 2) {};
+            \node[transition, label=$y$ Raccroche] (ry) at (9, 2) {};
+            \node[transition, label=Raccroche] (r6) at (12, 2) {};
+            \node[place, label=$y$ Attente] (ay) at (3, 0) {$u$};
+            \node[place, label=$x$ Attente] (ax) at (9, 0) {$u$};
+            \node[transition, label=Raccroche] (r7) at (12, 0) {};
+
+            \draw (inactif) edge[post] node[auto] {$x$} (decr)
+                edge[post] node[auto] {$y$} (ein)
+                edge[pre, bend left] node[auto] {$x$} (r1)
+                %edge[pre, in=70, out=230] node[auto] {$x$} (r2)
+                edge[pre, in=90, out=180] node[auto] {$(x,y)$} (r3)
+                edge[pre, bend right] node[auto] {$x$} (r4)
+                edge[pre, in=90, out=0] node[auto] {$x$} (r5)
+                edge[pre, in=20, out=0] node[auto] {$x$} (r6)
+                edge[pre, in=0, out=0] node[auto] {$x$} (r7);
+            \draw (cont) edge[pre] node[auto] {$x$} (decr)
+                edge[post] node[auto] {$x$} (r1)
+                edge[post] node[auto] {$x$} (comp);
+            \draw (notone) edge[pre] node[auto] {$x$} (comp)
+                edge[post] node[auto] {$x$} (r4)
+                edge[post] node[auto] {$x$} (ein)
+                edge[post] node[auto] {$x$} (ea);
+            \draw (req) edge[pre] node[above] {$(x,y)$} (comp)
+                edge[post, bend right] node[above left] {$(x,y)$} (r4)
+                edge[post] node[auto] {$(x,y)$} (r5);
+            \draw (court) edge[pre] node[above] {$x$} (ea)
+                edge[post] node[auto] {$x$} (r5);
+            \draw (appel) edge[pre] node[auto] {$(x,y)$} (ein)
+                edge[post] node[auto] {$(x,y)$} (r3)
+                edge[post] node[auto] {$(x,y)$} (rep);
+            \draw (long) edge[pre] node[auto] {$x$} (ein)
+                edge[post] node[auto] {$x$} (r3)
+                edge[post] node[auto] {$x$} (rep);
+            \draw (sonne) edge[pre] node[auto] {$y$} (ein)
+                edge[post, in=350, out=130] node[above right] {$y$} (r3)
+                edge[post] node[auto] {$y$} (rep);
+            \draw (con1) edge[pre] node[above] {$x$} (rep)
+                edge[post] node[auto] {$x$} (rx)
+                edge[post] node[auto] {$y$} (ry);
+            \draw (con2) edge[pre] node[auto] {$(x,y)$} (rep)
+                edge[post] node[auto] {$(x,y)$} (rx)
+                edge[post] node[auto] {$(x,y)$} (ry);
+            \draw (ax) edge[pre] node[auto] {$x$} (ry)
+                edge[post] node[auto] {$x$} (r7);
+            \draw (ay) edge[pre] node[auto] {$x$} (rx)
+                edge[post] node[auto] {$x$} (r6);
+        \end{tikzpicture}
+    \end{center}
+\end{figure}

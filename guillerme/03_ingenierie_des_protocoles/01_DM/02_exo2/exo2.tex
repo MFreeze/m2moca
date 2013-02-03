@@ -1,0 +1,193 @@
+\begin{figure}
+    \begin{center}
+        \begin{tikzpicture}[every transition/.style={minimum width=2mm, minimum height=7mm},
+        >=latex, node distance=18mm]
+            \node[place,label=Repos $(p_0)$,tokens=1] (urepos) at (0,0) {};
+
+            \node[transition,below right=of urepos,label=Décroche $(t_0)$] (udec) {}
+                edge[pre] (urepos);
+
+            \node[place,label=Attente $(p_1)$,below left=of udec] (uattente) {}
+                edge[pre] (udec);
+
+            \node[transition, below left=of urepos, label=Raccroche $(t_1)$] (urac) {}
+                edge[pre] (uattente)
+                edge[post] (urepos);
+
+            \node[transition, below=of uattente, label=Sélection $(t_2)$] (uselec) {}
+                edge[pre] (uattente);
+
+            \node[place, below=of uselec, label=Attente 2 $(p_2)$] (uattente2) {}
+                edge[pre] (uselec);
+
+            \node[transition, below right=of uattente2, label=Acceptation $(t_4)$] (ucaccept) {}
+                edge[pre] (uattente2);
+
+            \node[place,label=Repos $(p_3)$,tokens=1,above right=of ucaccept] (crepos) {}
+                edge[post] (ucaccept);
+
+            \node[transition, below=of ucaccept,label=Raccroche $(t_5)$] (ucrac) {}
+                edge[post, out=45, in=0] (urepos);
+
+            \node[place,left=of ucrac,label=Comm $(p_4)$] (ucomm) {}
+                edge[pre] (ucaccept)
+                edge[post] (ucrac);
+
+            \node[place,right=of ucrac,label=Comm $(p_5)$] (ccomm) {}
+                edge[pre] (ucaccept)
+                edge[post] (ucrac);
+
+            \node[transition, below=of ucrac,label=Libère $(t_6)$] (uclib) {}
+                edge[pre] (ucomm)
+                edge[pre] (ccomm);
+
+            \node[transition, below=of uclib,label=Raccroche $(t_7)$] (ucracr2) {};
+
+            \node[place, left=of ucracr2, label=Faux $(p_6)$] (ufaux) {}
+                edge[post] (ucracr2)
+                edge[pre] (uclib);
+
+            \node[place, right=of ucracr2, label=Faux $(p_7)$] (cfaux) {}
+                edge[post] (ucracr2)
+                edge[pre] (uclib);
+
+            \node[place, right=of uclib, label=Attente 3 $(p_8)$] (catt) {}
+                edge[pre] (ucrac)
+                edge[pre] (ucracr2);
+
+            \node[transition, right=of catt, label=Confirm $(t_8)$] (cconf) {}
+                edge[pre] (catt)
+                edge[post, bend right] (crepos);
+
+            \node[transition, label=Raccroche $(t_3)$] at (-4, -4) (uraccr3) {}
+                edge[pre, bend right] (uattente2)
+                edge[post, bend left] (urepos);
+
+            \draw[post, ->] (ucracr2) to[out=225, in=270] (-6, -8) to[out=90, in=180] (urepos);
+
+        \end{tikzpicture}
+    \end{center}
+    \caption{Repérésentation d'un protocole de communication à l'aide d'un réseau de Pétri}
+    \label{fig1_ex2}
+\end{figure}
+        
+Considérons le réseau de la figure~\ref{fig1_ex2} représentant le protocole de communication décrit
+dans l'énoncé.
+\begin{thrm}
+     Le réseau considéré vérifie les spécifications du protocole de communication étudié.
+\end{thrm}
+
+\begin{proof}
+    Lorsque l'utilisateur décroche, la \emph{disparition} du jeton dans la place $p_0$ permet de
+    mémoriser l'événement. Il sélectionne ensuite une ligne ($t_2$) et attend que le contrôleur
+    accepte la sélection de la ligne $(t_4)$. Il est alors en communication $(p_4)$. Si la ligne est
+    libérée sans que l'utilisateur n'ait raccroché, lui et le contrôleur passent en état de faux
+    appel ($p_5$ et $p_7$). Dans l'éventualité où l'utilisateur raccroche après la mise en
+    communication, le contrôleur passe alors dans un état d'attente de confirmation de raccrochage
+    $p_8$, avant de revenir à son état de repos.
+    Une fois que l'utilisateur a raccroché, il revient en état de repos et peut donc à nouveau
+    décrocher.
+
+    Les spécifications sont donc vérifiées.
+\end{proof}
+
+Définissons la matrice d'incidence du réseau de Pétri : \[
+    C = \left [
+    \begin{array}{ccccccccc}
+        -1 &  1 &  0 &  1 &  0 &  1 &  0 &  1 &  0 \\
+         1 & -1 & -1 &  0 &  0 &  0 &  0 &  0 &  0 \\
+         0 &  0 &  1 & -1 & -1 &  0 &  0 &  0 &  0 \\
+         0 &  0 &  0 &  0 & -1 &  0 &  0 &  0 &  1 \\
+         0 &  0 &  0 &  0 &  1 & -1 & -1 &  0 &  0 \\
+         0 &  0 &  0 &  0 &  1 & -1 & -1 &  0 &  0 \\
+         0 &  0 &  0 &  0 &  0 &  0 &  1 & -1 &  0 \\
+         0 &  0 &  0 &  0 &  0 &  0 &  1 & -1 &  0 \\
+         0 &  0 &  0 &  0 &  0 &  1 &  0 &  1 & -1 \\
+    \end{array}
+    \right ]
+\]
+
+\begin{thrm}
+    Les invariants de ce réseaux sont donnés par : \[
+        \left \lbrace \begin{array}{rcl}
+            p_0 + p_1 + p_2 + p_4 + p_6 & = & 1\\
+            p_0 + p_1 + p_2 + p_5 + p_6 & = & 1\\
+            p_0 + p_1 + p_2 + p_4 + p_7 & = & 1\\
+            p_0 + p_1 + p_2 + p_5 + p_7 & = & 1\\
+            p_3 + p_4 + p_6 + p_8       & = & 1\\
+            p_3 + p_5 + p_6 + p_8       & = & 1\\
+            p_3 + p_4 + p_7 + p_8       & = & 1\\
+            p_3 + p_5 + p_7 + p_8       & = & 1\\
+        \end{array} \right .
+    \]
+\end{thrm}
+
+\begin{proof}
+    Pour calculer les $P-$flots, il suffit de résoudre le système d'équations donné par : \[
+        ^tf.C = 0
+    \]
+    avec $^tf = (f_1, f_2, f_3, f_4, f_5, f_6, f_7, f_8, f_9)$.
+
+    On obtient alors : \[
+        \left \lbrace \begin{array}{rcl}
+            f_2 - f_1 & = & 0 \\
+            f_1 - f_2 & = & 0 \\
+            f_3 - f_2 & = & 0 \\
+            f_3 - f_1 & = & 0 \\
+            f_5 + f_6 - f_3 - f_4 & = & 0 \\
+            f_1 + f_9 - f_5 - f_6 & = & 0 \\
+            f_7 + f_8 - f_5 - f_6 & = & 0 \\
+            f_1 + f_9 - f_7 - f_8 & = & 0 \\
+            f_4 - f_9 & = & 0 \\
+        \end{array}
+        \right .
+    \]
+     On obtient après simplification et suppression des équations redondantes : \[
+        \left \lbrace \begin{array}{rcl}
+            f_2 & = & f_1 \\
+            f_3 & = & f_1 \\
+            f_9 & = & f_4 \\
+            f_5 + f_6 & = & f_1 + f_4 \\
+            f_7 + f_8 & = & f_1 + f_4 \\
+        \end{array}
+        \right .
+    \]
+    Ainsi, tout vecteur de la forme $^t(f_1, f_1, f_1, f_4, f_5, f_6, f_7, f_8, f_4)$ vérifiant $f_5
+    + f_6 = f_7 + f_8 = f_1 + f_4$ est solution du sytème et donc toute combinaison linéaire des
+    vecteurs suivants est solution du système : \[
+        \left ( \begin{array}{c}
+            1 \\ 1 \\ 1 \\ 0 \\ 1 \\ 0 \\ 1 \\ 0 \\ 0
+        \end{array} \right ) \ 
+        \left ( \begin{array}{c}
+            1 \\ 1 \\ 1 \\ 0 \\ 0 \\ 1 \\ 1 \\ 0 \\ 0
+        \end{array} \right ) \ 
+        \left ( \begin{array}{c}
+            1 \\ 1 \\ 1 \\ 0 \\ 1 \\ 0 \\ 0 \\ 1 \\ 0
+        \end{array} \right ) \ 
+        \left ( \begin{array}{c}
+            1 \\ 1 \\ 1 \\ 0 \\ 0 \\ 1 \\ 0 \\ 1 \\ 0
+        \end{array} \right ) \ 
+        \left ( \begin{array}{c}
+            0 \\ 0 \\ 0 \\ 1 \\ 1 \\ 0 \\ 1 \\ 0 \\ 1
+        \end{array} \right ) \ 
+        \left ( \begin{array}{c}
+            0 \\ 0 \\ 0 \\ 1 \\ 1 \\ 0 \\ 0 \\ 1 \\ 1
+        \end{array} \right ) \ 
+        \left ( \begin{array}{c}
+            0 \\ 0 \\ 0 \\ 1 \\ 0 \\ 1 \\ 1 \\ 0 \\ 1
+        \end{array} \right ) \ 
+        \left ( \begin{array}{c}
+            0 \\ 0 \\ 0 \\ 1 \\ 0 \\ 1 \\ 0 \\ 1 \\ 1
+        \end{array} \right ) \ 
+    \]
+    Le marquage initial étant égal à $p_0p_3$, on en déduit les invariants donnés précédemment.
+\end{proof}
+
+\begin{thrm}
+    Les $P-$semiflots sont identiques aux $P-$flots.
+\end{thrm}
+
+\begin{proof}
+    Les invariants précédemment calculés présentant des coefficients entiers positifs les
+    $P-$semiflots sont donc identiques aux $P-$flots.
+\end{proof}

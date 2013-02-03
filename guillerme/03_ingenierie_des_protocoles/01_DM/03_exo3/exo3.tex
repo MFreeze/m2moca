@@ -1,0 +1,280 @@
+\begin{figure}
+    \begin{center}
+        \begin{tikzpicture}[every transition/.style={minimum width=2mm, minimum height=7mm},
+        >=latex, node distance=18mm, scale=0.9, every place/.style={transform shape}]
+            \node[place, label=$d_0$,tokens=1] (d0) at (0,0) {};
+            \node[transition, right=of d0, label=$t_0^0$] (t00) {}
+                edge[pre] (d0);
+            \node[place, right=of t00, label=$p_0$] (p0) {}
+                edge[pre] (t00);
+            \node[transition, right=of p0, label=$t_0^1$] (t01) {}
+                edge[pre] (p0);
+            \node[place, right=of t01, label=$p_0'$] (pp0) {}
+                edge[pre] (t01);
+            \node[transition, right=of pp0, label=$t_0^2$] (t02) {}
+                edge[pre] (pp0);
+            \node[place, right=of t02, label=$f_0$] (f0) {}
+                edge[pre] (t02);
+            \node[transition, above=of p0, label=$t_0^3$] (t03) {}
+                edge[pre, bend right] (p0)
+                edge[post, bend left] (p0);
+            \node[place, right=of t03, label=$c_0'$] (cp0) {}
+                edge[pre] node[auto] {2} (t03);
+            \node[transition, right=of cp0, label=$t_0^4$] (t04) {}
+                edge[pre] (cp0)
+                edge[pre, bend right] (pp0)
+                edge[post, bend left] (pp0);
+            \node[place, above=of cp0, label=$c_0$, structured tokens=$n$] (c0) {}
+                edge[pre, bend left] (t04)
+                edge[post, bend right] (t03);
+        \end{tikzpicture}
+    \end{center}
+    \caption{Un réseau de Petri particulier $N_0^n$}
+    \label{exo3fig1}
+\end{figure}
+        
+\begin{figure}
+    \begin{center}
+        \begin{tikzpicture}[every transition/.style={minimum width=2mm, minimum height=7mm},
+        >=latex, scale=0.65, every node/.style={transform shape}]
+            \node[place, label=$d_0$] (d0) at (0,0) {};
+            \node[transition, right=of d0, label=$t_0^0$] (t00) {}
+                edge[pre] (d0);
+            \node[place, right=of t00, label=$p_0$] (p0) {}
+                edge[pre] (t00);
+            \node[transition, right=of p0, label=$t_0^1$] (t01) {}
+                edge[pre] (p0);
+            \node[place, right=of t01, label=$p_0'$] (pp0) {}
+                edge[pre] (t01);
+            \node[transition, right=of pp0, label=$t_0^2$] (t02) {}
+                edge[pre] (pp0);
+            \node[place, right=of t02, label=$f_0$] (f0) {}
+                edge[pre] (t02);
+            \node[transition, above=of p0, label=$t_0^3$] (t03) {}
+                edge[pre, bend right] (p0)
+                edge[post, bend left] (p0);
+            \node[place, right=of t03, label=$c_0'$] (cp0) {}
+                edge[pre] node[auto] {2} (t03);
+            \node[transition, right=of cp0, label=$t_0^4$] (t04) {}
+                edge[pre] (cp0)
+                edge[pre, bend right] (pp0)
+                edge[post, bend left] (pp0);
+            \node[place, above=of cp0, label=$c_0$] (c0) {}
+                edge[pre, bend left] (t04)
+                edge[post, bend right] (t03);
+
+            \node[transition, left=of d0, label=$a_1$] (a1) {}
+                edge[post] (d0);
+            \node[place, left=of a1, label=$d_1$, tokens=1] (d1) {}
+                edge[post] (a1);
+            \node[transition, above=of d1, label=$r_1$] (r1) {}
+                edge[post, bend left] (d1)
+                edge[pre, bend right] (d1)
+                edge[post, out=0, in=180] (c0);
+            \node[place, above=of r1, label=$c_1$, structured tokens=$n$] (c1) {}
+                edge[post] (r1);
+            \node[place, below=of d1, label=$c_1'$] (cp1) {}
+                edge[pre, in=180, out=180] (r1);
+            \node[transition, below=of t01, label=$e_1$] (e1) {}
+                edge[pre] (cp1)
+                edge[post] (d0)
+                edge[pre] (f0);
+            \node[transition, right=of f0, label=$t_1^0$] (t10) {}
+                edge[pre] (f0);
+            \node[place, right=of t10, label=$p_1$] (p1) {}
+                edge[pre] (t10);
+            \node[transition, right=of p1, label=$t_1^1$] (t11) {}
+                edge[pre, bend right] (p1)
+                edge[post, bend left] (p1)
+                edge[pre, in=0, out=150] (c0)
+                edge[post, out=90, in=60] (c1);
+            \node[place, right=of t11, label=$f_1$] (f1) {}
+                edge[pre] (t11);
+        \end{tikzpicture}
+    \end{center}
+    \caption{Un réseau de Petri particulier $N_1^n$}
+    \label{exo3fig2}
+\end{figure}
+
+Considérons le réseau de Petri de la figure~\ref{exo3fig1} et le réseau de la figure~\ref{exo3fig2}
+construit à partir de celui de la figure~\ref{exo3fig1}.
+
+\begin{thrm}
+    Le réseau de Petri de la figure~\ref{exo3fig1} présente un invariant donné par :
+    \[
+        d_0 + p_0 + p_0' + f_0 = 1 
+    \]
+\end{thrm}
+
+\begin{proof}
+    Pour trouver les invariants d'un réseau, il suffit de trouver les solutions au système
+    d'équations obtenu à partir de : \[
+        ^tfC = 0
+    \]. Avec $C$ la matrice d'incidence du réseau, que l'on décrira ainsi :
+    \[
+        \left [ \begin{array}{ccccc}
+            -1 & 0 & 0 & 0 & 0 \\
+            1 & -1 & 0 & 0 & 0 \\
+            0 & 1 & -1 & 0 & 0 \\
+            0 & 0 & 1 & 0 & 0 \\
+            0 & 0 & 0 & -1 & 1 \\
+            0 & 0 & 0 & 2 & -1 \\
+        \end{array}
+        \right ]
+    \]
+
+    Le système est alors donné par : \[
+        \left \lbrace \begin{array}{rcl}
+            -f_1 + f_2 & = & 0 \\
+            -f_2 + f_3 & = & 0 \\
+            -f_3 + f_4 & = & 0 \\
+            -f_5 + 2f_6 & = & 0 \\
+            f_5 - f_6 & = & 0 \\
+        \end{array}
+        \right .
+    \]
+    \[
+        \Rightarrow \left \lbrace \begin{array}{rcl}
+            f_2 & = & f_1 \\
+            f_3 & = & f_1 \\
+            f_4 & = & f_1 \\
+            f_5 & = & 0 \\
+            f_6 & = & 0 \\
+        \end{array}
+        \right .
+    \]
+    Les vecteurs de la forme $^t(f_1, f_1, f_1, f_1, 0, 0)$ sont solutions du système précédent, on
+    en déduit donc l'invariant énoncé précédemment. De la même manière que l'exercice 2, le $P-$flot
+    étant à valeur entière et positive, il représente aussi un $P-$semiflot.
+\end{proof}
+
+\begin{rmq}
+    Le $P-$semi flot trouvé à l'aide de l'outil Tina est identique à celui trouvé précédemment.
+\end{rmq}
+
+\verbatiminput{03_exo3/N0n-struct.txt}
+
+\begin{thrm}
+    Le $P-$semiflot du réseau de la figure~\ref{exo3fig2} est le suivant : \[
+        d_0 + p_0 + p_0' + f_0 + p_1 + d_1 = 1
+    \]
+\end{thrm}
+
+\begin{proof}
+    Nous allons calculer les $P-$flots de la même que précédemment. Commençons par la matrice $C'$,
+    définie comme suit : \[
+        \left [
+        \begin{array}{cccccccccc}
+            -1 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 1\\
+            1 & -1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+            0 & 1 & -1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+            0 & 0 & 1 & 0 & 0 & 0 & 0 & -1 & 0 & -1\\
+            0 & 0 & 0 & -1 & 1 & 1 & 0 & 0 & -1 & 0\\
+            0 & 0 & 0 & 2 & -1 & 0 & 0 & 0 & 0 & 0\\
+            0 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 1 & 0\\
+            0 & 0 & 0 & 0 & 0 & 1 & -1 & 0 & 0 & -1\\
+            0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0\\
+            0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0\\
+            0 & 0 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0\\
+        \end{array}
+        \right ]
+    \]
+    On remarque que la matrice $C'$ est de la forme : \[
+        \left [ \begin{array}{cc}
+            C & A \\
+            0 & A' \\
+        \end{array} \right ]
+    \]
+    On peut donc d'ores et déjà poser : 
+    \[
+        \left \lbrace \begin{array}{rcl}
+            f_2 & = & f_1 \\
+            f_3 & = & f_1 \\
+            f_4 & = & f_1 \\
+            f_5 & = & 0 \\
+            f_6 & = & 0 \\
+        \end{array}
+        \right .
+    \]
+    représentant le système d'équation du réseau précédent. Il reste à résoudre le système suivant :
+    \[
+        \left \lbrace \begin{array}{rcl}
+            f_5 - f_7 + f_8 & = & 0 \\
+            f_1 - f_8 - f_{11} & = & 0 \\
+            f_9 + f_4 & = & 0 \\
+            f_7 + f_{10} - f_5 & = & 0 \\
+            f_1 - f_4 - f_8 & = & 0
+        \end{array} \right .
+    \]
+    On obtient alors : \[
+        \left \lbrace \begin{array}{ccccccccccc}
+            f_1 & = & f_2 & = & f_3 & = & f_4 & = & f_9 & = & f_{11} \\
+            f_5 & = & f_6 & = & f_7 & = & f_8 & = & f_{10} & = & 0 \\
+        \end{array} \right .
+    \]
+    Le $P-$ semiflot est dont donné par le vecteur : \[
+    \left ( \begin{array}{c}
+        1 \\ 1 \\ 1 \\ 1 \\ 0 \\ 0 \\ 0 \\ 0 \\ 1 \\ 0 \\ 1
+    \end{array} \right )
+    \]
+    Le marquage initial étant donné par $d_1c_1^n$, l'invariant est donc :\[
+        d_0 + p_0 + p_0' + f_0 + p_1 + d_1 = 1
+    \]
+\end{proof}
+
+\begin{rmq}
+    Le $P-$semiflot trouvé à l'aide de l'outil Tina est identique à celui trouvé précédemment.
+\end{rmq}
+
+\verbatiminput{03_exo3/N1n-struct.txt}
+
+La séquence maximale de $N_0^n$ telle que $d_0$ est unitaire est la suivante : \[
+    t_0^0 t_0^3 t_0^1 t_0^4 t_0^2
+\].
+
+La séquence maximale de $N_1^n$ telle que $d_1$ est unitaire est la suivante : \[
+    r_1 a_1 t_0^0 t_0^3 t_0^1 t_0^4 t_0^2 t_1^0 t_1^1
+\].
+
+Nous ne donnerons l'arborescence de couverture que pour $N_0^1$ pour des raisons de taille de
+l'arborescence. Cette dernière est donnée à la figure~\ref{exo3fig3}.
+
+\begin{figure}
+    \begin{center}
+        \begin{tikzpicture}
+            \node (n1) at (0,0) {$(d_0c_0)$};
+
+            \node[below=of n1] (n2) {$(p_0c_0)$}
+                edge[pre] node[auto] {$t_0^0$} (n1);
+
+            \node[below left=of n2] (n3) {$(p_0'c_0)$}
+                edge[pre] node[auto] {$t_0^1$} (n2);
+
+            \node[below right=of n2] (n4) {$(p_0'c_0^{'2})$}
+                edge[pre] node[auto] {$t_0^3$} (n2);
+
+            \node[below=of n3] (n5) {$(f_0c_0)$}
+                edge[pre] node[auto] {$t_0^2$} (n3);
+
+            \node[below=of n4] (n6) {$(p'_0c_0^{'2})$}
+                edge[pre] node[auto] {$t_0^1$} (n4);
+
+            \node[below left=of n6] (n7) {$(f_0c_0^{'2})$}
+                edge[pre] node[auto] {$t_0^2$} (n6);
+
+            \node[below right=of n6] (n8) {$(p'_0c_0c'_0)$}
+                edge[pre] node[auto] {$t_0^4$} (n6);
+
+            \node[below left=of n8] (n9) {$(f_0c_0c'_0)$}
+                edge[pre] node[auto] {$t_0^2$} (n8);
+
+            \node[below right=of n8] (n10) {$(p'_0c_0^2)$}
+                edge[pre] node[auto] {$t_0^4$} (n8);
+
+            \node[below=of n10] (n11) {$(f_0c_0^2)$}
+                edge[pre] node[auto] {$t_0^2$} (n10);
+        \end{tikzpicture}
+    \end{center}
+    \caption{Arborescence de couverture du réseau de Petri $N_0^1$}
+    \label{exo3fig3}
+\end{figure}
