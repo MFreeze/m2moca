@@ -1,0 +1,56 @@
+titre : Algorithmes d'approximation pour des problèmes d'ordonnancement d'intervalles avec optimisation 
+de la défragmentation
+
+
+Le contexte de ce stage est l'ordonnancement d'intervalles sur machines parallèles.
+Dans ce type de contexte, on considère n tâches à ordonnancer sur m
+ressources, chaque tâche ayant une date de début et de fin imposée (on assimile donc
+une tâche à un intervalle).
+
+
+Il existe pour ce type de problèmes une littérature importante [3] sur la maximisation du
+profit (typiquement maximiser le nombre de tâches acceptées), avec
+par exemple les problème de "bandwidth/storage allocation problem" [1],
+ou d'ordonnancement d'intervalles/ de taches avec dates de début et
+fin fixés [2].
+
+L'objectif du stage consiste à étudier pour ces problèmes un
+autre type de fonction objectif, non plus liées à la maximisation du
+profit, mais à la "flexibilité" de l'ordonnancement produit.
+En effet, on considère à présent que toutes les tâches peuvent être
+ordonnancées. Ainsi, l'objectif n'est plus de maximiser le profit des tâches
+acceptées, mais de créer un ordonnancement le moins "fragmenté" possible.
+Typiquement, on préférera un ordonnancement avec un petit nombre de longues plages
+d'inactivités des processeurs à un ordonnancement avec un grand nombre
+de petites plages d'inactivités. 
+
+Une motivation pour ce type de fonction objectif est qu'un
+ordonnancement défragmenté peut permettre d'accepter plus de tâches
+futures qu'un ordonnancement ayant de nombreux petits espaces inutilisables.
+De plus, il se trouve que la considération de la défragmentation est apparu très récemment dans la
+communauté de l'allocation de bande passante [4].
+
+L'idée serait donc d'étudier la complexité et de fournir des algorithmes
+d'approximation pour des variantes de ces problèmes d'ordonnancement d'intervalles avec optimisation 
+de la défragmentation.
+
+
+[1] 
+Approximation Algorithms for Bandwidth and Storage Allocation, Reuven Bar-Yehuda∗
+Michael Beder, Yuval Cohen [2005]
+
+[2]
+Scheduling jobs within time windows on identical parallel
+machines: New model and algorithms, 
+Virginie Grabel, EJOR 95
+
+[3]
+Interval Scheduling: A Survey
+Antoon W.J. Kolen, Jan Karel Lenstra, Christos H. Papadimitriou, Frits
+C.R. Spieksma
+Naval Research Logistics (NRL) 2007
+
+[4]
+Dynamic on-demand defragmentation in flexible
+bandwidth elastic optical networks
+Optics Express 2012

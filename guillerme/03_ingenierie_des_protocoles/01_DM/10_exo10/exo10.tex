@@ -37,22 +37,18 @@
         \begin{tikzpicture}
             \node (n1) at (3, 8) {$P_1P_2^2$};
             \node (n2) at (3, 6) {$P_3P_4P_5$};
-            \node (n3) at (0, 4) {$P_2P_3P_5$};
-            \node (n4) at (6, 4) {$P_4P_5$};
-            \node (n5) at (3, 2) {$P_2P_5$};
-            \node (n6) at (3, 0) {$P_2^2$};
+            \node (n3) at (3, 4) {$P_2P_3P_5$};
+            \node (n4) at (3, 2) {$P_2^2P_3$};
 
             \draw (n2) edge[pre] node[right] {$t_1$} (n1)
-                edge[post] node[above left] {$t_2$} (n3)
-                edge[post] node[above right] {$t_5$} (n4)
-                edge[loop below] node[below] {$t_4$} ();
-            \draw (n3) edge[post] node[below left] {$t_5$} (n5)
+                edge[post] node[left] {$t_2$} (n3)
                 edge[loop right] node[right] {$t_4$} ();
-            \draw (n4) edge[post] node[below right] {$t_5$} (n5);
-            \draw (n6) edge[pre] node[left] {$t_3$} (n5);
+            \draw (n3) edge[post] node[right] {$t_3$} (n4)
+                edge[loop right] node[right] {$t_4$} ();
+            \draw (n4) edge[loop right] node[right] {$t_4$} ();
         \end{tikzpicture}
     \end{center}
-    \caption{Graphe de classe}
+    \caption{Graphe de classes}
     \label{exo10fig2}
 \end{figure}
 
