@@ -458,7 +458,7 @@
     \pgfmathparse{#2-0.7}       \let\inity\pgfmathresult
     \pgfmathparse{#1*\unitxpas} \let\longx\pgfmathresult
 
-    \draw[<->] (\initx, \inity) to node[above] {#4} (\initx + #1, \inity);
+    \draw[<->] (\initx, \inity) to node[above] {#4} (\initx + \longx, \inity);
 }
 
 \newcommand{\newbeghole}[3]{
@@ -469,7 +469,7 @@
     \pgfmathparse{#2-0.7}       \let\inity\pgfmathresult
     \pgfmathparse{#1*\unitxpas} \let\longx\pgfmathresult
 
-    \draw[->] (\initx, \inity) to node[above] {#3} (\initx + #1, \inity);
+    \draw[->] (\initx, \inity) to node[above] {#3} (\initx + \longx, \inity);
 }
 
 \newcommand{\newendhole}[4]{
@@ -481,7 +481,7 @@
     \pgfmathparse{#2-0.7}       \let\inity\pgfmathresult
     \pgfmathparse{#1*\unitxpas} \let\longx\pgfmathresult
 
-    \draw[<-] (\initx, \inity) to node[above] {#4} (\initx + #1, \inity);
+    \draw[<-] (\initx, \inity) to node[above] {#4} (\initx + \longx, \inity);
 }
 
 % {{{ Notations
