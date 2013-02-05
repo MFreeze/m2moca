@@ -336,14 +336,15 @@
 %}}}
 
 % {{{ Ordonnacement
+% {{{ Nombre fixé de machines
 \newenvironment{ordo}[4][12]
-% 1 : Max
+% 1 : Longueur Max en cm
 % 2 : Nbre de machines
 % 3 : Pas en abscisse
 % 4 : xmax
 {
     \begin{center}
-    \begin{tikzpicture}
+    \begin{tikzpicture}[>=latex]
         \pgfmathparse{#3/#4 * #1} \let\xpas\pgfmathresult
         \pgfmathparse{int(#4/#3)} \let\nbpas\pgfmathresult
         \pgfmathparse{\xpas/#3} \let\unitxpas\pgfmathresult
@@ -368,7 +369,9 @@
         }
 }
 {\end{tikzpicture}\end{center}}
+% }}}
 
+% {{{ k machines k non fixé
 \newenvironment{ordok}[4][12]
 % 1 : Max
 % 2 : Nbre de machines avant ...
@@ -376,7 +379,7 @@
 % 4 : xmax
 {
     \begin{center}
-    \begin{tikzpicture}
+    \begin{tikzpicture}[>=latex]
         \pgfmathparse{#3/#4 * #1} \let\xpas\pgfmathresult
         \pgfmathparse{int(#4/#3)} \let\nbpas\pgfmathresult
         \pgfmathparse{\xpas/#3} \let\unitxpas\pgfmathresult
@@ -406,6 +409,7 @@
         \draw[dotted]  (0, #2 + 1) to (#1+1, #2 + 1);
 }
 {\end{tikzpicture}\end{center}}
+% }}}
 
 % TODO Vérifier que le nombre de machines est suffisant
 \newcommand{\newtask}[4]{
@@ -422,15 +426,93 @@
 }
 
 \newcommand{\newresa}[3]{
-    % 1 : Durée de la tâche
+    % 1 : Durée de la réservation
     % 2 : Numéro de machine
     % 3 : Date de début
-    % 4 : Label de la tâche
     \pgfmathparse{#3*\unitxpas} \let\initx\pgfmathresult
     \pgfmathparse{#2-0.9}       \let\inity\pgfmathresult
     \pgfmathparse{#1*\unitxpas} \let\longx\pgfmathresult
 
     \fill[black] (\initx, \inity) rectangle +(\longx, 0.8);
 }
+
+\newcommand{\newlabeledresa}[4]{
+    % 1 : Durée de la réservation
+    % 2 : Numéro de machine
+    % 3 : Date de début
+    % 4 : Label de la réservation
+    \pgfmathparse{#3*\unitxpas} \let\initx\pgfmathresult
+    \pgfmathparse{#2-0.9}       \let\inity\pgfmathresult
+    \pgfmathparse{#1*\unitxpas} \let\longx\pgfmathresult
+
+    \fill[black] (\initx, \inity) rectangle +(\longx, 0.8);
+    \node[white] at (\initx + \longx/2, \inity + 0.4) {#4};
+}
+
+\newcommand{\newhole}[4]{
+    % 1 : Durée du trou
+    % 2 : Numéro de machine
+    % 3 : Date de début
+    % 4 : Label du trou
+    \pgfmathparse{#3*\unitxpas} \let\initx\pgfmathresult
+    \pgfmathparse{#2-0.7}       \let\inity\pgfmathresult
+    \pgfmathparse{#1*\unitxpas} \let\longx\pgfmathresult
+
+    \draw[<->] (\initx, \inity) to node[above] {#4} (\initx + #1, \inity);
+}
+
+\newcommand{\newbeghole}[3]{
+    % 1 : Durée du trou
+    % 2 : Numéro de machine
+    % 3 : Label du trou
+    \pgfmathparse{0*\unitxpas} \let\initx\pgfmathresult
+    \pgfmathparse{#2-0.7}       \let\inity\pgfmathresult
+    \pgfmathparse{#1*\unitxpas} \let\longx\pgfmathresult
+
+    \draw[->] (\initx, \inity) to node[above] {#3} (\initx + #1, \inity);
+}
+
+\newcommand{\newendhole}[4]{
+    % 1 : Durée du trou
+    % 2 : Numéro de machine
+    % 3 : Date de début
+    % 4 : Label du trou
+    \pgfmathparse{#3*\unitxpas} \let\initx\pgfmathresult
+    \pgfmathparse{#2-0.7}       \let\inity\pgfmathresult
+    \pgfmathparse{#1*\unitxpas} \let\longx\pgfmathresult
+
+    \draw[<-] (\initx, \inity) to node[above] {#4} (\initx + #1, \inity);
+}
+
+% {{{ Notations
+%% Début d'une tâche
+\newcommand{\st}[1]{ r^t_{#1} }
+%% Fin d'une tâche
+\newcommand{\ct}[1]{ \widetilde{d}^t_{#1} }
+%% Durée d'une tâche
+\newcommand{\pt}[1]{ p^t_{#1} }
+
+%% Début d'une réservation
+\newcommand{\sres}[1]{ r^r_{#1} }
+%% Fin d'une réservation
+\newcommand{\cres}[1]{ \widetilde{d}^r_{#1} }
+%% Durée d'une réservation
+\newcommand{\pres}[1]{ p^r_{#1} }
+
+%% Début d'un trou
+\newcommand{\sho}[1]{ r^h_{#1} }
+%% Fin d'un trou
+\newcommand{\cho}[1]{ \widetilde{d}^h_{#1} }
+%% Durée d'un trou
+\newcommand{\pho}[1]{ p^h_{#1} }
+
+%% Début d'un événement général (tache ou réservation)
+\newcommand{\sgen}[1]{ r_{#1} }
+%% Fin d'un événement général
+\newcommand{\cgen}[1]{ \widetilde{d}_{#1} }
+%% Durée d'un événement général
+\newcommand{\pgen}[1]{ p_{#1} }
+
+% }}}
 
 % }}}
