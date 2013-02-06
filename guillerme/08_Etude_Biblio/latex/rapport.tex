@@ -73,7 +73,7 @@ minimum}
 
 et son problème de décision associé :
 
-% {{{ PROBLEME : Flexible Interval Scheduling
+% {{{ PROBLEME : Flexible Interval Scheduling Decision
 \dfdec{\fischedpi}
 {Un ensemble de $k$ machines, un ensemble $\mathcal{T}$ de tâches $j = [\st{j}, \ct{j}]$, un
 ensemble $\mathcal{R}$ de réservations $l = (m_i, [\sres{l}, \cres{l}])$, un entier $z$}
@@ -218,7 +218,7 @@ trou minimum soit supérieure ou égale à $z$?}
 
 \section{$NP-$complétude}
 
-Considérons le problème suivant :
+Considérons les problèmes suivants :
 
 % {{{ PROBLEME : Precoloring extension
 \dfdec{\precolor}
@@ -228,10 +228,71 @@ entier $k$}
 c'(v)$?}
 % }}}
 
+% {{{ PROBLEME : Flexible Interval Scheduling Decision
+\dfdec{\unitfischedpi}
+{Un ensemble de $k$ machines, un ensemble $\mathcal{T}$ de tâches $j = [\st{j}, \ct{j}]$ telles que
+$\ct{j} = \st{j} + 1$ et $\st{j} \equiv 0 \mod 2$, un ensemble $\mathcal{R}$ de réservations $l =
+(m_i, [\sres{l}, \cres{l}])$ telles que $\cres{j} = \sres{j} + 1$ et $\sres{j} \equiv 0 \mod 2$, un
+entier $z$}
+{Existe-t-il un ordonnancement $\mathcal{O}$ des tâches sur les $k$ machines tel que la taille du
+trou minimum soit supérieure ou égale à $z$?}
+% }}}
+
+\begin{ndf}[Graphe d'intervalles]
+    Étant donné un ensemble d'intervalles $\mathcal{I} = \{b_1, \dots, b_n\}$ tels que $b_i = [s_i,
+    c_i]$, le graphe d'intervalles défini par cet ensemble est un graphe non orienté construit de la
+    manière suivante :
+    \begin{enumerate}
+        \item à chaque intervalle $b_i \in \mathcal{I}$ on associe un sommet $v_i$
+        \item étant donnés deux sommets $v_i,\ v_j \in V$, $(v_iv_j) \in E$ si et seulement si : \[
+                s_i \leq s_j < c_i
+            \]
+            ou \[
+                s_j \leq s_i < c_j
+            \]
+    \end{enumerate}
+
+    Un graphe d'intervalles est dit propre si et seulement si, étant donnés deux intervalles $b_i$
+    et $b_j$ : \[
+        s_i \leq s_j < c_i \Rightarrow c_j > c_i
+    \]
+    Autrement, il n'existe aucune paire d'intervalle $(b_i, b_j) \in \mathcal{I}^2$ telle que $b_i$
+    contient $b_j$.
+\end{ndf}
+
 \begin{nthrm}
-    Le problème \precolor est $NP-$complet sur les graphe d'intervalles
+    Le problème \precolor est \npc sur les graphes d'intervalles
     propres~\cite{marx2006precoloring}.
 \end{nthrm}
+
+\begin{nthrm}
+    Le problème \unitfischedpi est \npc.
+\end{nthrm}
+
+\begin{proof}
+    Pour démontrer la \npcude de \unitfischedpi, nous allons réaliser une réduction depuis
+    \precolor.
+
+    Considérons une instance du problème \precolor sur un graphe d'intervalles propres $G = (V, E)$
+    obtenu à partir d'un ensemble d'intervalles $\mathcal{I}$.  On suppose sans perte de généralité
+    que les intervalles représentés par les sommets sont de la forme $[s_i, c_i]$ avec $s_i \in
+    \mathbb{N}$ et $c_i \in \mathbb{N}*$.
+
+    Notons $w$, la taille du plus petit des intervalles représentés par les sommets de $G$, et
+    $\iota$ le plus petit entier tel que $\iota w \geq z + 1$.
+
+    Considérons la fonction $\phi$ qui à un intervalle $[s_i, c_i] \in \mathcal{I}$ associe
+    l'intervalle $[s'_i, c'_i]$, tel que $s'_i = 2 \iota s_i$ et $c'_i = 2 \iota
+    c_i$. L'ensemble des intervalles $\mathcal{I}'$ obtenu par $\phi(\mathcal{I})$ définit un graphe
+    d'intervalle propre $G' = (V', E')$ identique à $G$. En effet $\phi$ est en réalité une
+    homothétie de rapport $2 \iota$ préservant les inclusions et intersections d'intervalles.
+
+    Le problème \precolor sur $G$ possède donc une solution si et seulement si le problème \precolor
+    sur $G'$ possède une solution.
+
+    À chaque sommet $v \in V'$, on associe une tâche unitaire $t_v$
+    
+\end{proof}
 
 
 % }}}
