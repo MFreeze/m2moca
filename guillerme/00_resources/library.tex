@@ -73,6 +73,8 @@
 \newtheorem{nlemma}{Lemme}
 \newtheorem{ncorol}{Corollaire}
 \newtheorem{npb}{Problème}
+\newtheorem{npbopt}{Problème (Optimisation)}
+\newtheorem{npbdec}{Problème (Décision)}
 % }}}
 
 % {{{ THÉORÈMES, lEMMES -- NON NUMÉROTÉS
@@ -171,6 +173,7 @@
 \newcommand{\lpath}{\textsc{Longest Path} }
 \newcommand{\fisched}{\textsc{Flexible Interval Scheduling} }
 \newcommand{\fischedpi}{\textsc{Decision Flexible Interval Scheduling} }
+\newcommand{\precolor}{\textsc{Precoloring Extension} }
 
 % }}}
 
@@ -179,14 +182,29 @@
 \newcommand{\dfopt}[3]{
     ~\\
     \hrule
-    \begin{npb}
+    \begin{npbopt}
         #1
         \begin{itemize}
             \itemindent 5mm
             \item[\textbf{Données :}] #2
             \item[\textbf{Résultat :}] #3
         \end{itemize}
-    \end{npb}
+    \end{npbopt}
+    \hrule
+    ~\\
+}
+
+\newcommand{\dfdec}[3]{
+    ~\\
+    \hrule
+    \begin{npbdec}
+        #1
+        \begin{itemize}
+            \itemindent 10mm
+            \item[\textbf{Données :}] #2
+            \item[\textbf{Question :}] #3
+        \end{itemize}
+    \end{npbdec}
     \hrule
     ~\\
 }
