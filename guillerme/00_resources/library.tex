@@ -5,26 +5,24 @@
 \usepackage[french]{babel}
 \usepackage{eurosym}
 % }}}
-
+% {{{ ITEMIZE
+\usepackage{enumitem}
+% }}}
 % {{{ FIGURES
 \usepackage{graphicx}
 \usepackage{subfig}
 % }}}
-
 % {{{ INSERTION DE CODE
 \usepackage{moreverb}
 % }}}
-
 % {{{ INSERTION DE PDF
 \usepackage{pdfpages}
 % }}}
-
 % {{{ RÉDUCTION DES MARGES
 %\usepackage{fullpage}
 \usepackage[top=2.5cm, bottom=2.5cm, left=3.5cm, right=3.5cm]{geometry}
 \usepackage{fancyhdr}
 % }}}
-
 % {{{ MATHÉMATIQUES
 \usepackage[fleqn]{amsmath}
 \usepackage{amsthm}
@@ -32,25 +30,20 @@
 \usepackage{amssymb}
 \usepackage{stmaryrd}
 % }}}
-
 % {{{ GRAPHES
 \usepackage{tikz}
 \usepackage{pgf}
 \usetikzlibrary{arrows,automata,shapes}
 % }}}
-
 % {{{ RESEAUX DE pETRI
 \usetikzlibrary{petri}
 % }}}
-
 % {{{ ARBRES
 \usetikzlibrary{trees}
 % }}}
-
 % {{{ DIAGRAMME DE GANTT
 \usepackage{pgfgantt}
 % }}}
-
 % {{{ ALGORITHMES
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode}
@@ -365,11 +358,13 @@
 {
     \begin{center}
     \begin{tikzpicture}[>=latex]
-        \pgfmathparse{#3/#4 * #1} \let\xpas\pgfmathresult
+        \pgfmathparse{#3/#4 * (#1-1)} \let\xpas\pgfmathresult
         \pgfmathparse{int(#4/#3)} \let\nbpas\pgfmathresult
         \pgfmathparse{\xpas/#3} \let\unitxpas\pgfmathresult
         
-        \draw[thick] (#1+1,0) -- (0,0) -- (0,#2) -- (#1+1,#2);
+        \draw[thick] (#1,0) -- (0,0) -- (0,#2) -- (#1,#2);
+        \draw[thick,dashed] (#1,0) -- (#1+1,0);
+        \draw[thick,dashed] (#1,#2) -- (#1+1,#2);
 
         \node[below] at (0, 0) {$0$};
 
@@ -381,10 +376,13 @@
             \draw[dotted] (\abscisse,0) to (\abscisse,#2);
         }
 
+        \pgfmathparse{(\nbpas + 1) * \xpas} \let\abscisse\pgfmathresult
+        \node[above] at (\abscisse, -0.4) {$\dots$};
+
         \foreach \y in {1,...,#2}{
             \pgfmathparse{\y - 0.5} \let\ordlabel\pgfmathresult
 
-            \node[left] at (0, \ordlabel) {$M_\y$};
+            \node[left] at (0, \ordlabel) {$m_\y$};
             \draw[dotted] (0, \y) to (#1+1, \y);
         }
 }
@@ -405,6 +403,8 @@
         \pgfmathparse{\xpas/#3} \let\unitxpas\pgfmathresult
         
         \draw[thick] (#1+1,0) -- (0,0) -- (0,#2+2) -- (#1+1,#2+2);
+        \draw[thick,dashed] (#1,0) -- (#1+1,0);
+        \draw[thick,dashed] (#1,#2+2) -- (#1+1,#2+2);
 
         \node[below] at (0, 0) {$0$};
 
@@ -417,10 +417,13 @@
             \draw[dotted] (\abscisse,#2+1) to (\abscisse,#2+2);
         }
 
+        \pgfmathparse{(\nbpas + 1) * \xpas} \let\abscisse\pgfmathresult
+        \node[above] at (\abscisse, -0.4) {$\dots$};
+
         \foreach \y in {1,...,#2}{
             \pgfmathparse{\y - 0.5} \let\ordlabel\pgfmathresult
 
-            \node[left] at (0, \ordlabel) {$M_\y$};
+            \node[left] at (0, \ordlabel) {$m_\y$};
             \draw[dotted] (0, \y) to (#1+1, \y);
         }
 
@@ -431,6 +434,7 @@
 {\end{tikzpicture}\end{center}}
 % }}}
 
+% {{{ \newtask{duree}{machine}{début}{label}
 % TODO Vérifier que le nombre de machines est suffisant
 \newcommand{\newtask}[4]{
     % 1 : Durée de la tâche
@@ -444,7 +448,9 @@
     \fill[black!30] (\initx, \inity) rectangle +(\longx, 0.8);
     \node at (\initx + \longx/2, \inity + 0.4) {#4};
 }
+% }}}
 
+% {{{ \newresa{duree}{machine}{debut}
 \newcommand{\newresa}[3]{
     % 1 : Durée de la réservation
     % 2 : Numéro de machine
@@ -455,7 +461,9 @@
 
     \fill[black] (\initx, \inity) rectangle +(\longx, 0.8);
 }
+% }}}
 
+% {{{ \newlabeledresa{duree}{machine}{debut}{label}
 \newcommand{\newlabeledresa}[4]{
     % 1 : Durée de la réservation
     % 2 : Numéro de machine
@@ -468,7 +476,10 @@
     \fill[black] (\initx, \inity) rectangle +(\longx, 0.8);
     \node[white] at (\initx + \longx/2, \inity + 0.4) {#4};
 }
+% }}}
 
+% TODO une seule commande pour les trous en utilisant un ifthenelse sur un argument optionnel
+% {{{ \newhole{duree}{machine}{debut}{label}
 \newcommand{\newhole}[4]{
     % 1 : Durée du trou
     % 2 : Numéro de machine
@@ -480,7 +491,9 @@
 
     \draw[<->] (\initx, \inity) to node[above] {#4} (\initx + \longx, \inity);
 }
+% }}}
 
+% {{{ \newbeghole{duree}{machine}{label}
 \newcommand{\newbeghole}[3]{
     % 1 : Durée du trou
     % 2 : Numéro de machine
@@ -490,8 +503,11 @@
     \pgfmathparse{#1*\unitxpas} \let\longx\pgfmathresult
 
     \draw[->] (\initx, \inity) to node[above] {#3} (\initx + \longx, \inity);
+    \draw[-,dashed] (\initx - 1, \inity) to (\initx, \inity);
 }
+% }}}
 
+% {{{ \newendhole{duree}{machine}{debut}{label}
 \newcommand{\newendhole}[4]{
     % 1 : Durée du trou
     % 2 : Numéro de machine
@@ -502,37 +518,66 @@
     \pgfmathparse{#1*\unitxpas} \let\longx\pgfmathresult
 
     \draw[<-] (\initx, \inity) to node[above] {#4} (\initx + \longx, \inity);
+    \draw[-,dashed] (\initx + \longx, \inity) to (\initx + \longx + 2, \inity);
 }
+% }}}
 
 % {{{ Notations
+% {{{ Taches
 %% Début d'une tâche
 \newcommand{\st}[1]{ r^t_{#1} }
 %% Fin d'une tâche
 \newcommand{\ct}[1]{ \widetilde{d}^t_{#1} }
 %% Durée d'une tâche
 \newcommand{\pt}[1]{ p^t_{#1} }
+% }}}
 
+% {{{ Resa
 %% Début d'une réservation
 \newcommand{\sres}[1]{ r^r_{#1} }
 %% Fin d'une réservation
 \newcommand{\cres}[1]{ \widetilde{d}^r_{#1} }
 %% Durée d'une réservation
 \newcommand{\pres}[1]{ p^r_{#1} }
+% }}}
 
+% {{{ Hole
 %% Début d'un trou
 \newcommand{\sho}[1]{ r^h_{#1} }
 %% Fin d'un trou
 \newcommand{\cho}[1]{ \widetilde{d}^h_{#1} }
 %% Durée d'un trou
 \newcommand{\pho}[1]{ p^h_{#1} }
+% }}}
 
+% {{{ Evénement général
 %% Début d'un événement général (tache ou réservation)
 \newcommand{\sgen}[1]{ r_{#1} }
 %% Fin d'un événement général
 \newcommand{\cgen}[1]{ \widetilde{d}_{#1} }
 %% Durée d'un événement général
 \newcommand{\pgen}[1]{ p_{#1} }
-
 % }}}
 
+% {{{ Intervalle
+%% Début d'un intervalle
+\newcommand{\sint}[1]{ s_{#1} }
+%% Fin d'un intervalle général
+\newcommand{\cint}[1]{ c_{#1} }
+%% Durée d'un intervalle
+\newcommand{\pint}[1]{ l_{#1} }
+% }}}
+
+% }}}
+% }}}
+
+% {{{ Petits environnements
+% {{{ Bullet itemize
+\newenvironment{bitemize}{
+    \begin{itemize}[label=$\bullet$]
+}
+{
+    \end{itemize}
+}
+% }}}
 % }}}
