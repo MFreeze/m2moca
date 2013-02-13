@@ -1,0 +1,266 @@
+\documentclass[a4paper,11pt]{article}
+
+\input{library.tex}
+
+\begin{document}
+
+\section{Définition des problèmes d'ordonnancement}
+
+\subsection{Description des tâches}
+
+Dans la littérature, en général (nous adopterons cette définition dans la suite), les problèmes
+d'ordonnancement se déclinent de la manière suivante\footnote{Nous avons omis l'ensemble des
+    ressources à l'exécution d'une tâche pour ne pas alourdir d'une part la présentation, et d'autre
+    part dans le reste de ce manuscrit nous considérons des modèles pour lesquels l'utilisation de
+ressources supplémentaires n'est pas pris en compte.} : nous disposons de deux ensembles
+$\mathcal{T}=\{T_1,\ldots,T_n\}$ de $n$ tâches, $\mathcal{P}=\{\pi_1,\ldots,\pi_m\}$ de $m$
+processeurs. L'ordonnancement consiste à affecter l'ensemble $\mathcal{T}$ des tâches, soumises à
+des contraintes imposées, à l'ensemble des processeurs $\mathcal{P}$. Il existe en général deux
+contraintes en théorie de l'ordonnancement :
+
+\begin{itemize}
+    \item chaque processeur est capable d'exécuter au plus une tâche à chaque instant,
+    \item chaque tâche ne peut-être exécutée qu'au plus par un seul processeur\footnote{Dans
+        certains modèles hiérarchiques du type tâches modelables ou malléables \cite{blayo,decker},
+    une tâche peut s'exécuter sur plusieurs processeurs (les communications sont intégrées dans la
+durée d'exécution des tâches). Cependant  la durée dépend du nombre de processeurs exécutant cette
+tâche.}.% (il est possible selon les spécifications des ressources additionnelles)
+\end{itemize}
+
+\subsection{Environnement des processeurs}
+
+Maintenant caractérisons les processeurs. Ils peuvent être soit parallèles, exécutant les mêmes
+fonctions, soit dédiés i.e. spécialisés pour l'exécution de certaines tâches. Les trois types de
+processeurs de machines parallèles se distinguent par leurs vitesses de traitement des tâches. Si
+tous les processeurs de l'ensemble $\mathcal{P}$ admettent la même vitesse de traitement, nous
+dirons que les processeurs sont identiques. Si les vitesses de traitements des processeurs
+diffèrent, mais chaque vitesse $b_i$ (facteur d'accélération du traitement de la tâche) de chaque
+processeur est constant et ne dépend pas de la tâche à exécuter, alors nous dirons que les
+processeurs sont uniformes. En dernier lieu, si les vitesses des processeurs dépendent des tâches à
+ordonnancer, nous dirons que les processeurs de la machine parallèle sont généraux.
+
+
+Dans le cas où le les processeurs sont dédiés, nous pouvons présenter trois modèles : \texttt{flow
+shop, open shop} et \texttt{job shop}. Nous renvoyons les personnes intéressées pour ces trois
+modèles à la lecture des livres \cite{handbook}, \cite{brucker},  \cite{pinedo}. Ces trois modèles
+n'étant pas étudiés dans cette thèse, ils ne seront pas décrits.
+
+
+En général, une tâche $T_j \in \mathcal{T}$ est caractérisée par les données suivantes :
+
+\begin{enumerate}
+    \item un vecteur de temps d'exécution $p_j=[p_{1j}, p_{2j},\ldots,p_{mj}]^T$, où $p_{ij}$
+        désigne le temps nécessaire au processeur $\pi_i$ d'exécuter $T_j$. Dans le cas où tous les
+        processeurs sont identiques, nous avons $p_{ij}=p_j, i=1,\ldots,m$. Si les processeurs de
+        $\mathcal{P}$ sont uniformes, nous avons $p_{ij}=p_j/b_i, i=1,\ldots,m$ où $p_j$ représente
+        la vitesse d'exécution standard  et $b_i$ facteur d'accélération du traitement de la tâche
+        par le processeur $P_i$.
+    \item une date de disponibilité, notée $r_j$, qui désigne la date à partir de laquelle la tâche
+        $T_j$ est prête à être exécutée. Si les dates de disponibilités sont équivalentes pour
+        toutes les tâches de $\mathcal{T}$, alors nous pouvons supposer que $r_j=0, \forall j$.
+
+    \item une date d'échéance $d_j$, qui spécifie la date limite (souhaité) à laquelle la tâche $T_j$ devra être exécutée.
+    \item une date de fin impérative $\tilde{d}_j$, date à laquelle la tâche $T_j$ devra avoir fini son exécution.
+    \item un poids (priorité) $w_j$, qui représente l'urgence relative de la tâche $T_j$.
+\end{enumerate}
+
+Dans toute la suite, nous supposerons que les paramètres liés aux tâches $p_j, ~r_j, \tilde{d}_j,
+d_j$ et $w_j$ sont des entiers. %En fait cette hypothèse n'est pas pas trop restrictive
+
+%Dans la suite, nous proposerons les définitions concernant la préemption des tâches, la duplication
+%des tâches et sur les contraintes de précédence portant sur les tâches.
+
+Un ordonnancement est dit préemptif si chaque tâche peut-être préemptée (interrompue) à n'importe
+quel moment et son exécution peut-être reprise également à n'importe quel moment. Si la préemption
+des tâches est interdite, nous dirons que l'ordonnancement est non-préemptif.
+
+%La duplication des tâches peut-être autorisée ou non selon les problèmes étudiés. Dans le cas,
+
+Les tâches de $\mathcal{T}$ à exécuter sur les processeurs de $\mathcal{P}$ peuvent être dupliquées.
+En effet, dans le but de réduire l'influence des délais de communication (voir ci-après), dans le
+cas où la duplication des tâches est autorisée, des copies de tâches peuvent être produites. Nous
+supposerons par la suite, que les tâches originelles et leurs copies  admettent une même date de
+début d'exécution.
+
+Sur l'ensemble des tâches $\mathcal{T}$, des contraintes de précédence peut-être définies. $T_i
+\prec T_j$ signifie que la tâche $T_j$ ne pourra commencer son exécution que si la tâche $T_i$ a
+fini la sienne. En d'autres termes, nous pouvons définir sur l'ensemble $\mathcal{T}$ une relation
+de précédence donnée par $\prec$. Les tâches de l'ensemble $\mathcal{T}$ sont dites dépendantes si
+au moins deux tâches de $\mathcal{T}$ admettent un relation de précédence. Dans le cas contraire,
+nous dirons que les tâches sont indépendantes.
+Les tâches soumises à des relations de précédence, seront représentés par un graphe orienté (valué
+ou non, selon la présence ou non de délais de communication) où les sommets correspondent aux tâches
+et les arcs les contraintes de précédence. Nous supposerons que nous n'avons pas d'arc transitif
+dans le graphe de précédence.
+
+
+Une tâche $T_j$ est dite disponible à l'instant $t$ si $r_j \leq t$ et  si tous ces prédécesseurs
+(en respectant les contraintes de précédence) ont fini leur exécution avant l'instant $t$.
+
+\subsection{Critères d'optimalité}
+
+Maintenant, nous donnons les définitions concernant les ordonnancements et les critères
+d'optimalité. Un ordonnancement est une affectation des tâches de $\mathcal{T}$ sur les processeurs
+de $\mathcal{P}$ telles que les conditions suivantes soient satisfaites :
+\begin{itemize}
+    \item à chaque instant un processeur exécute au plus une tâche et chaque tâche est exécutée par un seul processeur,
+
+    \item chaque tâche $T_j$ est exécutée durant l'intervalle $[r_j,\infty)$.
+    \item toutes les tâches sont ordonnancées.
+    \item si deux tâches $T_i$ et $T_j$ admettent une relation de précédence $T_i \prec T_j$,
+        alors la tâche $T_j$ ne peut commencer son exécution qu'après la fin d'exécution de
+        $T_i$.
+    \item dansle cas d'ordonnancements non préemptifs, aucune tâche ne peut-être interrompue.
+        Dans le cas contraire, le nombre de préemptions est fini.
+    \item dansle cas où la duplication est non autorisée, aucune tâche ne peut-être dupliquée.
+        Dans le cas contraire, nous supposerons que le nombre de copies d'une tâche est fini.
+\end{itemize}
+
+
+
+Pour représenter les ordonnancements, nous utiliserons un diagramme de Gantt. Un exemple
+d'utilisation du diagramme de Gantt est donné à la figure \ref{fig:gantt}. Dans cette figure,
+nous avons à notre disposition trois processeurs identiques sur lesquels nous devons exécuter un
+ensemble de huit tâches, ayant des durées différentes, soumises à des contraintes de précédence
+données par lagraphe de précédence de la figure \ref{fig:gantt0}. Dans cette figure les
+valuations surun sommet $x$ correspondent à son temps d'exécution sur un processeur. Pour
+chaque tâche $T_j, i=1,\ldots n$ exécutée dans un ordonnancement donné, nous pouvons calculer la
+valeur de chaque paramètre suivant :
+
+
+\begin{itemize}
+    \item le temps de  complétion noté $C_j=t_j+p_j$ où $t_j$ désigne la date de début d'exécution de la tâche $T_j$,
+    \item le temps d'attente $F_j=C_j-(r_j+p_j)$,
+    \item le retard algébrique noté $L_j=C_j-d_j$,
+    \item le retard absolue $D_j=\max\{C_j-d_j,0\}$,
+    \item l'avance de la tâche $E_j=\max\{d_j-C_j,0\}$,
+        %\itemet bien sûr les versions pondérées
+\end{itemize}
+
+\section{Classification des problèmes d'ordonnancement  déterministes}
+
+
+
+\subsection{Présentation de la notation à trois champs}
+
+La grande variété des problèmes d'ordonnancement a motivé l'introduction d'une notation synthétique
+pour classifier les schémas. Nous reprenons la notation proposée par Graham et al. \cite{graham} et
+par B\l a\. zewicz et al. \cite{blazewicz} et nous proposons une extension.
+%Nous allons étendre les notations  à notre modèle.
+
+Pour définir un problème d'ordonnancement, il est commode d'introduire trois paramètres
+$\alpha,\beta,\gamma$. Ces trois paramètres permettent de définir tous les ordonnancements
+statiques, et ils permettent de synthétiser la formulation des divers problèmes. Détaillons ces
+trois paramètres :
+
+\begin{itemize}
+
+    \item Le paramètre $\alpha=\alpha_1(\alpha_2)$\footnote{Il se peut que des combinaisons n'aient
+        pas de sens.} définit l'environnement des processeurs (nombre de processeurs, modèle
+        hiérarchique, topologie, $\ldots$)
+
+        % la présence ou non d'un modèle hiérarchique, le type de processeur et leur nombre.
+
+        $\ast \alpha_1= \in \{ P, \bar{P}, P_m,\varnothing  \} \mbox{ et } \alpha_2 \in \{ P,
+        \bar{P}, P_m, Q,R,O,F,J  \}$
+
+        \begin{itemize}
+
+            \item Si $\alpha_1 \neq \varnothing$ alors nous sommes en présence d'un modèle
+                hiérarchique.
+            \item Si $\alpha_i=P$ signifie que les processeurs sont identiques et que leur nombre
+                $m$ est une entrée du problème.
+
+            \item Si $\alpha_i=\bar{P}$ ou $\alpha_2=\infty$ signifie que les processeurs sont
+                identiques, et que leur nombre est suffisant ou non bornée.
+
+            \item Si $\alpha_i=P_{m}, ~i \in \{1,2\}$ signifie que le  nombre de processeurs identiques est fixé.
+            \item Si $\alpha_i=Q$, les processeurs sont uniformes,
+            \item Si $\alpha_i=R$, les processeurs sont généraux,
+            \item Si $\alpha_i=O$, les processeurs sont dédiés (modèle Open-Shop),
+            \item Si $\alpha_i=F$, les processeurs sont dédiés (modèle Flow-Shop),
+            \item Si $\alpha_i=J$, les processeurs sont dédiés (modèle Job-shop).
+        \end{itemize}
+
+    \item Le paramètre $\beta$  définit le type d'application et ces caractéristiques c'est-à-dire
+        le graphe de précédence, le coût des communications, les temps d'exécution des tâches,
+        l'autorisation ou pas de la duplication, l'autorisation ou pas de la préemption.
+
+        De manière synthétique, on obtient $\beta=\beta_1\beta_2\beta_3\beta_4\beta_5$ où :
+
+        $\ast \beta_1 \in \{ prec,arbre,chaine,\ldots, .\}$
+
+        \begin{itemize}
+
+            \item Si $\beta_1=$prec (le graphe est quelconque).
+
+            \item Si $\beta_1=$arbre (le graphe est un arbre)
+
+            \item $\vdots$
+
+            \item Si $\beta_1=.$ (les t\^aches sont indépendantes)
+
+        \end{itemize}
+
+        $\ast \beta_2 \in \{ com,c_{jk},c ,.\}$
+
+        \begin{itemize}
+
+            \item Si $\beta_2=$com (les temps de communication sont donnés par le graphe).
+
+            \item Si $\beta_2=c_{jk}$ (représente le temps de communication entre la tâche $j$ et la
+                tâche $k$).
+
+            \item Si $\beta_2=c$ (le temps de communication est constant et égal entre chaque paire
+                de tâches).
+
+            \item $\beta_2=.$ (il n'existe pas de communication).
+
+        \end{itemize}
+
+        $\ast \beta_3 \in \{p_j,.\}$
+
+        \begin{itemize}
+
+            \item Si $\beta_3=p_j=1$ (toutes les t\^aches ont une durée unitaire).
+
+            \item Si $\beta_3=.$ (les durées d'exécution sont définies par le graphe).
+
+        \end{itemize}
+
+        $\ast \beta_4 \in \{dup,.\}$
+
+        \begin{itemize}
+
+            \item Si $\beta_4=dup$ (on autorise la duplication des t\^aches).
+
+            \item Si $\beta_4=.$ (on n'autorise pas la duplication des t\^aches).
+
+        \end{itemize}
+
+
+
+        $\ast \beta_5 \in \{pmtp,.\}$
+
+        \begin{itemize}
+
+            \item Si $\beta_5=pmtp$ (on autorise l'interruption d'une tâche).
+
+            \item Si $\beta_5=.$ (on n'autorise pas l'interruption d'une tâche).
+
+        \end{itemize}
+
+    \item Le paramètre $\gamma$ définit la fonction objective ou le critère d'optimalité. Dans toute
+        la suite de cette thèse, nous considérons les deux fonctions objectives suivantes :
+        \begin{itemize}
+            \item la minimisation de la longueur de l'\ordofin, notée $C_{max}=\max_i \{t_i+p_i\}$
+                (où $p_j$ est la durée d'exécution de la tâche $j$ et $t_j$ est la date de début
+                d'exécution) par la suite, qui est le temps d'achèvement. De plus, $C^{opt}_{max}$
+                désignera la longueur optimale de l'ordonnancement.
+            \item la minimisation de la somme des temps de complétude noté $\sum_{j} C_j$ avec
+                $C_j=t_j+p_j$.
+        \end{itemize}
+
+
+\end{itemize}
+\end{document}

@@ -1,4 +1,4 @@
-\documentclass[a4paper,9pt]{book}
+\documentclass[a4paper,9pt]{report}
 
 \input{library}
 
@@ -46,7 +46,7 @@ Choses à faire :
 % }}}
 
 \begin{nrmq}
-    Par la suite nous nous restraindrons à des tâches dont les dates de début et de fin sont à
+    Par la suite nous nous restreindrons à des tâches dont les dates de début et de fin sont à
     valeurs entières et positives.
 \end{nrmq}
 
@@ -103,7 +103,7 @@ section~\ref{scomplexite}.
     \begin{enumerate}
         \item à chaque intervalle $b_i \in \mathcal{I}$ on associe un sommet $v_i$.
         \item étant donnés deux sommets $v_i,\ v_j \in V$, $[v_iv_j) \in E$ si et seulement si 
-            $\sint{i} \leq \sint{j} < \cint{i}$ ou$\sint{j} \leq \sint{i} < \cint{j}$. Il s'agit
+            $\sint{i} \leq \sint{j} < \cint{i}$ ou $\sint{j} \leq \sint{i} < \cint{j}$. Il s'agit
             de la manière formelle de dire qu'une arête existe entre deux sommets $v_i$ et $v_j$ si
             et seulement s $i$ et $j$ se chevauchent.
     \end{enumerate}
@@ -163,9 +163,11 @@ trou minimum soit au moins égale à $z$?}
             \colon   i,i' \in \mathcal{T} \cup \mathcal{R},\ f(i) = f(i')\}$
     \end{bitemize}
 
-    On peut finalement définir la notation de Graham pour ce problème, à savoir : \[
-        P \arrowvert \mbox{Intervalle},\ \mathcal{T},\ \mathcal{R} \arrowvert \max\ H_{\min}
-    \]
+    On peut finalement définir la notationà trois champs de ce problème, à savoir : 
+    \begin{center}
+        $P \arrowvert \mbox{Intervalle},\ \mathcal{T},\ \mathcal{R} \arrowvert H_{\min}$
+    \end{center}
+    
 % }}}
 
 % {{{ REMARQUE : Conventions
@@ -174,8 +176,8 @@ trou minimum soit au moins égale à $z$?}
         \item la date de début d'un ordonnancement est fixée à $- \infty$ de façon à
             ce que les trous initiaux aient une taille infinie. Ainsi sur la figure~\ref{prescas},
             on a : $\pho{h_4} = \pho{h_7} = \infty$.
-        \item la date de fin d'un ordonnancement est fixée, quant à elle, arbitrairement loin à
-            droite de manière à ce que les trous finaux aient eux aussi une taille infinie. On a
+        \item la date de fin d'un ordonnancement est fixée, quant à elle, à
+            $+\infty$ de manière à ce que les trous finaux aient eux aussi une taille infinie. On a
             alors : $\pho{h_5} = \pho{h_6} = \infty$.
         \item le temps $t_0$ est défini comme suit : \[
                 t_0 = \min\{\min\{\st{j} : j \in \mathcal{T}\}, \min\{\sres{l} : l \in \mathcal{R}\}\}
@@ -200,12 +202,12 @@ trou minimum soit au moins égale à $z$?}
             \newtask{1}{1}{7}{$t_2$}
             \newhole{4}{1}{3}{$h_1$}Optimisation
 
-            \newlabeledresa{2}{2}{0}{$r_1$}
+            \newlabeledresa{2}{2}{0}{$l_1$}
             \newtask{3}{2}{4}{$t_3$}
             \newhole{2}{2}{2}{$h_2$}
 
-            \newlabeledresa{3}{3}{2}{$r_2$}
-            \newlabeledresa{2}{3}{7}{$r_3$}
+            \newlabeledresa{3}{3}{2}{$l_2$}
+            \newlabeledresa{2}{3}{7}{$l_3$}
             \newhole{2}{3}{5}{$h_3$}
 
             \newbeghole{1}{1}{$h_4$}
@@ -224,8 +226,8 @@ trou minimum soit au moins égale à $z$?}
 \begin{figure}
     \begin{center}
         \begin{ordo}[10]{3}{1}{10}
-            \newlabeledresa{1}{1}{1}{$r_1$}
-            \newlabeledresa{1}{2}{3}{$r_2$}
+            \newlabeledresa{1}{1}{1}{$l_1$}
+            \newlabeledresa{1}{2}{3}{$l_2$}
 
             \newtask{3}{3}{0}{$j_1$}
             \newtask{1}{2}{0}{$j_2$}
@@ -246,8 +248,8 @@ trou minimum soit au moins égale à $z$?}
 \begin{figure}
     \begin{center}
         \begin{ordo}[10]{3}{1}{10}
-            \newlabeledresa{1}{1}{1}{$r_1$}
-            \newlabeledresa{1}{2}{3}{$r_2$}
+            \newlabeledresa{1}{1}{1}{$l_1$}
+            \newlabeledresa{1}{2}{3}{$l_2$}
 
             \newtask{3}{2}{0}{$j_1$}
             \newtask{1}{1}{0}{$j_2$}
@@ -283,7 +285,7 @@ complexité. Pour ce faire, considérons le problème suivant :
 
 % {{{ PROBLEME : Precoloring extension
 \dfdec{\precolor}
-{Un graphe $G=(V, E)$, un sous-ensemble $W \subset V$, une coloration $c'$ de $G[W]$ et un
+{Un graphe $G=(V, E)$, un sous-ensemble $W \subset V,\ W \neq \emptyset$, une coloration $c'$ de $G[W]$ et un
 entier $k$}
 {Existe-t-il une $k-$coloration $c$ de $G$ telle que pour tout sommet $v \in W$, $c(v) =
 c'(v)$?}
@@ -300,95 +302,87 @@ $G$.
 % }}}
 
 \begin{nthrm}
-    \label{fischedpi_in_np}
-    Le problème \fischedpi apartient à la classe \textbf{NP}.
-\end{nthrm}
-
-\begin{proof}
-    Considérons un ordonancement $\mathcal{O}$ qui à chaque tâche associe une machine, l'algorithme
-    naïf, consistant pour chacune des tâches à vérifier qu'aucun autre événement n'est assigné à la
-    même machine au même moment, permet de vérifier la validité de $\mathcal{O}$ en un temps
-    $O(e^2)$ polynomial en le nombre d'événements.
-\end{proof}
-
-\begin{nthrm}
     Le problème \fischedpi est \npc.
 \end{nthrm}
 
 % {{{ PREUVE NP-COMPLETUDE
-\begin{proof}
-    Nous considérerons une instance quelconque du problème \precolor sur les graphes d'intervalles
-    propres et construirons une instance de \fischedpi telle que l'instance du problème \precolor
-    est positive si et seulement si l'intance construite est positive.
+Nous considérerons une instance quelconque du problème \precolor et construirons une instance de
+\fischedpi.
 
-    Considérons une instance du problème \precolor sur les graphes d'intervalles propre caractérisée
-    par un graphe d'intervalle propre $G = (V,E)$, l'ensemble d'intervalle associé $\mathcal{I}$, un
-    sous-ensemble de sommets $W \subset V$ et une coloration $c'$ qui à chaque sommet de $W$ associe
-    une couleur. 
-    
-    La transformation se fait alors comme suit : 
-    \begin{enumerate}
-        \item à chaque couleur $i$, on associe une machine $m_i$, on a donc un ensemble
-            $\mathcal{M}$ de $k$ machines.
-        \item à chaque sommet $v \in V \backslash W$, on associe une tâche $j_v$ avec $\st{j_v} =
-            \sint{v}$ et $\ct{j_v} = \cint{v}$, on a alors $\mathcal{T} = \{j_v\ \colon\ v \in V
-            \backslash W\}$.
-        \item à chaque sommet $w \in W$, on associe une réservation sur la machine associée à la
-            couleur de $w$ par la coloration $c'$ dont les dates de début et de fin sont données par
-            le début et la fin de l'intervalle associé à $w$ : \[
-                l_w = (m_{c'(w)}, [\sres{l_w} = \sint{i_w}, \cres{l_w} = \cint{i_w}]
-            \]
-        \item on introduit $z$ comme l'écart minimum strictement positif entre deux intervalles qui
-            ne sintersectent pas. Soient deux intervalles $i_u$ et $i_v$ qui ne s'intersectent pas
-            tels que $i_u$ précède temporellement $i_v$, l'écart en $i_u$ et $i_v$ est
-            $\delta_{i_ui_v} = \sint{i_v} - \cint{i_u}$. Dans le cas où $z$ n'est pas
-            défini\footnote{Tous les intervalles s'intersectent, où les écarts sont tous nuls.}, on
-            pose $z = \infty$
-    \end{enumerate}
+Considérons une instance du problème \precolor sur les graphes d'intervalles caractérisée
+par un graphe $G = (V,E)$, l'ensemble d'intervalle associé $\mathcal{I}$, un
+sous-ensemble de sommets $W \subset V$ et une coloration $c'$ qui à chaque sommet de $W$ associe
+une couleur. 
 
-    On obtient alors une instance du problème \fischedpi positive si et seulement s'il existe un
-    ordonnancement $\mathcal{O}$ de $\mathcal{T}$ sur $\mathcal{M}$ sous les contraintes
-    $\mathcal{R}$ tel que le trou minimum de ce dernier soit supérieur ou égal à $z$.
+La transformation se fait alors comme suit : 
+\begin{enumerate}
+    \item À chaque couleur $i$, on associe une machine $m_i$, on a donc un ensemble
+        $\mathcal{M}$ de $k$ machines.
+    \item À chaque sommet $w \in W$, on associe une réservation sur la machine associée à la
+        couleur de $w$ par la coloration $c'$ dont les dates de début et de fin sont données par
+        le début et la fin de l'intervalle associé à $w$ : \[
+            l_w = (m_{c'(w)}, [\sres{l_w} = \sint{i_w}, \cres{l_w} = \cint{i_w}])
+        \]
+        On a alors $\mathcal{R} = \{l_w : w \in W\}$.
+    \item À chaque sommet $v \in V \backslash W$, on associe une tâche $j_v$ avec $\st{j_v} =
+        \sint{v}$ et $\ct{j_v} = \cint{v}$, on a alors $\mathcal{T} = \{j_v\ \colon\ v \in V
+        \backslash W\}$.
+    \item pour chaque paire d'intervalle $(i_u, i_v)$, on calcule l'écart entre la fin de $i_u$ et
+        le début de $i_v$ : $\Delta_{i_ui_v} = \sint{i_v} - \cint{i_u}$. De par sa définition si
+        $\Delta_{i_ui_v}$ est négatif, alors le début de $i_v$ précède la fin de $i_u$, s'il est nul
+        $i_u = i_v$ et s'il est positif alors $i_u$ précède temporellement $i_v$ et $i_u$ et $i_v$
+        ne se chevauchent pas. On peut alors calculer $z = \min\{\Delta_{i_ui_v} > 0\ :\ i_u, i_v
+        \in \mathcal{I}\}$. $z$ définit alors l'écart minimum positif entre deux intervalles qui ne
+        se chevauchent pas.
+        Dans le cas où $z$ n'est pas
+        défini\footnote{Tous les intervalles s'intersectent, où les écarts sont tous nuls.}, on
+        pose $z = \infty$
+\end{enumerate}
 
-    Cette transformation se fait en temps linéaire en le nombre de sommets et donc en le nombre
-    d'événements.
+Cette transformation se fait en temps quadratique en le nombre de sommets et donc en le nombre
+d'événements.
 
-    Nous allons à présent mettre en évidence l'équivalence entre les deux problèmes :
-    \begin{bitemize}
-        \item Supposons qu'il existe un ordonnancement $\mathcal{O}$ ayant un trou minimum d'une durée au
-            moins égale à $z$. Une coloration $c$ de $G$ étendant la coloration $c'$ est obtenue en
-            affectant à chaque sommet $v \in V$ la couleur correspondant à la machine
-            sur laquelle est exécutée l'événement associé à $v$\footnote{Une tâche ou une
-            réservation.}.
-            
-            Pour démontrer ce point, nous raisonnerons par l'absurde. Supposons qu'il existe deux
-            sommets $u, v \in V$ adjacents ayant la même couleur. Les événements $e_u$ et $e_v$
-            correspondants s'exécutent sur la même machine. Or $G$ étant un graphe d'intervalles,
-            les intervalles $i_u$ et $i_v$ s'intersectent, les événements $e_u$ et $e_v$ sont
-            concurrents et ne peuvent donc s'exécuter sur la même machine. Contradiction.
+Considérons un ordonancement $\mathcal{O}$ qui à chaque tâche associe une machine, l'algorithme
+naïf, consistant pour chacune des tâches à vérifier qu'aucun autre événement n'est assigné à la
+même machine au même moment, permet de vérifier la validité de $\mathcal{O}$ en un temps
+$O(e^2)$ polynomial en le nombre d'événements. Le problème \fischedpi appartient à la classe
+\textbf{NP}.
 
-        \item Supposons qu'il existe une coloration $c$ qui étend $c'$ sur $G$, on peut alors
-            construire un ordonnancement à partir de $c$ en affectant à chaque événement $e_v$,
-            associé au sommet $v \in V$, la machine correspondant à la couleur $c(v)$.
-            L'ordonnancement obtenu est alors un ordonnancement ayant un trou de longueur au moins
-            $z$.
+Nous allons à présent mettre en évidence l'équivalence entre les deux problèmes :
+\begin{bitemize}
+    \item Supposons qu'il existe une coloration $c$ qui étend $c'$ sur $G$, on peut alors
+        construire un ordonnancement à partir de $c$ en affectant à chaque événement $e_v$,
+        associé au sommet $v \in V$, la machine correspondant à la couleur $c(v)$.
+        L'ordonnancement obtenu est alors un ordonnancement ayant un trou de longueur au moins
+        $z$.
 
-            À nouveau, nous raisonnerons par l'absurde pour démontrer la validité de
-            l'ordonnancement $\mathcal{O}$ obtenu. Supposons qu'il existe deux événements
-            concurrents $e_u$ et $e_v$ tels que $f(e_u) = f(e_v)$. Si $e_u$ et $e_v$ sont
-            concurrents alors leur intervalle associé s'interctent, $G$ étant un graphe
-            d'intervalles, il existe une arête entre $u$ et $v$ et donc $c(u) \neq c(v)$. Ceci
-            implique que $e_u$ et $e_v$ s'exécutent sur deux machines différentes. Contradiction.
+    \item Supposons qu'il existe un ordonnancement $\mathcal{O}$ ayant un trou minimum d'une durée au
+        moins égale à $z$. Une coloration $c$ de $G$ étendant la coloration $c'$ est obtenue en
+        affectant à chaque sommet $v \in V$ la couleur correspondant à la machine
+        sur laquelle est exécutée l'événement associé à $v$\footnote{Une tâche ou une
+        réservation.}.
+        
+        Pour démontrer ce point, nous raisonnerons par l'absurde. Supposons qu'il existe deux
+        sommets $u, v \in V$ adjacents ayant la même couleur. Les événements $e_u$ et $e_v$
+        correspondants s'exécutent sur la même machine. Or $G$ étant un graphe d'intervalles,
+        les intervalles $i_u$ et $i_v$ s'intersectent, les événements $e_u$ et $e_v$ sont
+        concurrents et ne peuvent donc s'exécuter sur la même machine. Contradiction.
 
-            Par construction de l'instance, la longueur du trou minimum est au moins égale à $z$.
-    \end{bitemize}
+        %À nouveau, nous raisonnerons par l'absurde pour démontrer la validité de
+        %l'ordonnancement $\mathcal{O}$ obtenu. Supposons qu'il existe deux événements
+        %concurrents $e_u$ et $e_v$ tels que $f(e_u) = f(e_v)$. Si $e_u$ et $e_v$ sont
+        %concurrents alors leur intervalle associé s'interctent, $G$ étant un graphe
+        %d'intervalles, il existe une arête entre $u$ et $v$ et donc $c(u) \neq c(v)$. Ceci
+        %implique que $e_u$ et $e_v$ s'exécutent sur deux machines différentes. Contradiction.
 
-    D'après le théorème~\ref{fischedpi_in_np}, le problème \fischedpi appartient à \textbf{NP}, la
-    transformation exposée ci-dessus étant polynomiale, \fischedpi est \npc.
-    %Soient deux intervalles $i, j \in \mathcal{I}$, notons $z_{ij} = \|\sint{j} - \cint{i}\|$
-    %l'écart entre le début de l'intervalle $j$ et la fin de l'intervalle $i$, on introduit alors :
-    %$z = \min_{i,j \in \mathcal{I}} \{z_{ij} : z_{ij} \neq 0\}$.
-\end{proof}
+        %Par construction de l'instance, la longueur du trou minimum est au moins égale à $z$.
+\end{bitemize}
+
+Le problème \fischedpi appartenant à \textbf{NP}, la
+transformation exposée ci-dessus étant polynomiale, \fischedpi est alors \npc.
+%Soient deux intervalles $i, j \in \mathcal{I}$, notons $z_{ij} = \|\sint{j} - \cint{i}\|$
+%l'écart entre le début de l'intervalle $j$ et la fin de l'intervalle $i$, on introduit alors :
+%$z = \min_{i,j \in \mathcal{I}} \{z_{ij} : z_{ij} \neq 0\}$.
 % }}}
 
 \begin{ex}
@@ -397,8 +391,24 @@ $G$.
 
     On cherche à savoir si le graphe est $4-$colorable, on utilise donc quatre machines, à chaque
     sommet précoloré et associé une réservation et à chaque sommet non coloré, on associe une tâche
-    à ordonnancer. Le plus petit écart non nul $z$ entre la fin d'un intervalle et le début d'un
-    autre étant égal à $1$, on cherche un ordonnancement dont la taille du trou minimum est au moisn
+    à ordonnancer. 
+    
+    On calcule alors les différents écarts entre les intervalles : \[
+        \begin{array}{|c|c|c|c|c|c|c|c|c|}
+            \hline & i_1 & i_2 & i_3 & i_4 & i_5 & i_6 & i_7 & i_8 \\
+            \hline i_1 & -4 & -3 & -2 & -1 & 2 & 4 & 6 & 7 \\
+            \hline i_2 & -5 & -4 & -3 & -2 & \textcolor{red}{\textbf{1}} & 3 & 5 & 6 \\
+            \hline i_3 & -6 & -5 & -4 & -3 & 0 & 2 & 4 & 5 \\
+            \hline i_4 & -7 & -6 & -5 & -4 & -1 & \textcolor{red}{\textbf{1}} & 3 & 4 \\
+            \hline i_5 & -9 & -8 & -7 & -6 & -3 & -1 & \textcolor{red}{\textbf{1}} & 2 \\
+            \hline i_6 & -12 & -11 & -10 & -9 & -6 & -4 & -2 & -1 \\
+            \hline i_7 & -13 & -12 & -11 & -10 & -7 & -5 & -3 & -2 \\
+            \hline i_8 & -14 & -13 & -12 & -11 & -8 & -6 & -4 & -3 \\
+            \hline
+        \end{array}
+    \]
+    Le plus petit écart non nul $z$ entre la fin d'un intervalle et le début d'un
+    autre étant égal à $1$, on cherche un ordonnancement dont la taille du trou minimum est au moins
     égale à $1$.
 
     L'ordonnancement donné est tel que la taille de son trou minimum ($h_2$) est égale à $1$, il
@@ -521,9 +531,9 @@ $G$.
                     \draw[dotted] (0, \y) to (9, \y);
                 }
 
-                \newlabeledresa{4}{1}{1}{$r_2$}
-                \newlabeledresa{4}{2}{2}{$r_3$}
-                \newlabeledresa{2}{4}{10}{$r_7$}
+                \newlabeledresa{4}{1}{1}{$l_2$}
+                \newlabeledresa{4}{2}{2}{$l_3$}
+                \newlabeledresa{2}{4}{10}{$l_7$}
             \end{tikzpicture}
         \end{minipage}
         % }}}
@@ -592,9 +602,9 @@ $G$.
                     \draw[dotted] (0, \y) to (9, \y);
                 }
 
-                \newlabeledresa{4}{1}{1}{$r_2$}
-                \newlabeledresa{4}{2}{2}{$r_3$}
-                \newlabeledresa{2}{4}{10}{$r_7$}
+                \newlabeledresa{4}{1}{1}{$l_2$}
+                \newlabeledresa{4}{2}{2}{$l_3$}
+                \newlabeledresa{2}{4}{10}{$l_7$}
 
                 \newtask{4}{4}{0}{$j_1$}
                 \newtask{4}{3}{3}{$j_4$}
