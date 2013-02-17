@@ -26,6 +26,7 @@
 % {{{ MATHÉMATIQUES
 \usepackage[fleqn]{amsmath}
 \usepackage{amsthm}
+\usepackage{amssymb}
 \usepackage{bbm}
 \usepackage{amssymb}
 \usepackage{stmaryrd}
@@ -53,6 +54,9 @@
 % }}}
 % {{{ COULEURS
 %\usepackage[table]{xcolor}
+% }}}
+% {{{ APPENDICE
+\usepackage{appendix}
 % }}}
 % }}}
 
@@ -170,72 +174,88 @@
 \newcommand{\lpath}{\textsc{Longest Path} }
 \newcommand{\fisched}{\textsc{Flexible Interval Scheduling} }
 \newcommand{\fischedpi}{\textsc{Decision Flexible Interval Scheduling} }
-\newcommand{\unitfischedpi}{\textsc{Decision Flexible Unit Interval Scheduling} }
+\newcommand{\unitfischedpi}{\textsc{Decision Unit Flexible Interval Scheduling} }
 \newcommand{\precolor}{\textsc{Precoloring Extension} }
 
 % }}}
 
 % {{{ MISE EN PAGE
 
-\newcommand{\dfopt}[3]{
+\newcommand{\dfopt}[4][nolabel]{
+\noindent
+\begin{minipage}{\linewidth}
     ~\\
     \hrule
     \begin{npbopt}
-        #1
+        \ifthenelse{\equal{#1}{nolabel}}{}{\label{#1}}
+        #2
         \begin{itemize}
-            \itemindent 10mm
-            \item[\textbf{Données :}] #2
-            \item[\textbf{Résultat :}] #3
+            \itemindent 15mm
+            \item[\textbf{Données :}] #3
+            \item[\textbf{Résultat :}] #4
         \end{itemize}
     \end{npbopt}
     \hrule
     ~\\
+\end{minipage}
 }
 
-\newcommand{\dfdec}[3]{
+\newcommand{\dfdec}[4][nolabel]{
+\noindent
+\begin{minipage}{\linewidth}
     ~\\
     \hrule
     \begin{npbdec}
-        #1
+        \ifthenelse{\equal{#1}{nolabel}}{}{\label{#1}}
+        #2
         \begin{itemize}
-            \itemindent 10mm
-            \item[\textbf{Données :}] #2
-            \item[\textbf{Question :}] #3
+            \itemindent 15mm
+            \item[\textbf{Données :}] #3
+            \item[\textbf{Question :}] #4
         \end{itemize}
     \end{npbdec}
     \hrule
     ~\\
+\end{minipage}
 }
 
-\newcommand{\dfpb}[3]{
+\newcommand{\dfpb}[4][nolabel]{
+\noindent
+\begin{minipage}{\linewidth}
     ~\\
     \hrule
     \begin{npb}
-        #1
+        \ifthenelse{\equal{#1}{nolabel}}{}{\label{#1}}
+        #2
         \begin{itemize}
-            \itemindent 10mm
-            \item[\textbf{Données :}] #2
-            \item[\textbf{Question :}] #3
+            \itemindent 15mm
+            \item[\textbf{Données :}] #3
+            \item[\textbf{Question :}] #4
         \end{itemize}
     \end{npb}
     \hrule
     ~\\
+\end{minipage}
 }
 
-\newcommand{\dfpbp}[4]{
+\newcommand{\dfpbp}[5][nolabel]{
+\noindent
+\begin{minipage}{\linewidth}
     ~\\
     \hrule
     \begin{npb}
-        #1
+        \ifthenelse{\equal{#1}{nolabel}}{}{\label{#1}}
+        #2
         \begin{itemize}
-            \itemindent 10mm
-            \item[\textbf{Données :}] #2
-            \item[\textbf{Paramètre :}] #4
-            \item[\textbf{Question :}] #3
+            \itemindent 15mm
+            \item[\textbf{Données :}] #3
+            \item[\textbf{Paramètre :}] #5
+            \item[\textbf{Question :}] #4
         \end{itemize}
     \end{npb}
     \hrule
     ~\\
+\end{minipage}
 }
 % }}}
 
