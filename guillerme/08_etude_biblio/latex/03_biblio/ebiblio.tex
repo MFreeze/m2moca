@@ -172,7 +172,8 @@ On peut définir la notation à trois champs de ce problème :
 Ce problème, comme tous les autres problèmes d'\isched, est fortement lié à la notion de graphe
 d'intervalles. Un graphe d'intervalles est un graphe tel que ses sommets sont représentables par
 des intervalles et il existe une arête entre deux sommets si et seulement si les intervalles
-associés à ces sommets s'intersectent. Un exemple de graphe d'intervalles est donné à la
+associés à ces sommets s'intersectent lorsqu'ils sont représenté sur la ligne des réels. Un exemple
+de graphe d'intervalles est donné à la
 figure~\ref{fig:ex_gint}. Il est facile de voir que si l'on considère le graphe représentant les
 tâches qui ne peuvent s'exécuter sur la même machine, on obtient alors un graphe d'intervalle.
 
@@ -274,7 +275,66 @@ machines sur lesquelles la tâche $j$ peut être exécutée.
 
 Ce problème devient alors \npc si le nombre de machine dans chaque sous-ensemble $\mathcal{M_j}$ est
 supérieur ou égal à $3$~\cite{arkin_scheduling_1987}, la preuve se faisant par une réduction depuis
-le problème \textsc{$3-$SAT}.
+le problème \textsc{$3-$SAT}. Un algorithme exprimé sous forme de programmation dynamique a été
+décrit dans ce même article, il s'exécute en $O(n^{k+1})$.
+
+Bhatia et al. ont proposé une $(1 - 1/\varepsilon)-$approximation
+randomisée~\cite{bhatia2003algorithmic} basée sur de la programmation linéaire permettant la
+résolution de ce problème. De plus de nombreuses heuristiques ont été introduite pour répondre à ce
+problème, nous renvoyons les intéressés à la lectures des articles~\cite{kroon1995exact}
+et~\cite{gabrel1995scheduling}.
+
+\subsubsection{Indisponnibilité de machines}
+
+Une seconde extension au problème \bisched est une variante introduisant des périodes au cours
+desquelles certaines machines seront dites indisponibles et donc pendant lesquelles elles ne
+pourront effectuer aucun calcul. La machine entrant en indisponibilité ne doit avoir aucune tâche en
+curt d'exécution, un ordonnancement présentant une intersection entre une tâche et une
+indisponibilité n'est donc pas un ordonnancement valide.
+
+Comme vu précédemment, les problèmes d'ordonnancement d'intervalles ont un lien fort avec les
+graphes d'intervalles, \bisched étant équivalent au problème de coloration sur ces derniers. Il
+existe une catégorie de graphe, à savoir les graphes à arcs circulaires qui est le
+graphe d'intersection d'un ensemble d'arcs de cercle, dont le problème de coloration est équivalent
+au problème avec machines indiponibles.
+
+\begin{figure}
+    \centering
+    \begin{tikzpicture}[n/.style={draw=black, circle}, scale=0.7, every node/.style={transform shape}, >=latex]
+        \node[n] (A) at (1, 4) {$A$};
+        \node[n] (B) at (3, 4) {$B$};
+        \node[n] (C) at (4, 2) {$C$};
+        \node[n] (D) at (2, 0) {$D$};
+        \node[n] (E) at (0, 2) {$E$};
+
+        \draw[-] (A) to (B);
+        \draw[-] (A) to (E);
+
+        \draw[-] (B) to (C);
+
+        \draw[-] (C) to (D);
+        \draw[-] (C) to (E);
+
+        \draw[-] (D) to (E);
+
+        \draw (10,2) circle (1.5cm);
+        \draw[rotate around={100:(10,2)}, <->] (12, 2) arc (0:60:2cm);
+        \draw[rotate around={150:(10,2)}, <->] (12.5, 2) arc (0:40:2.5cm);
+        \draw[rotate around={180:(10,2)}, <->] (12, 2) arc (0:90:2cm);
+        \draw[rotate around={180:(10,2)}, <->] (13, 2) arc (0:240:3cm);
+        \draw[rotate around={ 50:(10,2)}, <->] (12.5, 2) arc (0:60:2.5cm);
+
+        \node (a) at (8.3, 3.7) {$A$}; 
+        \node (b) at (10.4, 4.9) {$B$}; 
+        \node (c) at (12.2, -0.7) {$C$}; 
+        \node (d) at (8.5, 0) {$D$}; 
+        \node (e) at (7.2, 2.4) {$E$}; 
+        
+    \end{tikzpicture}
+    \caption{Exemple de graphe à arcs circulaires}
+    \label{fig:fig_ex_ac}
+\end{figure}
+
 
 \newpage
 \appendix
