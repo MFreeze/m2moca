@@ -50,4 +50,7 @@ Thumbs.db
 *.pdf
 *.aux
 *.bak
+*.bbl
+*.blg
+*.toc
 
