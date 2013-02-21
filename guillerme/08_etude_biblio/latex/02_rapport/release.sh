@@ -1,0 +1,1 @@
+../../../00_resources/release.sh

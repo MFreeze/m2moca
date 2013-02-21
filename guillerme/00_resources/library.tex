@@ -1,134 +1,123 @@
-% {{{ PACKAGES
-% {{{ ENCODAGE ET POLICE
+% <<< ENCODAGE ET POLICE
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[french]{babel}
 \usepackage{eurosym}
-% }}}
-% {{{ ITEMIZE
+% >>>
+% <<< ITEMIZE
 \usepackage{enumitem}
-% }}}
-% {{{ FIGURES
+% >>>
+% <<< FIGURES
 \usepackage{graphicx}
 \usepackage{subfig}
-% }}}
-% {{{ INSERTION DE CODE
+% >>>
+% <<< INSERTION DE CODE
 \usepackage{moreverb}
-% }}}
-% {{{ INSERTION DE PDF
+% >>>
+% <<< INSERTION DE PDF
 \usepackage{pdfpages}
-% }}}
-% {{{ RÉDUCTION DES MARGES
+% >>>
+% <<< RÉDUCTION DES MARGES
 %\usepackage{fullpage}
 \usepackage[top=2.5cm, bottom=2.5cm, left=3.5cm, right=3.5cm]{geometry}
 \usepackage{fancyhdr}
-% }}}
-% {{{ MATHÉMATIQUES
+% >>>
+% <<< MATHÉMATIQUES
 \usepackage[fleqn]{amsmath}
 \usepackage{amsthm}
 \usepackage{amssymb}
 \usepackage{bbm}
 \usepackage{amssymb}
 \usepackage{stmaryrd}
-% }}}
-% {{{ GRAPHES
+% >>>
+% <<< GRAPHES
 \usepackage{tikz}
 \usepackage{pgf}
 \usetikzlibrary{arrows,automata,shapes}
-% }}}
-% {{{ RESEAUX DE pETRI
+% >>>
+% <<< RESEAUX DE pETRI
 \usetikzlibrary{petri}
-% }}}
-% {{{ ARBRES
+% >>>
+% <<< ARBRES
 \usetikzlibrary{trees}
-% }}}
-% {{{ DIAGRAMME DE GANTT
+% >>>
+% <<< DIAGRAMME DE GANTT
 \usepackage{pgfgantt}
-% }}}
-% {{{ ALGORITHMES
+% >>>
+% <<< ALGORITHMES
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode}
 \usepackage{ifthen}
 %\usepackage{algorithmic}
 %\usepackage{algorithmicx}
-% }}}
-% {{{ COULEURS
+% >>>
+% <<< COULEURS
 %\usepackage[table]{xcolor}
-% }}}
-% {{{ APPENDICE
+% >>>
+% <<< APPENDICE
 \usepackage{appendix}
-% }}}
-% }}}
+% >>>
 
-% {{{ NEWTHEOREM
-% {{{ THÉORÈMES, lEMMES -- NUMÉROTATION PERSONNALISÉE
+
+% <<< THÉORÈMES, lEMMES -- NUMÉROTATION PERSONNALISÉE
 \theoremstyle{plain}
 \newtheorem{thrm}{Théorème}[section]
 \newtheorem{lemma}{Lemme}[subsection]
 \newtheorem{corol}{Corollaire}[section]
-% }}}
-
-% {{{ THÉORÈMES, lEMMES -- NUMÉROTATION CLASSIQUE
+% >>>
+% <<< THÉORÈMES, lEMMES -- NUMÉROTATION CLASSIQUE
 \newtheorem{nthrm}{Théorème}
 \newtheorem{nlemma}{Lemme}
 \newtheorem{ncorol}{Corollaire}
 \newtheorem{npb}{Problème}
 \newtheorem{npbopt}{Problème (Optimisation)}
 \newtheorem{npbdec}{Problème (Décision)}
-% }}}
-
-% {{{ THÉORÈMES, lEMMES -- NON NUMÉROTÉS
+% >>>
+% <<< THÉORÈMES, lEMMES -- NON NUMÉROTÉS
 \newtheorem*{thrm*}{Théorème}
 \newtheorem*{lemma*}{Lemme}
 \newtheorem*{corol*}{Corollaire}
-% }}}
-
-% {{{ DÉFINITIONS, pROPRIÉTÉS -- NUMÉROTATION PERSONNALISÉE
+% >>>
+% <<< DÉFINITIONS, pROPRIÉTÉS -- NUMÉROTATION PERSONNALISÉE
 \theoremstyle{definition}
 \newtheorem{df}{Définition}[subsection]
 \newtheorem{prop}{Propriété}[subsection]
 \newtheorem{conj}{Conjecture}[subsection]
-% }}}
-
-% {{{ DÉFINITIONS, pROPRIÉTÉS -- NUMÉROTATION CLASSIQUE
+% >>>
+% <<< DÉFINITIONS, pROPRIÉTÉS -- NUMÉROTATION CLASSIQUE
 \newtheorem{ndf}{Définition}
 \newtheorem{nprop}{Propriété}
 \newtheorem{nconj}{Conjecture}
-% }}}
-
-% {{{ DÉFINITIONS, pROPRIÉTÉS -- NON NUMÉROTÉS
+% >>>
+% <<< DÉFINITIONS, pROPRIÉTÉS -- NON NUMÉROTÉS
 \newtheorem*{df*}{Définition}
 \newtheorem*{prop*}{Propriété}
 \newtheorem*{conj*}{Conjecture}
-% }}}
-
-% {{{ AUTRES -- NUMÉROTATION PERSONNALISÉE
+% >>>
+% <<< AUTRES -- NUMÉROTATION PERSONNALISÉE
 \theoremstyle{remark}
 \newtheorem{note}{Note}[subsubsection]
 \newtheorem{pr}{Proposition}[subsection]
 \newtheorem{rmq}{Remarque}[subsubsection]
-% }}}
-
-% {{{ AUTRES -- NUMÉROTATION CLASSIQUE
+% >>>
+% <<< AUTRES -- NUMÉROTATION CLASSIQUE
 \newtheorem{nnote}{Note}
 \newtheorem{npr}{Proposition}
 \newtheorem{nrmq}{Remarque}
-% }}}
-
-% {{{ AUTRES -- NON NUMÉROTÉS
+% >>>
+% <<< AUTRES -- NON NUMÉROTÉS
 \newtheorem*{note*}{Note}
 \newtheorem*{pr*}{Proposition}
 \newtheorem*{rmq*}{Remarque}
-% }}}
-
-% {{{ EXEMPLES
+% >>>
+% <<< EXEMPLES
 \newtheorem*{ex}{Exemple}
 \newtheorem*{exo}{Exercice}
 \newtheorem*{rappel}{Rappel}
-% }}}
-% }}}
+% >>>
 
-% {{{ OPÉRATEURS MATHÉMATIQUES
+
+% <<< OPÉRATEURS MATHÉMATIQUES
 \DeclareMathOperator{\poly}{\textbf{poly}}
 \DeclareMathOperator{\gap}{\mbox{gap}}
 \DeclareMathOperator{\Bg}{\mbox{Big}}
@@ -146,10 +135,10 @@
 \DeclareMathOperator{\lc}{\leq_c}
 \DeclareMathOperator{\lex}{\mbox{lex}}
 \DeclareMathOperator{\ord}{\mbox{ord}}
-% }}}
+% >>>
 
-% {{{ MACCROS
-% {{{ MACROS DIVERSES
+
+% <<< MACROS DIVERSES
 \newcommand{\npc}{\textbf{NP}-complet }
 \newcommand{\npcude}{\textbf{NP}-complétude }
 \newcommand{\npd}{\textbf{NP}-difficile }
@@ -161,9 +150,8 @@
 \newcommand{\Taustar}[0]{\mathcal{T}^* = (T, \{X_t : t \in T\})}
 \newcommand{\Taugstar}[0]{\mathcal{T}_G^* = (T, \{X_t : t \in T\})}
 \newcommand{\pdsol}[1]{(X_{#1}^0, X_{#1}^1, X_{#1}^2, M_{#1})}
-% }}}
-                
-% {{{ NOM DE PROBLEMES
+% >>>
+% <<< NOM DE PROBLEMES
 \newcommand{\hcycle}{\textsc{HAMILTONIAN CYCLE} }
 \newcommand{\phcycle}[1]{\textsc{HAMILTONIAN CYCLE }paramétré par \textsc{#1} }
 \newcommand{\vcover}{\textsc{VERTEX COVER} }
@@ -176,10 +164,10 @@
 \newcommand{\fischedpi}{\textsc{Decision Flexible Interval Scheduling} }
 \newcommand{\unitfischedpi}{\textsc{Decision Unit Flexible Interval Scheduling} }
 \newcommand{\precolor}{\textsc{Precoloring Extension} }
-
-% }}}
-
-% {{{ MISE EN PAGE
+\newcommand{\isched}{\textsc{Interval Scheduling} }
+\newcommand{\bisched}{\textsc{Basic Interval Scheduling} }
+% >>>
+% <<< MISE EN PAGE
 
 \newcommand{\dfopt}[4][nolabel]{
 \noindent
@@ -257,12 +245,10 @@
     ~\\
 \end{minipage}
 }
-% }}}
+% >>>
 
-% }}}
     
-% {{{ TIKZ
-%%% {{{ STYLE
+%%% <<< STYLE
 \tikzstyle{edge}=[
 	-,
 	draw=black
@@ -358,9 +344,8 @@
     node distance=10mm,
     draw=black
 ]
-%%% }}}
-
-% {{{ DESSINS
+%%% >>>
+% <<< DESSINS
 \newcommand{\base}[4]{
     \draw[->] (0,0) to (0, #1);
     \draw[->] (0,0) to (#2, 0);
@@ -368,11 +353,10 @@
     \node at (0, #1+2) {#3};
     \node at (#2 + 2, -2) {#4};
 }
-% }}}
-%}}}
+% >>>
 
-% {{{ Ordonnacement
-% {{{ Nombre fixé de machines
+
+% <<< Nombre fixé de machines
 \newenvironment{ordo}[4][12]
 % 1 : Longueur Max en cm
 % 2 : Nbre de machines
@@ -410,9 +394,8 @@
         }
 }
 {\end{tikzpicture}\end{center}}
-% }}}
-
-% {{{ k machines k non fixé
+% >>>
+% <<< k machines k non fixé
 \newenvironment{ordok}[4][12]
 % 1 : Max
 % 2 : Nbre de machines avant ...
@@ -455,9 +438,8 @@
         \draw[dotted]  (0, #2 + 1) to (#1+1, #2 + 1);
 }
 {\end{tikzpicture}\end{center}}
-% }}}
-
-% {{{ \newtask{duree}{machine}{début}{label}
+% >>>
+% <<< \newtask{duree}{machine}{début}{label}
 % TODO Vérifier que le nombre de machines est suffisant
 \newcommand{\newtask}[4]{
     % 1 : Durée de la tâche
@@ -471,9 +453,8 @@
     \fill[black!30] (\initx, \inity) rectangle +(\longx, 0.8);
     \node at (\initx + \longx/2, \inity + 0.4) {#4};
 }
-% }}}
-
-% {{{ \newresa{duree}{machine}{debut}
+% >>>
+% <<< \newresa{duree}{machine}{debut}
 \newcommand{\newresa}[3]{
     % 1 : Durée de la réservation
     % 2 : Numéro de machine
@@ -484,9 +465,8 @@
 
     \fill[black] (\initx, \inity) rectangle +(\longx, 0.8);
 }
-% }}}
-
-% {{{ \newlabeledresa{duree}{machine}{debut}{label}
+% >>>
+% <<< \newlabeledresa{duree}{machine}{debut}{label}
 \newcommand{\newlabeledresa}[4]{
     % 1 : Durée de la réservation
     % 2 : Numéro de machine
@@ -499,10 +479,8 @@
     \fill[black] (\initx, \inity) rectangle +(\longx, 0.8);
     \node[white] at (\initx + \longx/2, \inity + 0.4) {#4};
 }
-% }}}
-
-% TODO une seule commande pour les trous en utilisant un ifthenelse sur un argument optionnel
-% {{{ \newhole{duree}{machine}{debut}{label}
+% >>>
+% <<< \newhole{duree}{machine}{debut}{label}
 \newcommand{\newhole}[4]{
     % 1 : Durée du trou
     % 2 : Numéro de machine
@@ -514,9 +492,8 @@
 
     \draw[<->] (\initx, \inity) to node[above] {#4} (\initx + \longx, \inity);
 }
-% }}}
-
-% {{{ \newbeghole{duree}{machine}{label}
+% >>>
+% <<< \newbeghole{duree}{machine}{label}
 \newcommand{\newbeghole}[3]{
     % 1 : Durée du trou
     % 2 : Numéro de machine
@@ -528,9 +505,8 @@
     \draw[->] (\initx, \inity) to node[above] {#3} (\initx + \longx, \inity);
     \draw[-,dashed] (\initx - 1, \inity) to (\initx, \inity);
 }
-% }}}
-
-% {{{ \newendhole{duree}{machine}{debut}{label}
+% >>>
+% <<< \newendhole{duree}{machine}{debut}{label}
 \newcommand{\newendhole}[4]{
     % 1 : Durée du trou
     % 2 : Numéro de machine
@@ -543,64 +519,56 @@
     \draw[<-] (\initx, \inity) to node[above] {#4} (\initx + \longx, \inity);
     \draw[-,dashed] (\initx + \longx, \inity) to (\initx + \longx + 2, \inity);
 }
-% }}}
+% >>>
 
-% {{{ Notations
-% {{{ Taches
+
+% <<< Taches
 %% Début d'une tâche
 \newcommand{\st}[1]{ r^t_{#1} }
 %% Fin d'une tâche
 \newcommand{\ct}[1]{ \widetilde{d}^t_{#1} }
 %% Durée d'une tâche
 \newcommand{\pt}[1]{ p^t_{#1} }
-% }}}
-
-% {{{ Resa
+% >>>
+% <<< Resa
 %% Début d'une réservation
 \newcommand{\sres}[1]{ r^r_{#1} }
 %% Fin d'une réservation
 \newcommand{\cres}[1]{ \widetilde{d}^r_{#1} }
 %% Durée d'une réservation
 \newcommand{\pres}[1]{ p^r_{#1} }
-% }}}
-
-% {{{ Hole
+% >>>
+% <<< Hole
 %% Début d'un trou
 \newcommand{\sho}[1]{ r^h_{#1} }
 %% Fin d'un trou
 \newcommand{\cho}[1]{ \widetilde{d}^h_{#1} }
 %% Durée d'un trou
 \newcommand{\pho}[1]{ p^h_{#1} }
-% }}}
-
-% {{{ Evénement général
+% >>>
+% <<< Evénement général
 %% Début d'un événement général (tache ou réservation)
 \newcommand{\sgen}[1]{ r_{#1} }
 %% Fin d'un événement général
 \newcommand{\cgen}[1]{ \widetilde{d}_{#1} }
 %% Durée d'un événement général
 \newcommand{\pgen}[1]{ p_{#1} }
-% }}}
-
-% {{{ Intervalle
+% >>>
+% <<< Intervalle
 %% Début d'un intervalle
 \newcommand{\sint}[1]{ s_{#1} }
 %% Fin d'un intervalle général
 \newcommand{\cint}[1]{ c_{#1} }
 %% Durée d'un intervalle
 \newcommand{\pint}[1]{ l_{#1} }
-% }}}
+% >>>
 
-% }}}
-% }}}
 
-% {{{ Petits environnements
-% {{{ Bullet itemize
+%<<< Bullet itemize
 \newenvironment{bitemize}{
     \begin{itemize}[label=$\bullet$]
 }
 {
     \end{itemize}
 }
-% }}}
-% }}}
+% >>>
