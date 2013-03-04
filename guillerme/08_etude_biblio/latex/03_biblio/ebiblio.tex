@@ -43,52 +43,52 @@ notations plus spécifiques au problème considéré.
 
 D'ordinaire, les problèmes d'ordonnancement sont définis par un ensemble de $n$ tâches $\mathcal{T} =
 \{T_1, T_2, \dots, T_n\}$ et par un ensemble de $m$ machines\footnote{On les appelle aussi des
-processeurs.} $\mathcal{P} = \{\pi_1, \pi_2, \dots, \pi_m\}$. L'ordonnancement consiste à affecter les
-tâches $\mathcal{T}$ aux processeurs $\mathcal{P}$ tout en respectant les contraintes définies par
+processeurs.} $\mathcal{M} = \{M_1, M_2, \dots, M_m\}$. L'ordonnancement consiste à affecter les
+tâches $\mathcal{T}$ aux machines $\mathcal{M}$ tout en respectant les contraintes définies par
 le problème initial. On peut citer trois contraintes largement répandues dans la théorie de
 l'ordonnancement :
 \begin{enumerate}
-    \item chaque processeur peut exécuter au plus une seule tâche à tout instant,
-    \item chaque tâche est exécutée par au plus un processeur,
-    \item chaque tâche est exécutée par au moins un processeur.
+    \item chaque machine peut exécuter au plus une seule tâche à tout instant,
+    \item chaque tâche est exécutée par au plus une machine,
+    \item chaque tâche est exécutée par au moins une machine.
 \end{enumerate}
 Un ordonnancement est dit valide, s'il respecte l'ensembles des contraintes imposées.
 
 Il paraît important de notifier, qu'il existe des problèmes autorisant l'exécution d'une tâche sur
-plusieurs processeurs, la durée d'exécution de la tâche est alors proportionnelle au nombre de
-processeurs sur lesquels elle s'exécute. On parle alors de modèles hiérarchiques, mais ces modèles
+plusieurs machines, la durée d'exécution de la tâche est alors proportionnelle au nombre de
+machines sur lesquelles elle s'exécute. On parle alors de modèles hiérarchiques, mais ces modèles
 ne seront pas développés dans le reste de ce manuscrit.
 
-\section{Caractérisation des processeurs}
+\section{Caractérisation des machines}
 
 Dans le but de décrire un problème d'ordonnancement, il est important de définir l'environnement des
-processeurs, c'est à dire les hypothèses considérées sur ces derniers. Au cours de ce rapport, seul
-le modèle des processeurs parallèles, exécutant tous les mêmes fonctions, sera considéré. Pour la
-découverte du modèle des processeurs dédiés, spécialisés dans l'exécution de certaines fonctions,
+machines, c'est à dire les hypothèses considérées sur ces dernières. Au cours de ce rapport, seul
+le modèle des machines parallèles, exécutant toutes les mêmes fonctions, sera considéré. Pour la
+découverte du modèle des machines dédiées, spécialisées dans l'exécution de certaines fonctions,
 nous invitons les intéressés à la lecture du livre~\cite{blazewicz_handbook_2007}.
 
-Les processeurs parallèles se décomposent en trois catégories :
+Les machines parallèles se décomposent en trois catégories :
 \begin{enumerate}
-    \item identiques : tous les processeurs de $\mathcal{P}$ admettent la même vitesse de traitement
+    \item identiques : tous les machines de $\mathcal{P}$ admettent la même vitesse de traitement
     \item uniformes : les vitesses de traitement diffèrent mais la vitesse de traitement est
-        proportionnelle à un coefficient propre à chaque processeur appelé facteur d'accélération
-    \item généraux : les vitesses de traitement dépendent des tâches à effectuer
+        proportionnelle à un coefficient propre à chaque machine appelé facteur d'accélération
+    \item générales : les vitesses de traitement dépendent des tâches à effectuer
 \end{enumerate}
 
 À nouveau nous ne considérerons qu'une seule catégorie, les problèmes nous intéressant ne portent
-que sur des processeurs identiques.
+que sur des machines identiques.
 
 \section{Caractérisation des tâches}
 
 Généralement, en ordonnancement, une tâche est définie par cinq paramètres :
 \begin{enumerate}
     \item un vecteur de temps d'exécution $p_j = ^t(p_{j1}, p_{j2}, \dots, p_{jm})$ où $p_{ji}$
-        représente le temps nécessaire à l'exécution de la tâche $j$ sur la machine $i$. Dans le cas
-        de machines identiques et uniformes, un etâche d'exécute à la même vitesse sur toutes les
+        représente le temps nécessaire à l'exécution de la tâche $T_j$ sur la machine $i$. Dans le cas
+        de machines identiques et uniformes, une tâche s'exécute à la même vitesse sur toutes les
         machines, $p_j$ se réduit alors à un réel,
     \item une date de disponibilité $r_j$, désignant la date à partir de laquelle la tâche est prête
         à être exécutée,
-    \item une date d'échéance $d_j$, désignant la date souhaitée à laquelle la tâche $j$ devrait
+    \item une date d'échéance $d_j$, désignant la date souhaitée à laquelle la tâche $T_j$ devrait
         être exécutée,
     \item une date de fin impérative $\widetilde{d_j}$, date à laquelle la tâche doit
         obligatoirement être exécutée. Contrairement à la date d'échéance souhaitée, si une tâche
@@ -96,6 +96,7 @@ Généralement, en ordonnancement, une tâche est définie par cinq paramètres 
         valide,
     \item un poids $w_j$, représentant l'urgence relative de la tâche.
 \end{enumerate}
+
 
 \section{Contraintes sur les tâches}
 
@@ -115,10 +116,10 @@ un sommet, et tel qu'il existe une arête entre deux sommets si deux taches ne p
 On peut, par exemple, imposer à ce graphe d'être un graphe d'intervalles. Un graphe d'intervalles
 est un graphe tel que ses sommets sont représentables par des intervalles et il existe une arête
 entre deux sommets si et seulement si les intervalles associés à ces sommets s'intersectent
-lorsqu'ils sont représenté sur la ligne des réels. Un exemple de graphe d'intervalles est donné à la
+lorsqu'ils sont représentés sur la ligne des réels. Un exemple de graphe d'intervalles est donné à la
 figure~\ref{fig:ex_gint}. 
 
-Les problèmes d'ordonnancement soumis à la contrainte du graphe d'intervalles définissent une
+Les problèmes d'ordonnancement tels que le graphe d'exclusion est un graphe d'intervalles définissent une
 sous-branche de l'ordonnancement appelée \isched{} que nous décrirons plus loin.
 
 \begin{figure}
@@ -168,16 +169,16 @@ notation introduite par Graham~\cite{graham} et B\l a\.zewicz~\cite{blazewicz}.
 Pour cette notation, il nous faut introduire trois paramètres $\alpha, \beta, \gamma$. Détaillons
 ces paramètres :
 \begin{enumerate}
-    \item le paramètre $\alpha$ permet de caractériser l'environnement des processeurs. $\alpha \in
+    \item le paramètre $\alpha$ permet de caractériser l'environnement des machines. $\alpha \in
         \left\{ P, \bar{P}, P_m, \right\}$, avec :
         \begin{itemize}
-            \item \textbf{$P$} : les processeurs sont identiques et leur nombre est une entrée du
+            \item \textcolor{red}{$P$} : les machines sont identiques et leur nombre est une entrée du
                 problème, 
-            \item $\bar{P}$ : les processeurs sont identiques, mais leur nombre est dit suffisant ou
+            \item $\bar{P}$ : les machines sont identiques, mais leur nombre est dit suffisant ou
                 non borné,
-            \item $P_m$ : les processeurs sont identiques et leur nombre est fixé,
+            \item $P_m$ : les machines sont identiques et leur nombre est fixé,
         \end{itemize}
-        $P$ est l'environnement de processeurs que nous utiliserons par la suite.
+        $P$ est l'environnement de machines que nous utiliserons par la suite.
     \item le paramètre $\beta$ permet de définir le type d'application et ses caractéristiques
         telles que les contraintes de précédence ou les durées d'exécution des tâches. Nous écrirons
         ce paramètre sous la forme $\beta = \beta_1\beta_2\beta_3$ avec :
@@ -218,7 +219,7 @@ ces paramètres :
 
 % TODO: Étoffer
 Les problèmes considérés tout au long de ce rapport s'inscrivent dans la branche de l'ordonnancement
-appelée \isched{}, dans cette branche le début et la fin de chaque tâche $j$ sont
+appelée \isched{}, dans cette branche le début et la fin de chaque tâche $T_j$ sont
 fixés, la tâche est donc représentable par un intervalle $\left[ \st{j}, \ct{j} \right]$ et un poids
 $w_j$, et toutes les tâches ne sont pas obligatoirement exécutées.
 
@@ -252,7 +253,7 @@ l'aide, par exemple d'algorithmes de flots~\cite{arkin_scheduling_1987}.
 Le but de ce stage est d'étudier une nouvelle fonction objectif pour ces problèmes cherchant à
 optimiser la flexibilité de l'ordonnancement produit en minimisant la fragmentation de celui-ci. La
 mesure choisie portera sur ce que nous appellerons les trous désignant le temps de repos d'une
-machine entre deux tâches qui lui sont affectée. Elle repose sur un constat simple : plus la période
+machine entre deux tâches qui lui sont affectées. Elle repose sur un constat simple : plus la période
 d'inactivité d'une machine est grande, plus celle-ci sera à même de traiter de nouvelles tâches;
 autrement dit, en cherchant à obtenir de longues périodes d'inactivité pour chacune des machines, on
 augmente le nombre de tâches susceptibles d'être acceptées ultérieurement et donc la flexibilité de
@@ -264,7 +265,7 @@ l'ordonnancement obtenu.
 
 
 Cette section se propose d'exhiber une infime partie des problèmes relatifs à l'ordonnancement
-ainsi que quelques solutions proposer pour résoudre ceux-ci. Nous présenterons, dans un premier
+ainsi que quelques solutions proposées pour résoudre ceux-ci. Nous présenterons, dans un premier
 temps, le problème \bisched{} ainsi qu'un certain nombre de résultats sur ce dernier. Puis nous
 introduirons quelques unes des nombreuses variantes de ce problème et là aussi nous décrirons
 quelques résultats que l'on peut trouver dans la littérature. Ces problèmes ont été choisis pour les
@@ -273,10 +274,10 @@ similitudes qu'ils présentent avec le problème étudié.
 \section{Le problème \bisched{}}
 
 Étant donnés un ensemble de $n$ tâches $\mathcal{T} = \left\{
-j_1, j_2, \dots, j_n \right\}$ représentés par un ensemble de $n$ intervalles $\mathcal{I} = \{
-[ \st{j_1}, \ct{j_1} ], [ \st{j_2}, \ct{j_2} ], \dots, [ \st{j_n},
-\ct{j_n} ] \}$ avec $\ct{j_i} > \st{j_i}$ pour $i = 1, \dots, n$, et un ensemble de
-machines $\mathcal{M} = \left\{ m_1, m_2, \dots, m_k \right\}$, le but est alors de trouver un
+T_1, T_2, \dots, T_n \right\}$ représentés par un ensemble de $n$ intervalles $\mathcal{I} = \{
+[ \st{T_1}, \ct{T_1} ], [ \st{T_2}, \ct{T_2} ], \dots, [ \st{T_n},
+\ct{T_n} ] \}$ avec $\ct{T_i} > \st{T_i}$ pour $i = 1, \dots, n$, et un ensemble de
+machines $\mathcal{M} = \left\{ M_1, M_2, \dots, M_m \right\}$, le but est alors de trouver un
 ordonnancement minimisant le nombre de machines utilisées par ce dernier.
 
 On peut définir la notation à trois champs de ce problème :
@@ -297,7 +298,7 @@ coloration du graphe d'intervalle est égal à la taille de la plus grande cliqu
 clique de taille $k$ dans le graphe associé à l'ensemble des tâches correspond à une durée pendant
 laquelle $k$ intervalles s'intersectent deux à deux. Ainsi, en parcourant les dates de début des tâches par
 ordre de dates de début, et en assignant cette tâche à une machine, ayant déjà été utilisée
-précédemment, l'algorithme s'assure qu'une nouvelle machine est utilisée lorsque le nombre de
+précédemment, l'algorithme s'assure qu'une nouvella machine est utilisée lorsque le nombre de
 tâches s'intersectant deux à deux est supérieur aux nombres de machines déjà utilisées. Dans ce cas
 le nombre de couleurs déjà utilisées pour colorer le graphe est inférieur à la taille de la clique
 courante (et donc nécessairement de la plus grande clique).
@@ -308,7 +309,7 @@ résolution de ce problème en $O(\log n)$ moyennant $O(n^2 / \log n)$ machines.
 \section{Quelques variantes}
 
 Il existe beaucoup de déclinaisons du problème \bisched{} considérant une autre fonction objectif,
-modifiant l'environnement des processeurs, ou encore introduisant de nouvelles notions permettant
+modifiant l'environnement des machines, ou encore introduisant de nouvelles notions permettant
 d'augmenter l'expressivité du modèle. Parmi ces variantes, nous en avons choisi deux permettant de
 définir le contexte de notre modèle.
 
@@ -316,8 +317,8 @@ définir le contexte de notre modèle.
 
 Cette variante, contrairement au problème originel, fixe le nombre de machines pouvant exécuter les
 tâches et cherche un ordonnancement permettant de maximiser la somme du poids des tâches affectées à
-une machine. Le poids $w_j$ d'une tâche $j$ peut être vu comme le profit généré par l'exécution de
-la tâche $j$, le problème cherche alors à maximiser les gains.
+une machine. Le poids $w_j$ d'une tâche $T_j$ peut être vu comme le profit généré par l'exécution de
+la tâche $T_j$, le problème cherche alors à maximiser les gains.
 
 Nous noterons ce problème :
 \begin{center}
@@ -328,17 +329,17 @@ Sans contraintes supplémentaires, le problème est polynomial, Arkin et Silverb
 1986 un algorithme s'exécutant en $O(n^2 \log n)$ opérations~\cite{arkin_scheduling_1987}. Cet
 algorithme repose sur la même observation que celui de Gupta et al.~\cite{gupta_optimal_1978} précédemment présenté : il faut
 exactement $p$ couleurs pour colorer une clique de taille $p$. Donc étant donné $\mathcal{M}=\left\{
-m_1, m_2, \dots, m_k \right\}$ un ensemble de $k$ machines, pour toutes les cliques de taille
-$p$ supérieure à $k$, l'algorithme cherche à supprimer les $p -k$ sommets de la clique présentant
+M_1, M_2, \dots, M_m \right\}$ un ensemble de $m$ machines, pour toutes les cliques de taille
+$p$ supérieure à $m$, l'algorithme cherche à supprimer les $p - m$ sommets de la clique présentant
 le plus petit profit. Ces sommets sont identifiés à l'aide d'un algorithme de flot de coût minimum
 dans un graphe construit à partir des cliques du graphes d'intervalles de départ.
 
 Cet algorithme a donc la particularité de trouver un ordonnancement de profit maximal, non pas en
 trouvant les tâches à affecter, mais en trouvant celle à ne pas affecter.
 
-À présent, considérons ce même problème, à ceci prêt : chaque tâche $j$ de $\mathcal{T}$ va se voir
+À présent, considérons ce même problème, à ceci prêt : chaque tâche $T_j$ de $\mathcal{T}$ va se voir
 attribuer un ensemble de machines $\mathcal{M}_j \subseteq \mathcal{M}$ représentant l'ensemble des
-machines sur lesquelles la tâche $j$ peut être exécutée.
+machines sur lesquelles la tâche $T_j$ peut être exécutée.
 
 Ce problème devient alors \npc si le nombre de machine dans chaque sous-ensemble $\mathcal{M}_j$ est
 supérieur ou égal à $3$~\cite{arkin_scheduling_1987}, la preuve se faisant par une réduction depuis
@@ -417,11 +418,11 @@ devient linéaire en le nombre de tâches.
 \end{figure}
 
 Il existe différentes façons de représenter l'indisponibilité d'une machine pendant une période
-donnée. Supposons que nous ayons une machine $m$ indisponible pendant le laps de temps représenté par
-l'intervalle $i_m = \left[ \sint{i_m}, \cint{i_m} \right]$, une première façon d'envisager un tel
-scénario est de considérer deux machines $m_1, m_2$ telles que la machine $m_1$ est disponible
-pendant la durée $\left[ 0, \sint{i_m} \right]$ et la machine $m_2$ est disponible entre les dates
-$\left[ \cint{i_m}, \infty \right]$. Une seconde façon de voir ce scénario est de considérer que
+donnée. Supposons que nous ayons une machine $M$ indisponible pendant le laps de temps représenté par
+l'intervalle $i_M = \left[ \sint{i_M}, \cint{i_M} \right]$, une première façon d'envisager un tel
+scénario est de considérer deux machines $M_1, M_2$ telles que la machine $M_1$ est disponible
+pendant la durée $\left[ 0, \sint{i_M} \right]$ et la machine $M_2$ est disponible entre les dates
+$\left[ \cint{i_M}, \infty \right]$. Une seconde façon de voir ce scénario est de considérer que
 l'indisponibilité de la machine n'est autre qu'une tâche préaffectée à la machine indisponible. C'est
 cette représentation que nous allons utiliser pour l'introduction du problème \fisched{} qui sera
 étudié tout au long de ce stage.
@@ -451,14 +452,14 @@ et à droite par des tâches et/ou des réservations.
 
 Si l'on considère :
 \begin{itemize}
-    \item $\mathcal{T} = \left\{ j_1, j_2, \dots, j_n \right\}$, l'ensemble des tâches à ordonnancer
-        associé à un ensemble d'intervalles $\mathcal{I} = \left\{ i_{j_1}, i_{j_2}, \dots,
-        i_{j_n} \right\}$,
-    \item $\mathcal{M} = \left\{ m_1, m_2, \dots, m_k \right\}$ l'ensemble des machines 
+    \item $\mathcal{T} = \left\{ T_1, T_2, \dots, T_n \right\}$, l'ensemble des tâches à ordonnancer
+        associé à un ensemble d'intervalles $\mathcal{I} = \left\{ i_{T_1}, i_{T_2}, \dots,
+        i_{T_n} \right\}$,
+    \item $\mathcal{M} = \left\{ M_1, M_2, \dots, M_m \right\}$ l'ensemble des machines 
     \item $\mathcal{R} = \left\{ l_1, l_2, \dots, l_h \right\}$ l'ensemble des réservations
-        représentable par un couple $\left( m_l, \left[ \sres{l}, \cres{l} \right] \right)$
+        représentable par un couple $\left( M_l, \left[ \sres{l}, \cres{l} \right] \right)$
         comprenant la machine à laquelle est préaffectée la réservation $l$ et l'intervalle
-        représentant la période d'indisponibilité de la machine $m_l$
+        représentant la période d'indisponibilité de la machine $M_l$
     \item $H_{\min} = \min \left\{ \sint{i'} - \cint{i} > 0 : i, i' \in \mathcal{T} \cup
         \mathcal{R} \right\}$ la fonction permettant de calculer la valeur du trou minimum,
 \end{itemize}
