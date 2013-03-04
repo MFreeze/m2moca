@@ -45,12 +45,14 @@ D'ordinaire, les problèmes d'ordonnancement sont définis par un ensemble de $n
 \{T_1, T_2, \dots, T_n\}$ et par un ensemble de $m$ machines\footnote{On les appelle aussi des
 processeurs.} $\mathcal{P} = \{\pi_1, \pi_2, \dots, \pi_m\}$. L'ordonnancement consiste à affecter les
 tâches $\mathcal{T}$ aux processeurs $\mathcal{P}$ tout en respectant les contraintes définies par
-le problème initial. On peut citer deux contraintes largement répandues dans la théorie de
+le problème initial. On peut citer trois contraintes largement répandues dans la théorie de
 l'ordonnancement :
 \begin{enumerate}
     \item chaque processeur peut exécuter au plus une seule tâche à tout instant,
-    \item chaque tâche est exécutée par au plus un processeur.
+    \item chaque tâche est exécutée par au plus un processeur,
+    \item chaque tâche est exécutée par au moins un processeur.
 \end{enumerate}
+Un ordonnancement est dit valide, s'il respecte l'ensembles des contraintes imposées.
 
 Il paraît important de notifier, qu'il existe des problèmes autorisant l'exécution d'une tâche sur
 plusieurs processeurs, la durée d'exécution de la tâche est alors proportionnelle au nombre de
@@ -218,7 +220,18 @@ ces paramètres :
 Les problèmes considérés tout au long de ce rapport s'inscrivent dans la branche de l'ordonnancement
 appelée \isched{}, dans cette branche le début et la fin de chaque tâche $j$ sont
 fixés, la tâche est donc représentable par un intervalle $\left[ \st{j}, \ct{j} \right]$ et un poids
-$w_j$. 
+$w_j$, et toutes les tâches ne sont pas obligatoirement exécutées.
+
+La possibilité de ne pas exécuter certaines tâches entraîne l'établissement de nouvelles fonctions
+objectif, les fonctions relatives au temps d'exécution ayant un intérêt moindre, pour ne pas dire
+nul\footnote{$C_{max}$ est, par exemple, systématiquement optimale pour un ordonnancement
+vide(n'exécutant aucune tâche).}. Parmis ces fonctions, nous citerons celles de maximisation du
+profit généré par l'exécution des tâches ou de maximisation du nombre de tâches exécutées. Il est
+usuel, lorsque l'on travaille avec ce genre de fonctions, de considérer un ensemble de tâches tel
+qu'il est impossible de pouvoir assigner à chaque tâche une machine : intuitivement, un
+ordonnancement affectant une machine à chaque tâche est un ordonnancement optimal. Or nous verrons
+au cours de la section suivante, que trouver un tel ordonnancement se fait en temps polynomial à
+l'aide, par exemple d'algorithmes de flots~\cite{arkin_scheduling_1987}.
 
 %Intuitivement, on conçoit que la difficulté des problèmes d'ordonnancement pour lesquels les dates
 %de débuts des tâches ne sont pas fixées repose sur leur grand nombre d'ordonnancements valides.
@@ -228,9 +241,10 @@ $w_j$.
 %machine, il existe un seul ordonnancement possible qui de surcroît peut être invalide. De manière
 %plus formelle, 
 
-Il est usuel, pour cette catégorie de problème,  de considérer un ensemble de tâches tel qu'il est
-impossible de pouvoir assigner à chaque tâche une machine, l'optimisation se fait alors en
-maximisant le poids de l'ensemble des tâches affectées à une machine. 
+%Un grand nombre de fonctions objectif définies pour l'ordonnancement classique présentent un
+%intérêt moindre pour l'\isched{} : la fonction $C_{max}$ est en effet constante lorsque les dates de
+%début et de fin d'exécution de chacune des tâches sont fixées. C'est pourquoi de nouvelles fonctions
+%ont été introduites telles que la maximisation du profit généré par l'exécution des tâches. 
 
 Le but de ce stage est d'étudier une nouvelle fonction objectif pour ces problèmes cherchant à
 optimiser la flexibilité de l'ordonnancement produit en minimisant la fragmentation de
@@ -240,11 +254,13 @@ l'ordonnancement produit.
 \newpage
 \chapter{État de l'art}
 
-Au cours de cette section nous présenterons, dans un premier temps, le problème \bisched{} ainsi qu'un
-certain nombre de résultats sur ce dernier. Puis nous introduirons quelques unes des nombreuses
-variantes de ce problème et là aussi nous décrirons quelques résultats que l'on peut trouver dans la
-littérature. Ces problèmes ont été choisis pour les similitudes qu'ils présentent avec le problème
-étudié.
+
+Cette section se propose d'exhiber une infime partie des problèmes relatifs à l'ordonnancement
+ainsi que quelques solutions proposer pour résoudre ceux-ci. Nous présenterons, dans un premier
+temps, le problème \bisched{} ainsi qu'un certain nombre de résultats sur ce dernier. Puis nous
+introduirons quelques unes des nombreuses variantes de ce problème et là aussi nous décrirons
+quelques résultats que l'on peut trouver dans la littérature. Ces problèmes ont été choisis pour les
+similitudes qu'ils présentent avec le problème étudié.
 
 \section{Le problème \bisched{}}
 
