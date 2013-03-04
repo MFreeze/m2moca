@@ -17,148 +17,273 @@
 % TODO Présentation de l'interval Scheduling et du problème de réservation de l'hotel
 % TODO Présentation du modèle de notation à trois champs
 
+% <<< Intro : Ordonnancement
+%\section{Introduction}
+%\subsection{L'ordonnancement}
+%
+%L'ordonnancement est un processus décisionnel très répandu utilisé très régulièrement par
+%les entreprises, les industries et même les particuliers.  Il s'occupe de répartir une certaine quantité de
+%ressources entre différentes tâches s'étalant sur une période donnée et s'attache en général à
+%optimiser un ou plusieurs objectifs. Ainsi un emploi du temps est une forme d'ordonnancement,
+%affectant du temps à un ensemble de tâches à réaliser.
+%
+%Ainsi l'étude de la théorie de l'ordonnancement, de par son fort potentiel applicatif, a été très
+%largement étudiée, ce qui a donné naissance à une multitude de problèmes. Dans la littérature, les
+%problème d'ordonnancement de décrivent généralement de la manière suivante : un ensemble de tâches
+%$\mathcal{T} = \{j_1, j_2, \dots, j_n\}$, un ensemble de machines $\mathcal{M} = \{m_1, m_2, \dots,
+%m_k\}$. Un ordonnancement consiste donc à affecter l'ensemble des tâches à l'ensemble des machines
+%en respectant des contraintes imposées. Deux de ces contraintes, sûrement les plus répandues dans les
+%problèmes d'ordonnancement, imposent qu'à chaque instant, chaque machine n'est capable de d'exécuter au
+%plus qu'une seule tâche et que chaque tâche n'est exécutée que par une seule machine.
+%
+%Il est possible de caractériser l'ensemble des machines prises en compte, ainsi ces dernières
+%peuvent être parallèles, c'est-à-dire exécutant les mêmes fonctions, soit dédiées, dans ce cas elles
+%sont spécialisées dans le traitement de certaines tâches. Nous ne nous intéresserons uniquement au
+%premier cas. On peut aller plus loin dans la caractérisation des machines en faisant une distinction
+%basée sur la vitesse de traitement. Si chaque tâche s'exécute à la même vitesse sur chacune des
+%machines, elles sont dites identiques, si les vitesses de traitement diffèrent, mais chaque vitesse
+%$b_i$ (facteur d'accélération de traitement de la tâche) des machines est constante et ne dépend
+%pas de la tâche à exécuter, les machines sont dites uniformes. Enfin, si la vitesse de traitement
+%d'une tâche dépend de cette tâche les machines sont alors appelées générales.
+%
+%% Références de bouquins traitant le sujet avec plus de précision.
+%
+%%Choses à faire :
+%%\begin{itemize}
+%%    \item présentation du domaine
+%%    \item définition d'un ordonnancement
+%%    \item introduction à la notation à trois champs
+%%\end{itemize}
+%
+%De la même manière, il est possible d'imposer des contraintes sur la manière d'exécuter les tâches,
+%on peut par exemple autoriser (ou interdire) la préemption des tâches, i.e. autoriser l'interruption
+%de l'exécution d'une tâche à n'importe quel moment et son exécution peut être reprise à n'importe
+%quel instant, un ordonnancement autorisant (resp. interdisant) la préemption est dit préemptif
+%(resp. non-préemptif). On peut aussi autoriser la duplication des tâches, afin de, par exemple,
+%réduire l'influence des délais de communication entre machines lorsque ceux ci sont définis, en
+%produisant des copies sur différentes machines.
+%On peut trouver des contraintes de précédence entre les tâches, ainsi $t_i
+%\prec t_j$ signifie que la tâche $t_j$ ne peut commencer qu'une fois la tâche $t_i$ terminée. Les
+%tâches soumises à des relations de précédence sont représentées par un graphe orienté dans lequel
+%les sommets correspondent aux taches et les arêtes aux relations de précédence.
+%
+%
+%\subsection{Notation à trois champs}
+%
+%La grande diversité de problèmes couverts par l'ordonnancement a conduit à la mise en place d'une
+%notation normalisée permettant de classifier les schémas. Nous décrivons donc, de manière non
+%exhaustive, la notation introduite par Graham~\cite{graham} et al. et Bla\.{z}evicz et
+%al.~\cite{blazewicz}. Il s'agit d'une
+%notation utilisant trois paramètres $\alpha, \beta$ et $\gamma$ permettant de synthétiser la
+%description des problèmes d'ordonnancement statique.
+%
+%\begin{enumerate}
+%    \item le paramètre $\alpha = \alpha_1(\alpha_2),\ \alpha \in \{P, \bar{P}, P_m, \dots\} ,\
+%            \alpha_2 \in \{P, \bar{P}, P_m, Q, R, \dots\}$\footnote{Notons que certaines combinaisons
+%        peuvent n'avoir aucun sens.} définit les caractéristiques des machines considérées.
+%        \begin{itemize}
+%            \item si $\alpha_i = P$ avec $i \in \{1, 2\}$, alors les machines sont identiques et
+%                leur nombre est une entrée du problème,
+%            \item si $\alpha_i = \bar{P}$, alors les machines sont identiques mais leur nombre est
+%                non borné,
+%            \item si $\alpha_i = P_m$, alors les machines sont identiques et leur nombre $m$ est
+%                fixé,
+%            \item si $\alpha_2 = Q$, les machines sont uniformes,
+%            \item si $\alpha_2 = R$ alors les machines sont générales.
+%        \end{itemize}
+%    \item le paramètre $\beta$ définit les caractéristiques d'exécution des tâches c'est-à-dire le
+%        graphe de précédence, les coûts de communication, les temps d'exécution, la possibilité ou
+%        non de duplication des tâches et l'autorisation ou non de la préemption.
+%        Le paramètre $\beta$ peut alors s'écrire sous la forme $\beta =
+%        \beta_1\beta_2\beta_3\beta_4\beta_5$ avec :
+%        \begin{itemize}[label=$\circ$]
+%            \item $\beta_1 \in \{$prec, intervalle, arbre, $\dots, . \}$
+%                \begin{itemize}
+%                    \item $\beta_1 =$ prec : le graphe est quelconque
+%                    \item $\beta_1 =$ intervalle : le graphe est un graphe d'intervalles
+%                    \item $\beta_1 =$ arbre : le graphe est un arbre
+%                    \item[$\vdots$] ~
+%                    \item $\beta_1 =$ . les tâches sont indépendantes
+%                \end{itemize}
+%            \item $\beta_2 \in \{$com, $c_{jk}, c, .\}$
+%                \begin{itemize}
+%                    \item $\beta_2 =$ com : les temps de communication sont donnés par le graphe
+%                    \item $\beta_2 = c_{jk}$ : les temps de communication sont donnés par une
+%                        matrice de $c_{jk}$ représentant le délai de communication entre la tâche
+%                        $j$ et la tâche $k$
+%                    \item $\beta_2 = c$ : les temps de communication sont constant et égaux entre
+%                        chaque paire de tâches
+%                    \item $\beta_2 = .$ : il n'y a pas de temps de communication
+%                \end{itemize}
+%            \item $\beta_3 \in \{p_j, .\}$
+%                \begin{itemize}
+%                    \item $\beta_3 = p_j = 1$ : toutes les tâches on une durée unitaire
+%                    \item $\beta_3 = .$ : les durées d'exécution sont définies par le graphe
+%                \end{itemize}
+%            \item $\beta_4 \in \{$dup, $. \}$
+%                \begin{itemize}
+%                    \item $\beta_4 =$ dup : la duplication est autorisée
+%                    \item $\beta_4 = .$ : la duplication est interdite
+%                \end{itemize}
+%            \item $\beta_5 \in \{$pmpt, $. \}$
+%                \begin{itemize}
+%                    \item $\beta_5 =$ pmpt : la préemption est autorisée
+%                    \item $\beta_5 = .$ : la préemption est interdite
+%                \end{itemize}
+%        \end{itemize}
+%    \item le paramètre $\gamma$ définit la fonction objectif à optimiser.
+%\end{enumerate}
+%% 
+%
 \section{Introduction}
-% {{{ Intro : Ordonnancement
-\subsection{L'ordonnancement}
 
-L'ordonnancement est un processus décisionnel très répandu utilisé très régulièrement par
-entreprises, industries et même particuliers.  Il s'occupe de répartir une certaine quantité de
-ressources entre différentes tâches s'étalant sur une période donné et s'attache en général à
-optimiser un ou plusieurs objectifs. Ainsi un emploi du temps est une forme d'ordonnancement,
-affectant du temps à un ensemble de choses à faire.
+La théorie de l'ordonnancement est une branche non négligeable de l'informatique couvrant un très
+grand nombre de problèmes permettant la modélisation d'applications pratiques. Ainsi, des
+problématiques aussi diverses que la planification de prises de photographies par satellite,
+l'agencement spatial de marchandises dans un entrepôt ou la planification d'une chaîne de production
+peuvent être représentées à l'aide de ces problèmes informatiques. Il n'est donc pas étonnant de
+de disposer à ce sujet d'une littérature fournie, détaillant nombre de déclinaisons de problèmes
+considérés classiques. Cette étude bibliographique, préliminaire au stage, s'inscrit dans cette
+démarche et cherche à définir le contexte et les bases nécessaires à l'introduction d'une variante
+d'un problème d'ordonnancement très étudié que l'on appelle \isched.
 
-Ainsi l'étude de la théorie de l'ordonnancement, de par son fort potentiel applicatif, a été très
-largement étudiée, ce qui a donné naissance à une multitude de problèmes. Dans la littérature, les
-problème d'ordonnancement de décrivent généralement de la manière suivante : un ensemble de tâches
-$\mathcal{T} = \{j_1, j_2, \dots, j_n\}$, un ensemble de machines $\mathcal{M} = \{m_1, m_2, \dots,
-m_k\}$. Un ordonnancement consiste donc à affecter l'ensemble des tâches à l'ensemble des machines
-en respectant des contraintes imposées. L'une de ces contraintes, sûrement la plus répandue dans les
-problème d'ordonnancement, impose qu'à chaque instant, chaque machine n'est capable de d'exécuter au
-plus qu'une seule tâche.
+\subsection{Description des problèmes d'ordonnancement}
 
-Il est possible de caractériser l'ensemble des machines prises en comptes, ainsi ces dernières
-peuvent être parallèles, c'est à dire exécutant les mêmes fonctions, soit dédiées, dans ce cas elles
-sont spécialisées dans le traitement de certaines tâches. Nous ne nous intéresserons uniquement au
-premier cas. On peut aller plus loin dans la caractérisation des machines en faisant une distinction
-basée sur la vitesse de traitement. Si chaque tâche s'exécute à la même vitesse sur chacune des
-machines, elles sont dites identiques, si les vitesses de traitement diffèrent, mais chaque vitesse
-$b_i$ (facteur d'accélération de traitement de la tâche) des machines est constante et ne dépend
-pas de la tâche à exécuter, les machines sont dites uniformes. Enfin, si la vitesse de traitement
-d'une tâche dépend de cette tâche les machines sont alors appelées générales.
+Nous utiliserons au cours de cette partie les notations communément utilisées pour définir de
+manière générale les problèmes d'ordonnancement. Nous serons amenés à définir et utiliser des
+notations plus spécifiques au problème considéré.
 
-% Références de bouquins traitant le sujet avec plus de précision.
+D'ordinaire, les problèmes d'ordonnancement sont définis par un ensemble de $n$ tâches $\mathcal{T} =
+\{T_1, T_2, \dots, T_n\}$ et par un ensemble de $m$ processeurs\footnote{On les appelle aussi des
+machines.} $\mathcal{P} = \{\pi_1, \pi_2, \dots, \pi_m\}$. L'ordonnancement consiste à affecter les
+tâches $\mathcal{T}$ aux processeurs $\mathcal{P}$ tout en respectant les contraintes définies par
+le problème initial. On peut citer deux contraintes largement répandues dans la théorie de
+l'ordonnancement :
+\begin{enumerate}
+    \item chaque processeur peut exécuter au plus une seule tâche à tout instant,
+    \item chaque tâche est exécutée par au plus un processeur.
+\end{enumerate}
 
-%Choses à faire :
-%\begin{itemize}
-%    \item présentation du domaine
-%    \item définition d'un ordonnancement
-%    \item introduction à la notation à trois champs
-%\end{itemize}
+Il paraît important de notifier, qu'il existe des problèmes autorisant l'exécution d'une tâche sur
+plusieurs processeurs, la durée d'exécution de la tâche est alors proportionnelle au nombre de
+processeurs sur lesquels elle s'exécute. On parle alors de modèles hiérarchiques, mais ces modèles
+ne seront pas développés dans le reste de ce manuscrit.
 
-De la même manière, il est possible d'imposer des contraintes sur la manière d'exécuter les tâches,
-on peut par exemple autoriser (ou interdire) la préemption des tâches, i.e. autoriser l'interruption
-de l'exécution d'une tâche à n'importe quel moment et son exécution peut être reprise à n'importe
-quel instant, un ordonnancement autorisant (resp. interdisant) la préemption est dit préemptif
-(resp. non-préemptif). On peut aussi autoriser la duplication des tâches, afin de, par exemple,
-réduire l'influence des délais de communication entre machines lorsque ceux ci sont définis, en
-produisant des copies sur différentes machines.
-On peut trouver des contraintes de précédence entre les tâches, ainsi $t_i
-\prec t_j$ signifie que la tâche $t_j$ ne peut commencer qu'une fois la tâche $t_i$ terminée. Les
-tâches soumises à des relations de précédence sont représentées par un graphe orienté dans lequel
-les sommets correspondent aux taches et les arêtes aux relations de précédence.
+\subsection{Caractérisation des processeurs}
 
-%}}}
+Dans le but de décrire un problème d'ordonnancement, il est important de définir l'environnement des
+processeurs, c'est à dire les hypothèses considérées sur les machines. Au cours de ce rapport, seul
+le modèle des processeurs parallèles, exécutant tous les mêmes fonctions, sera considéré. Pour la
+découverte du modèle des processeurs dédiés, spécialisés dans l'exécution de certaines fonctions,
+nous invitons les intéressés à la lecture du livre~\cite{blazewicz_handbook_2007}.
 
-% {{{ Intro : Notation à trois champs
+Les processeurs parallèles se décomposent en trois catégories :
+\begin{enumerate}
+    \item identiques : tous les processeurs de $\mathcal{P}$ admettent la même vitesse de traitement
+    \item uniformes : les vitesses de traitement diffèrent mais la vitesse de traitement est
+        proportionnelle à un coefficient propre à chaque machine appelé facteur d'accélération
+    \item généraux : les vitesses de traitement dépendent des tâches à effectuer
+\end{enumerate}
+
+À nouveau nous ne considérerons qu'une seule catégorie, les problèmes nous intéressant ne portent
+que sur des processeurs identiques.
+
+\subsection{Caractérisation des tâches}
+
+Généralement, en ordonnancement, une tâche est définie par cinq paramètres :
+\begin{enumerate}
+    \item un vecteur de temps d'exécution $p_j = ^t(p_{j1}, p_{j2}, \dots, p_{jm})$ où $p_{ji}$
+        représente le temps nécessaire à l'exécution de la tâche $j$ sur la machine $i$. Dans le cas
+        de machines identiques et uniformes, ce vecteur ne présente qu'une seule composante,
+    \item une date de disponibilité $r_j$, désignant la date à partir de laquelle la tâche est prête
+        à être exécutée,
+    \item une date d'échéance $d_j$, désignant la date souhaitée à laquelle la tâche $j$ devrait
+        être exécutée,
+    \item une date de fin impérative$\widetilde{d_j}$, date à laquelle la tâche doit obligatoirement être exécutée,
+    \item un poids $w_j$, représentant l'urgence relative de la tâche.
+\end{enumerate}
+
+Les tâches ainsi définies peuvent être soumises à certaines contraintes, telles que des contraintes
+de précédence, imposant que la date d'exécution d'une exécution soit ultérieure à la complétion
+d'un ensemble de tâches tierces.
+
+Si l'on considère le graphe, que nous appellerons le graphe d'exclusion, qui à chaque tâche associe
+un sommet, et tel qu'il existe une arête entre deux sommets si deux taches ne peuvent être affectée
+à la même machine, il est alors possible d'imposer des contraintes structurelles à ce graphe. 
+
 \subsection{Notation à trois champs}
 
-La grande diversité de problèmes couverts par l'ordonnancement a conduit à la mise en place d'une
-notation normalisée permettant de classifier les schémas. Nous décrivons donc, de manière non
-exhaustive, la notation introduite par Graham et al. et Bla\.{z}evicz et al.. Il s'agit d'une
-notation utilisant trois paramètres $\alpha, \beta$ et $\gamma$ permettant de synthétiser la
-description des problèmes d'ordonnancement statique.
+La multitude de problèmes d'ordonnancement énoncée précédemment a conduit à la mise en place d'une
+notation synthétique permettant la description de ces schémas. Nous nous proposons de reprendre la
+notation introduite par Graham~\cite{graham} et B\l a\.zewicz~\cite{blazewicz}. 
 
+Pour cette notation, il nous faut introduire trois paramètres $\alpha, \beta, \gamma$. Détaillons
+ces paramètres :
 \begin{enumerate}
-    \item le paramètre $\alpha = \alpha_1(\alpha_2),\ \alpha \in \{P, \bar{P}, P_m, \dots\} ,\
-            \alpha_2 \in \{P, \bar{P}, P_m, Q, R, \dots\}$\footnote{Notons que certaines combinaisons
-        peuvent n'avoir aucun sens.} définit les caractéristiques des machines considérées.
+    \item le paramètre $\alpha$ permet de caractériser l'environnement des processeurs. \\
+        $\alpha \in \left\{ P, \bar{P}, P_m, Q, R \right\}$, avec :
         \begin{itemize}
-            \item si $\alpha_i = P$ avec $i \in \{1, 2\}$, alors les machines sont identiques et
-                leur nombre est une entrée du problème,
-            \item si $\alpha_i = \bar{P}$, alors les machines sont identiques mais leur nombre est
+            \item $P$ : les processeurs sont identiques et leur nombre est une entrée du problème,
+            \item $\bar{P}$ : les processeurs sont identiques, mais leur nombre est dit suffisant ou
                 non borné,
-            \item si $\alpha_i = P_m$, alors les machines sont identiques et leur nombre $m$ est
-                fixé,
-            \item si $\alpha_2 = Q$, les machines sont uniformes,
-            \item si $\alpha_2 = R$ alors les machines sont générales.
+            \item $P_m$ : les processeurs sont identiques et leur nombre est fixé,
+            \item $Q$ : les processeurs sont uniformes
+            \item $R$ : les processeurs dont généraux
         \end{itemize}
-    \item le paramètre $\beta$ définit les caractéristiques d'exécution des tâches c'est à dire le
-        graphe de précédence, les coûts de communication, les temps d'exécution, la possibilité ou
-        non de duplication des tâches et l'autorisation ou non de la préemption.
-        Le paramètre $\beta$ peut alors s'écrire sous la forme $\beta =
-        \beta_1\beta_2\beta_3\beta_4\beta_5$ avec :
-        \begin{itemize}[label=$\circ$]
-            \item $\beta_1 \in \{$prec, intervalle, arbre, $\dots, . \}$
+    \item le paramètre $\beta$ permet de définir le type d'application et ses caractéristiques
+        telles que les contraintes de précédence ou les durées d'exécution des tâches. Nous écrirons
+        ce paramètre sous la forme $\beta = \beta_1\beta_2\beta_3$ avec :
+        \begin{itemize}[label=$\bullet$]
+            \item $\beta_1$ représentant les contraintes de précédence :
                 \begin{itemize}
-                    \item $\beta_1 =$ prec : le graphe est quelconque
-                    \item $\beta_1 =$ intervalle : le graphe est un graphe d'intervalles
-                    \item $\beta_1 =$ arbre : le graphe est un arbre
-                    \item[$\vdots$] ~
-                    \item $\beta_1 =$ . les tâches sont indépendantes
+                    \item $\beta_1 = prec$ : le graphe de précédence est un graphe quelconque
+                    \item $\beta_1 = arbre$ : le graphe de précédence est un arbre
+                    \item[$\vdots$]
+                    \item $\beta_1 = .$ : les tâches sont indépendantes
                 \end{itemize}
-            \item $\beta_2 \in \{$com, $c_{jk}, c, .\}$
+            \item $\beta_2$ représentant les temps d'exécution des tâches :
                 \begin{itemize}
-                    \item $\beta_2 =$ com : les temps de communication sont donnés par le graphe
-                    \item $\beta_2 = c_{jk}$ : les temps de communication sont donnés par une
-                        matrice de $c_{jk}$ représentant le délai de communication entre la tâche
-                        $j$ et la tâche $k$
-                    \item $\beta_2 = c$ : les temps de communication sont constant et égaux entre
-                        chaque paire de tâches
-                    \item $\beta_2 = .$ : il n'y a pas de temps de communication
+                    \item $\beta_2 = p_j = 1$ : les tâches sont unitaires, leur durée est égale à
+                        $1$
+                    \item $\beta_2 = .$ : les durées des tâches sont données par le graphe
                 \end{itemize}
-            \item $\beta_3 \in \{p_j, .\}$
+            \item $\beta_3$ représentant les propriétés structurelles du graphe d'exclusion :
                 \begin{itemize}
-                    \item $\beta_3 = p_j = 1$ : toutes les tâches on une durée unitaire
-                    \item $\beta_3 = .$ : les durées d'exécution sont définies par le graphe
-                \end{itemize}
-            \item $\beta_4 \in \{$dup, $. \}$
-                \begin{itemize}
-                    \item $\beta_4 =$ dup : la duplication est autorisée
-                    \item $\beta_4 = .$ : la duplication est interdite
-                \end{itemize}
-            \item $\beta_5 \in \{$pmpt, $. \}$
-                \begin{itemize}
-                    \item $\beta_5 =$ pmpt : la préemption est autorisée
-                    \item $\beta_5 = .$ : la préemption est interdite
+                    \item $\beta_3 = inter$ : le graphe d'exclusion est un graphe d'intervalles
+                    \item $\beta_3 = .$ : le graphe d'exclusion est un graphe vide (sans arêtes)
                 \end{itemize}
         \end{itemize}
-    \item le paramètre $\gamma$ définit la fonction objectif à optimiser.
+    \item le paramètre $\gamma$ représente quant à lui définit la fonction objectif que l'on
+        cherchera à optimiser.
 \end{enumerate}
-% }}}
 
-% {{{ Intro : Motivation
 \subsection{Motivations}
 
-%Faire une présentation du problème de réservations dans un hôtel, parler flexibilité
-Dans ce document, nous nous intéressons au problème de réservation de chambre d'hôtel, à savoir : un
+Faire une présentation du problème de réservations dans un hôtel, parler flexibilité
+Au cours de ce stage, nous nous intéressons au problème de réservation de chambre d'hôtel, à savoir : un
 ensemble de clients désirent réserver un séjour dans un hôtel pendant une durée fixée, le gérant de
 l'hôtel doit donc assigner à chaque client une chambre pour le créneau demandé par ce dernier. De
-plus, il doit veiller à ce qu'une chambre ne soit pas réservée par deux clients en même temps, doit
+plus, il doit veiller à ce qu'une chambre ne soit pas réservée par deux clients en même temps,
+autrement dit assurer une exclusion mutuelle, doit
 prendre en compte les réservations pré-enregistrées et va chercher à obtenir un planning de
 réservations présentant de longue plage de réservations libres afin de pouvoir accepter un maximum
 de nouvelles réservations à l'avenir.
 
-La représentation de ce problème par un problème d'ordonnancement se fait naturellement : chaque
+Nous pouvons modéliser le problème décrit ci-dessus de la manière suivante : chaque
 chambre peut être vue comme une machine, chaque demande de réservation peut être envisagée comme une
 tâche\footnote{La définition d'une tâche, dans le cadre de ce rapport est donnée à la
 section~\ref{intro_def}.} et chaque réservation préexistante peut être vue comme une tâche
 préassignée à une machine. L'objectif du gérant étant alors de maximiser la taille des plages de
-réservations libres.
+réservation libres.
 % }}}
 
 
 \section{Définitions}
 \label{intro_def}
+
+La modélisation de ce problème s'inscrit dans une branche de l'ordonnancement appelée \isched. Dans
+cette branche, les tâches sont soumises à des contraintes plus fortes, imposant une redéfinition de
+la notion de taches.
 
 % {{{ DEF : Tache
 \begin{ndf}[Tâche]
@@ -193,10 +318,10 @@ réservations libres.
 % }}}
 
 %{{{ RMQ : Événements
-\begin{nrmq}
+\begin{ndef}
     Nous appellerons \emph{événement} tout entité étant soit une tâche soit une réservation.
     L'ensemble des événement sera noté $\mathcal{E} = \mathcal{T} \cup \mathcal{R}$.
-\end{nrmq}
+\end{ndef}
 % }}}
 
 % {{{ DEF : Trou
@@ -214,11 +339,9 @@ réservations libres.
 % }}}
 
 % {{{ REMARQUE : PRESENTATION DES CAS
-\begin{nrmq}
-    Nous illustrons ces notions à la figure~\ref{prescas}, les rectangles gris
-    représentent différentes tâches, les rectangles noirs sont les réservations alors que les plages
-    libres représentent les différents trous possibles.
-\end{nrmq}
+Nous illustrons ces notions à la figure~\ref{prescas}, les rectangles gris
+représentent différentes tâches, les rectangles noirs sont les réservations alors que les plages
+libres représentent les différents trous possibles.
 % }}}
 
 Nous aurons besoin de définir la notion de graphe d'intervalles propre utilisée en
