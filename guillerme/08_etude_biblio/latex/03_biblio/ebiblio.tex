@@ -215,6 +215,10 @@ ces paramètres :
         \end{itemize}
 \end{enumerate}
 
+\section{Complexité}
+
+\subsection{Complexité classique}
+
 \section{Motivations}
 
 % TODO: Étoffer
@@ -346,7 +350,7 @@ supérieur ou égal à $3$~\cite{arkin_scheduling_1987}, la preuve se faisant pa
 le problème \textsc{$3-$SAT}. Un algorithme exprimé sous forme de programmation dynamique a été
 décrit dans ce même article, il s'exécute en $O(n^{k+1})$.
 
-Bhatia et al.~\cite{bhatia2003algorithmic} ont proposé une $(1 - 1/\varepsilon)-$approximation
+Bhatia et al.~\cite{bhatia2003algorithmic} ont proposé une $(1 - 1/e)-$approximation
 randomisée, dont une partie de l'exécution repose sur des données aléatoires, basée sur de la
 programmation linéaire permettant la résolution de ce problème. De plus de nombreuses heuristiques
 ont été introduite pour répondre à ce problème, nous renvoyons les intéressés à la lectures des
@@ -369,14 +373,16 @@ au problème avec machines indisponibles. Un exemple de graphe est donné à la 
 Le problème \isma{} a été démontré \npc par
 Papadimitriou~\cite{papadimitriou1982private} à l'aide d'une réduction depuis le problème de
 coloration sur un graphe à arcs circulaires. La réduction inverse, depuis \isma{} vers le problème de
-coloration, a été décrite plus tard par Kolen et al.~\cite{kolen2007interval}. Ces mêmes auteurs ont également
+coloration, a été décrite plus tard par Kolen et al.~\cite{kolen2007interval}. 
+
+Ces mêmes auteurs ont également
 proposé deux algorithmes exacts pour la résolution de ce problème, le premier utilise la
 programmation dynamique s'exécutant en $O(ln^{l+1})$, avec $l$ la taille de la plus grand clique dans
 le graphe à arcs circulaires. Le second algorithme, quant à lui, réalise une énumération  basée sur
 la notion d'ordonnancement partiel : un ordonnancement partiel jusqu'à la date $t$ est une
 assignation à une machine de chacune des tâches dont la date de début est antérieure à $t$ de sorte
-que deux tâches de s'exécutent en même temps sur la même machine. Cette algorithme s'exécute en
-$O\left( n+k \right)k!k \log k)$ opérations, avec $k$ le nombre de machines. Cet algorithme est
+que deux tâches de s'exécutent en même temps sur la même machine. Cet algorithme s'exécute en
+$O\left( (n + m) m! m \log m \right)$ opérations, avec $k$ le nombre de machines. Cet algorithme est
 particulièrement intéressant puisque si le nombre de machines pour \isma{} est fixé, alors l'algorithme
 devient linéaire en le nombre de tâches.
 
@@ -418,7 +424,7 @@ devient linéaire en le nombre de tâches.
 \end{figure}
 
 Il existe différentes façons de représenter l'indisponibilité d'une machine pendant une période
-donnée. Supposons que nous ayons une machine $M$ indisponible pendant le laps de temps représenté par
+donnée. Supposons que nous ayions une machine $M$ indisponible pendant le laps de temps représenté par
 l'intervalle $i_M = \left[ \sint{i_M}, \cint{i_M} \right]$, une première façon d'envisager un tel
 scénario est de considérer deux machines $M_1, M_2$ telles que la machine $M_1$ est disponible
 pendant la durée $\left[ 0, \sint{i_M} \right]$ et la machine $M_2$ est disponible entre les dates
@@ -472,20 +478,33 @@ alors la notation à trois champs de notre problème est la suivante :
 
 \chapter{Travaux à mener}
 
-Le stage portant sur le problème précédemment introduit sera abordé de la manière suivante :
-\begin{enumerate}
-    \item Dans un premier temps, nous nous intéresserons à la classification du problème du point de
-        vue de la complexité classique : \fisched{} est-il \npc? Et du point de vue de la complexité
-        paramétrée : est il FPT?
-    \item Puis nous chercherons à mettre au point différents algorithmes exacts ou
-        d'approximation\footnote{Uniquement si le problème est \npc.} avec garantie de performances.
-        Les techniques porteront sur la formulation du problème en programmation linéaire en nombre
-        entier et sur la programmation dynamique.
-    \item Enfin nous envisagerons différentes variantes du problème telles qu'une variante online,
-        l'ensemble des tâches à ordonnancer est alors initialement inconnu ou connu en partie
-        seulement, les autres tâches sont dévoilées au fur et à mesure du temps, qui paraît
-        s'inscrire naturellement dans le sillage de notre problème.
-\end{enumerate}
+Au cours du stage, le problème \fisched{} sera envisagé sous différents angles.
+
+Dans un premier temps, nous nous intéresserons à la classification de ce problème au sens de la
+complexité classique : \fisched{} est-il \npc? Si oui, nous chercherons à décrire une transformation
+polynomiale permattant de ramener la résolution d'un problème \npc à celle de \fisched{}.
+
+Si ce dernier est \npc, nous chercherons alors à le classifier du point de vue de la complexité
+paramétrée en recherchant l'existence d'algorithmes FPT. Dans l'éventualité de l'existence d'un tel
+algorithme, nous chercherons alors à mettre en évidence un noyau de ce problème.
+
+Une fois la classification effectuée, nous nous intéresserons aux méthodes de résolution du problème
+en cherchant à mettre à définir des algorithmes exacts ou d'approximation avec garantie de
+performance, basés sur des techniques classiques telles que la programmation dynamique, la
+programmation linéaire en nombres entiers ou les technniques de branchement. 
+
+Il peut être enrichissant d'envisager différentes mesures de la flexibilité.
+N'est-il pas plus intéressant d'avoir un très grand trou au risque de multiplier les plus petits
+plutôt qu'un grand nombre de trous ayant la même taille, auquel cas l'étude du trou maximum est plus
+intéressante? Ou encore peut on améliorer cette flexibilité en prenant en compte l'ensemble des
+trous plutôt que les extremas, auquel cas, il faudra introduire des outils statistiques permettant
+la considération de l'ensemble d'entre eux.
+
+Enfin, nous envisagerons la variante on-line de ce problème. Un problème est dit on-line lorsque
+les données en entrée du problèmes sont initialement inconnues et sont dévoilées dans le temps. Dans
+notre cas, l'ensemble de tâches $\mathcal{T}$ est inconnu, une tâche n'étant dévoilée que lorsque la
+précédente a été ordonnancée. Cette variante paraît en effet s'inscrire naturellement dans la
+continuité de \fisched{}.
 
 \newpage
 \appendix
