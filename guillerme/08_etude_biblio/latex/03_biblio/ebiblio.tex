@@ -266,6 +266,22 @@ d'un algorithme polynomial pour tous les problèmes appartenant à \textit{\text
 
 \subsection{Complexité Paramétrée}
 
+La complexité paramétrée permet d'étudier la difficulté des problèmes algorithmiques de manière plus
+précise que la complexité classique puisqu'elle permet de mesurer la complexité d'un problème en
+fonction de plusieurs paramètres et plus seulement en fonction de la taille de l'entrée. Ainsi avec
+l'introduction d'un nouveau paramètre $k$, certains problèmes peuvent être résolus par des algorithmes
+s'exécutant en $O\left( f(k) poly(n) \right)$ où $poly(n)$ est une fonction polynomiale en la
+taillle des données en entrées et $f(k)$ est une fonction quelconque dépendant uniquement du
+paramètre introduit $k$. Si un tel algorithme existe alors le problème est dit
+\textsc{Fixed-Parameter Tractable}, ce qui implique une résolution en temps polynomial si $k$ est
+fixé.
+
+Elle permet aussi une classification des problèmes \npc selon une hiérarchie appelée
+\textit{\textbf{W}}-hiérarichie.
+
+Pour plus de renseignements nous invitons le lecteur à parcourir le
+livre~\cite{flum2006parameterized}.
+
 \section{Motivations}
 
 % TODO: Étoffer
