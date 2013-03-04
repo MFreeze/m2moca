@@ -226,7 +226,10 @@ La possibilité de ne pas exécuter certaines tâches entraîne l'établissement
 objectif, les fonctions relatives au temps d'exécution ayant un intérêt moindre, pour ne pas dire
 nul\footnote{$C_{max}$ est, par exemple, systématiquement optimale pour un ordonnancement
 vide(n'exécutant aucune tâche).}. Parmis ces fonctions, nous citerons celles de maximisation du
-profit généré par l'exécution des tâches ou de maximisation du nombre de tâches exécutées. Il est
+profit généré par l'exécution des tâches ou de maximisation du nombre de tâches exécutées toutes
+deux introduites plus précisément au cours de l'état de l'art. 
+
+Il est
 usuel, lorsque l'on travaille avec ce genre de fonctions, de considérer un ensemble de tâches tel
 qu'il est impossible de pouvoir assigner à chaque tâche une machine : intuitivement, un
 ordonnancement affectant une machine à chaque tâche est un ordonnancement optimal. Or nous verrons
@@ -247,8 +250,13 @@ l'aide, par exemple d'algorithmes de flots~\cite{arkin_scheduling_1987}.
 %ont été introduites telles que la maximisation du profit généré par l'exécution des tâches. 
 
 Le but de ce stage est d'étudier une nouvelle fonction objectif pour ces problèmes cherchant à
-optimiser la flexibilité de l'ordonnancement produit en minimisant la fragmentation de
-l'ordonnancement produit.
+optimiser la flexibilité de l'ordonnancement produit en minimisant la fragmentation de celui-ci. La
+mesure choisie portera sur ce que nous appellerons les trous désignant le temps de repos d'une
+machine entre deux tâches qui lui sont affectée. Elle repose sur un constat simple : plus la période
+d'inactivité d'une machine est grande, plus celle-ci sera à même de traiter de nouvelles tâches;
+autrement dit, en cherchant à obtenir de longues périodes d'inactivité pour chacune des machines, on
+augmente le nombre de tâches susceptibles d'être acceptées ultérieurement et donc la flexibilité de
+l'ordonnancement obtenu.
 
 
 \newpage
@@ -282,8 +290,7 @@ petit nombre de couleurs nécessaires à la coloration d'un graphe. Dans la mesu
 coloration de graphes d'intervalles est polynomiale, le problème \bisched{} l'est aussi, ainsi Ford et
 Fulkerson ont proposé en 1962, un algorithme s'exécutant en $O(n^2)$
 opérations~\cite{ford1962network}. Depuis d'autres méthodes ont été proposées notamment par Gupta et
-al.~\cite{gupta_optimal_1978} ayant une complexité en $O(n\log n)$ opérations et qu'ils ont
-démontrée comme atteignant la meilleur complexité possible.
+al.~\cite{gupta_optimal_1978} ayant une complexité en $O(n\log n)$ opérations.
 
 L'algorithme repose sur une observation simple : le nombre minimal de couleurs nécessaires à la
 coloration du graphe d'intervalle est égal à la taille de la plus grande clique de ce graphe, or une
@@ -358,9 +365,9 @@ existe une catégorie de graphe, à savoir les graphes à arcs circulaires qui e
 graphe d'intersection d'un ensemble d'arcs de cercle, dont le problème de coloration est équivalent
 au problème avec machines indisponibles. Un exemple de graphe est donné à la figure~\ref{fig:ex_ac}.
 
-Le problème \isma a été démontré \npc par
+Le problème \isma{} a été démontré \npc par
 Papadimitriou~\cite{papadimitriou1982private} à l'aide d'une réduction depuis le problème de
-coloration sur un graphe à arcs circulaires. La réduction inverse, depuis \isma vers le problème de
+coloration sur un graphe à arcs circulaires. La réduction inverse, depuis \isma{} vers le problème de
 coloration, a été décrite plus tard par Kolen et al.~\cite{kolen2007interval}. Ces mêmes auteurs ont également
 proposé deux algorithmes exacts pour la résolution de ce problème, le premier utilise la
 programmation dynamique s'exécutant en $O(ln^{l+1})$, avec $l$ la taille de la plus grand clique dans
@@ -369,7 +376,7 @@ la notion d'ordonnancement partiel : un ordonnancement partiel jusqu'à la date 
 assignation à une machine de chacune des tâches dont la date de début est antérieure à $t$ de sorte
 que deux tâches de s'exécutent en même temps sur la même machine. Cette algorithme s'exécute en
 $O\left( n+k \right)k!k \log k)$ opérations, avec $k$ le nombre de machines. Cet algorithme est
-particulièrement intéressant puisque si le nombre de machines pour \isma est fixé, alors l'algorithme
+particulièrement intéressant puisque si le nombre de machines pour \isma{} est fixé, alors l'algorithme
 devient linéaire en le nombre de tâches.
 
 \begin{figure}
