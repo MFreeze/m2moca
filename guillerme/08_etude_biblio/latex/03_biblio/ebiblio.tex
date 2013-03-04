@@ -217,7 +217,54 @@ ces paramètres :
 
 \section{Complexité}
 
+Nous serons amené au cours de ce manuscrit et ultérieurement au cours du stage à manipuler certaines
+notions et certains outils relatifs à la théorie de la complexité. Nous proposons au lecteur une
+courte introduction à ces outils et renvoyons les intéressés à la lecture du
+livre~\cite{papadimitriou_computational_1993}.
+
 \subsection{Complexité classique}
+
+La complexité classique (par opposition à la complexité paramétrée que nous introduirons à la
+section suivante) est une branche de l'informatique théorique ayant pour but de classifier les
+problèmes en fonction de leur difficulté intrinsèque.  Un problème est considéré comme
+intrinsèquement difficile si sa résolution demande une grande quantité de ressources quelque soit
+l'algorithme utilisé. Nous remarquons donc que la complexité d'un problème est liée à la notion de
+complexité des algorithmes qui le résolvent.
+
+D'ordinaire, l'analyse des algorithmes se fait selon deux valeurs : le temps et l'espace. La
+complexité en temps d'un algorithme est déterminée par le nombre d'étapes
+élémentaires\footnote{Affectations, comparaisons, opérations arithmétiques, $\dots$} effectuées par
+ce dernier, sa complexité en espace quant à elle correspond à la quantité de mémoire nécessaire au
+stockage des valeurs calculées par l'algorithme au cours de son exécution.
+
+Ces deux complexités s'expriment en fonction de la taille de l'entrée du problème, par exemple le
+nombre de sommets d'un graphe pour des algorithmes de graphe ou le nombre de tâches pour les
+problèmes d'ordonnancement, et sont en réalité un ordre de grandeur\footnote{Ainsi les constantes
+multiplicatives sont supprimées.}. 
+
+Considérons par exemple un graphe $G$ ayant $n$ sommets et un
+algorithme s'exécutant sur ce graphe dont la complexité en temps est $O(n^2)$. Dans ce cas, le
+nombre d'opérations effectuées par l'algorithme sont au nombre de : $an^2 + bn +c$ avec $a,b,c$ des
+constantes entières positives.
+
+En considérant, pour un problème donné, le meilleur algorithme connu pour le résoudre, il est alors
+possible de classifier les problèmes, ainsi, de manière très succinte :
+\begin{itemize}
+    \item un problème appartient à la classe \textit{\textbf{P}} s'il existe un algorithme
+        permettant de le résoudre en temps $O(n^k),\ k \in \mathbb{N}$
+    \item un problème appartient à la classe \textit{\textbf{NP}}, si la validité de ses
+        solutions est vérifiable en temps polynomial : l'algorithme permettant la vérification de la
+        solution s'exécute en temps $O(n^k)$\footnote{On parle alors de certicat
+        polynomial.}
+    \item $\dots$
+\end{itemize}
+
+Enfin on dit qu'un problème est \npc, si et seulement il appartient à \textit{\textbf{NP}} et si
+tous les problèmes de \textit{\textbf{NP}} peuvent se réduirent à celui-ci en temps polynomial.
+Autrement dit, l'existence d'un algorithme polynomial pour un problème \npc, implique l'existence
+d'un algorithme polynomial pour tous les problèmes appartenant à \textit{\textbf{NP}}.
+
+\subsection{Complexité Paramétrée}
 
 \section{Motivations}
 
