@@ -1,0 +1,53 @@
+\section{Calcul de $z$}
+L'algorithme va parcourir les intervalles de la gauche vers la droite en calculant les écarts entre
+les fins et les débuts d'intervalles consécutifs. Pour chaque intervalle, on considère deux
+actions ponctuelless : le début et la fin de cet intervalle. Chaque action peut être vue comme un
+couple composé de la date $d_a$ de cette action et de son type $t_a$ avec $t_a \in \{$deb, fin$\}$.
+
+L'agolrithme prends donc en entrée une liste d'actions $L$ triées selon leur date d'exécution par ordre
+croissant. Il conserve la dernière fin d'intervalle rencontrée\footnote{Nous appellerons cette fin,
+la fin courante.}et à chaque nouvelle action, il vérifie le type de cette dernière :
+\begin{itemize}
+    \item si l'action est un début d'intervalle, l'écart entre le temps d'exécution de l'action et
+        la date de la fin courante est calculé, s'il est supérieur à $0$ et inférieur au minimum
+        courant, le minimum est mis à jour. 
+    \item si l'action est une fin d'intervalle, la fin courante est mise à jour.
+\end{itemize}
+
+L'algorithme en temps linéaire en le nombre d'actions, or il y a exactement deux actions par
+intervalle, il s'exécute donc en temps linéaire en le nombre d'intervalles.\footnote{Notons que si
+    la liste n'est pas triée, le tri préalable se fait en $O(n \log n)$ et donc l'algorithme
+s'exécute aussi en $O(n \log n)$.}
+
+\begin{algorithm}
+    \caption{Algorithme pour le calcul de $z$}
+    \label{algo_calcul_z}
+    \begin{algorithmic}[1]
+        \Require une liste d'actions $L$
+        \State fincourante $\gets$ \texttt{NULL} 
+        \State min $\gets \infty$
+        \State $a \gets pop(L)$
+        \While{$a \neq $\texttt{NULL} $\ \&\ t_a \neq $fin}
+            \State $a \gets pop(L)$
+        \EndWhile
+        \State fincourante $\gets d_a$
+        \State $a \gets pop(L)$
+        \While{$a \neq $\texttt{NULL} }
+            \If{$t_a = $fin}
+                \State fincourante $\gets d_a$
+            \Else
+                \State tmp $\gets d_a - $fincourante
+                \If{tmp $> 0$}
+                    \State min $\gets \min\{$min, tmp$\}$
+                \EndIf
+            \EndIf
+        \EndWhile
+    \end{algorithmic}
+\end{algorithm}
+% }}}
+% }}}
+                
+\bibliographystyle{plain}
+\bibliography{biblio}
+
+

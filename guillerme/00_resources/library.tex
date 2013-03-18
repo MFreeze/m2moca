@@ -35,14 +35,15 @@
 \usepackage{pgf}
 \usetikzlibrary{arrows,automata,shapes}
 % >>>
-% <<< RESEAUX DE pETRI
+% <<< RESEAUX DE PETRI
 \usetikzlibrary{petri}
 % >>>
 % <<< ARBRES
 \usetikzlibrary{trees}
 % >>>
-% <<< DIAGRAMME DE GANTT
+% <<< SCHEDULING
 \usepackage{pgfgantt}
+\usepackage{scheduling}
 % >>>
 % <<< ALGORITHMES
 \usepackage{algorithm}
@@ -139,9 +140,9 @@
 
 
 % <<< MACROS DIVERSES
-\newcommand{\npc}{\textbf{NP}-complet }
-\newcommand{\npcude}{\textbf{NP}-complétude }
-\newcommand{\npd}{\textbf{NP}-difficile }
+\newcommand{\npc}{\textbf{NP}-complet}
+\newcommand{\npcude}{\textbf{NP}-complétude}
+\newcommand{\npd}{\textbf{NP}-difficile}
 \newcommand{\la}{largeur arborescente}
 \newcommand{\legendre}[2]{\left ( \frac{#1}{#2} \right )}
 \newcommand{\wqo}[0]{\emph{well-quasi-ordered}}
@@ -150,6 +151,8 @@
 \newcommand{\Taustar}[0]{\mathcal{T}^* = (T, \{X_t : t \in T\})}
 \newcommand{\Taugstar}[0]{\mathcal{T}_G^* = (T, \{X_t : t \in T\})}
 \newcommand{\pdsol}[1]{(X_{#1}^0, X_{#1}^1, X_{#1}^2, M_{#1})}
+\newcommand{\authmach}[1]{$#1$-\emph{disponible}}
+\newcommand{\tphase}[0]{phase}
 % >>>
 % <<< NOM DE PROBLEMES
 \newcommand{\hcycle}{\textsc{HAMILTONIAN CYCLE}}
@@ -163,6 +166,7 @@
 \newcommand{\fisched}{\textsc{Flexible Interval Scheduling}}
 \newcommand{\fischedpi}{\textsc{Decision Flexible Interval Scheduling}}
 \newcommand{\unitfischedpi}{\textsc{Decision Unit Flexible Interval Scheduling}}
+\newcommand{\unitfisched}{\textsc{Unit Flexible Interval Scheduling}}
 \newcommand{\precolor}{\textsc{Precoloring Extension}}
 \newcommand{\isched}{\textsc{Interval Scheduling}}
 \newcommand{\bisched}{\textsc{Basic Interval Scheduling}}
@@ -356,215 +360,6 @@
 }
 % >>>
 
-
-% <<< Nombre fixé de machines
-\newenvironment{ordo}[4][12]
-% 1 : Longueur Max en cm
-% 2 : Nbre de machines
-% 3 : Pas en abscisse
-% 4 : xmax
-{
-    \begin{center}
-    \begin{tikzpicture}[>=latex]
-        \pgfmathparse{#3/#4 * (#1-1)} \let\xpas\pgfmathresult
-        \pgfmathparse{int(#4/#3)} \let\nbpas\pgfmathresult
-        \pgfmathparse{\xpas/#3} \let\unitxpas\pgfmathresult
-        
-        \draw[thick] (#1,0) -- (0,0) -- (0,#2) -- (#1,#2);
-        \draw[thick,dashed] (#1,0) -- (#1+1,0);
-        \draw[thick,dashed] (#1,#2) -- (#1+1,#2);
-
-        \node[below] at (0, 0) {$0$};
-
-        \foreach \x in {1,...,\nbpas}{
-            \pgfmathparse{\x * \xpas} \let\abscisse\pgfmathresult
-            \pgfmathparse{int(\x * #3)} \let\xlabel\pgfmathresult
-
-            \node[below] at (\abscisse, 0) {$\xlabel$};
-            \draw[dotted] (\abscisse,0) to (\abscisse,#2);
-        }
-
-        \pgfmathparse{(\nbpas + 1) * \xpas} \let\abscisse\pgfmathresult
-        \node[above] at (\abscisse, -0.4) {$\dots$};
-
-        \foreach \y in {1,...,#2}{
-            \pgfmathparse{\y - 0.5} \let\ordlabel\pgfmathresult
-
-            \node[left] at (0, \ordlabel) {$m_\y$};
-            \draw[dotted] (0, \y) to (#1+1, \y);
-        }
-}
-{\end{tikzpicture}\end{center}}
-% >>>
-% <<< k machines k non fixé
-\newenvironment{ordok}[4][12]
-% 1 : Max
-% 2 : Nbre de machines avant ...
-% 3 : Pas en abscisse
-% 4 : xmax
-{
-    \begin{center}
-    \begin{tikzpicture}[>=latex]
-        \pgfmathparse{#3/#4 * #1} \let\xpas\pgfmathresult
-        \pgfmathparse{int(#4/#3)} \let\nbpas\pgfmathresult
-        \pgfmathparse{\xpas/#3} \let\unitxpas\pgfmathresult
-        
-        \draw[thick] (#1+1,0) -- (0,0) -- (0,#2+2) -- (#1+1,#2+2);
-        \draw[thick,dashed] (#1,0) -- (#1+1,0);
-        \draw[thick,dashed] (#1,#2+2) -- (#1+1,#2+2);
-
-        \node[below] at (0, 0) {$0$};
-
-        \foreach \x in {1,...,\nbpas}{
-            \pgfmathparse{\x * \xpas} \let\abscisse\pgfmathresult
-            \pgfmathparse{int(\x * #3)} \let\xlabel\pgfmathresult
-
-            \node[below] at (\abscisse, 0) {$\xlabel$};
-            \draw[dotted] (\abscisse,0) to (\abscisse,#2);
-            \draw[dotted] (\abscisse,#2+1) to (\abscisse,#2+2);
-        }
-
-        \pgfmathparse{(\nbpas + 1) * \xpas} \let\abscisse\pgfmathresult
-        \node[above] at (\abscisse, -0.4) {$\dots$};
-
-        \foreach \y in {1,...,#2}{
-            \pgfmathparse{\y - 0.5} \let\ordlabel\pgfmathresult
-
-            \node[left] at (0, \ordlabel) {$m_\y$};
-            \draw[dotted] (0, \y) to (#1+1, \y);
-        }
-
-        \node[left] at (0, #2 + 0.6) {$\vdots$};
-        \node[left] at (0, #2 + 1.5) {$k$};
-        \draw[dotted]  (0, #2 + 1) to (#1+1, #2 + 1);
-}
-{\end{tikzpicture}\end{center}}
-% >>>
-% <<< \newtask{duree}{machine}{début}{label}
-% TODO Vérifier que le nombre de machines est suffisant
-\newcommand{\newtask}[4]{
-    % 1 : Durée de la tâche
-    % 2 : Numéro de machine
-    % 3 : Date de début
-    % 4 : Label de la tâche
-    \pgfmathparse{#3*\unitxpas} \let\initx\pgfmathresult
-    \pgfmathparse{#2-0.9}       \let\inity\pgfmathresult
-    \pgfmathparse{#1*\unitxpas} \let\longx\pgfmathresult
-
-    \fill[black!30] (\initx, \inity) rectangle +(\longx, 0.8);
-    \node at (\initx + \longx/2, \inity + 0.4) {#4};
-}
-% >>>
-% <<< \newresa{duree}{machine}{debut}
-\newcommand{\newresa}[3]{
-    % 1 : Durée de la réservation
-    % 2 : Numéro de machine
-    % 3 : Date de début
-    \pgfmathparse{#3*\unitxpas} \let\initx\pgfmathresult
-    \pgfmathparse{#2-0.9}       \let\inity\pgfmathresult
-    \pgfmathparse{#1*\unitxpas} \let\longx\pgfmathresult
-
-    \fill[black] (\initx, \inity) rectangle +(\longx, 0.8);
-}
-% >>>
-% <<< \newlabeledresa{duree}{machine}{debut}{label}
-\newcommand{\newlabeledresa}[4]{
-    % 1 : Durée de la réservation
-    % 2 : Numéro de machine
-    % 3 : Date de début
-    % 4 : Label de la réservation
-    \pgfmathparse{#3*\unitxpas} \let\initx\pgfmathresult
-    \pgfmathparse{#2-0.9}       \let\inity\pgfmathresult
-    \pgfmathparse{#1*\unitxpas} \let\longx\pgfmathresult
-
-    \fill[black] (\initx, \inity) rectangle +(\longx, 0.8);
-    \node[white] at (\initx + \longx/2, \inity + 0.4) {#4};
-}
-% >>>
-% <<< \newhole{duree}{machine}{debut}{label}
-\newcommand{\newhole}[4]{
-    % 1 : Durée du trou
-    % 2 : Numéro de machine
-    % 3 : Date de début
-    % 4 : Label du trou
-    \pgfmathparse{#3*\unitxpas} \let\initx\pgfmathresult
-    \pgfmathparse{#2-0.7}       \let\inity\pgfmathresult
-    \pgfmathparse{#1*\unitxpas} \let\longx\pgfmathresult
-
-    \draw[<->] (\initx, \inity) to node[above] {#4} (\initx + \longx, \inity);
-}
-% >>>
-% <<< \newbeghole{duree}{machine}{label}
-\newcommand{\newbeghole}[3]{
-    % 1 : Durée du trou
-    % 2 : Numéro de machine
-    % 3 : Label du trou
-    \pgfmathparse{0*\unitxpas} \let\initx\pgfmathresult
-    \pgfmathparse{#2-0.7}       \let\inity\pgfmathresult
-    \pgfmathparse{#1*\unitxpas} \let\longx\pgfmathresult
-
-    \draw[->] (\initx, \inity) to node[above] {#3} (\initx + \longx, \inity);
-    \draw[-,dashed] (\initx - 1, \inity) to (\initx, \inity);
-}
-% >>>
-% <<< \newendhole{duree}{machine}{debut}{label}
-\newcommand{\newendhole}[4]{
-    % 1 : Durée du trou
-    % 2 : Numéro de machine
-    % 3 : Date de début
-    % 4 : Label du trou
-    \pgfmathparse{#3*\unitxpas} \let\initx\pgfmathresult
-    \pgfmathparse{#2-0.7}       \let\inity\pgfmathresult
-    \pgfmathparse{#1*\unitxpas} \let\longx\pgfmathresult
-
-    \draw[<-] (\initx, \inity) to node[above] {#4} (\initx + \longx, \inity);
-    \draw[-,dashed] (\initx + \longx, \inity) to (\initx + \longx + 2, \inity);
-}
-% >>>
-
-
-% <<< Taches
-%% Début d'une tâche
-\newcommand{\st}[1]{ r^t_{#1} }
-%% Fin d'une tâche
-\newcommand{\ct}[1]{ \widetilde{d}^t_{#1} }
-%% Durée d'une tâche
-\newcommand{\pt}[1]{ p^t_{#1} }
-% >>>
-% <<< Resa
-%% Début d'une réservation
-\newcommand{\sres}[1]{ r^r_{#1} }
-%% Fin d'une réservation
-\newcommand{\cres}[1]{ \widetilde{d}^r_{#1} }
-%% Durée d'une réservation
-\newcommand{\pres}[1]{ p^r_{#1} }
-% >>>
-% <<< Hole
-%% Début d'un trou
-\newcommand{\sho}[1]{ r^h_{#1} }
-%% Fin d'un trou
-\newcommand{\cho}[1]{ \widetilde{d}^h_{#1} }
-%% Durée d'un trou
-\newcommand{\pho}[1]{ p^h_{#1} }
-% >>>
-% <<< Evénement général
-%% Début d'un événement général (tache ou réservation)
-\newcommand{\sgen}[1]{ r_{#1} }
-%% Fin d'un événement général
-\newcommand{\cgen}[1]{ \widetilde{d}_{#1} }
-%% Durée d'un événement général
-\newcommand{\pgen}[1]{ p_{#1} }
-% >>>
-% <<< Intervalle
-%% Début d'un intervalle
-\newcommand{\sint}[1]{ s_{#1} }
-%% Fin d'un intervalle général
-\newcommand{\cint}[1]{ c_{#1} }
-%% Durée d'un intervalle
-\newcommand{\pint}[1]{ l_{#1} }
-% >>>
-
-
 %<<< Bullet itemize
 \newenvironment{bitemize}{
     \begin{itemize}[label=$\bullet$]
@@ -573,3 +368,4 @@
     \end{itemize}
 }
 % >>>
+

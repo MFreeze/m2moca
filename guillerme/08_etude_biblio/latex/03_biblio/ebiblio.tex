@@ -32,8 +32,8 @@ l'agencement spatial de marchandises dans un entrepôt ou la planification d'une
 peuvent être modélisées par des problèmes d'ordonanncement comme en témoigne la longue liste
 d'articles et de livres détaillant nombre de déclinaisons de problèmes
 considérés comme classiques. Cette étude bibliographique, préliminaire au stage, s'inscrit dans cette
-démarche et cherche à définir le contexte et les bases nécessaires à l'introduction d'une variante
-d'un problème d'ordonnancement très étudié que l'on appelle \isched{}.
+démarche et cherche à définir le contexte et les bases nécessaires à l'introduction
+d'un problème d'ordonnancement appartenant à une branche de l'ordonnancement que l'on appelle \isched{}.
 
 \section{Description des problèmes d'ordonnancement}
 
@@ -69,7 +69,7 @@ nous invitons les intéressés à la lecture du livre~\cite{blazewicz_handbook_2
 
 Les machines parallèles se décomposent en trois catégories :
 \begin{enumerate}
-    \item identiques : tous les machines de $\mathcal{P}$ admettent la même vitesse de traitement
+    \item identiques : tous les machines de $\mathcal{M}$ admettent la même vitesse de traitement
     \item uniformes : les vitesses de traitement diffèrent mais la vitesse de traitement est
         proportionnelle à un coefficient propre à chaque machine appelé facteur d'accélération
     \item générales : les vitesses de traitement dépendent des tâches à effectuer
@@ -250,19 +250,18 @@ constantes entières positives.
 En considérant, pour un problème donné, le meilleur algorithme connu pour le résoudre, il est alors
 possible de classifier les problèmes, ainsi, de manière très succinte :
 \begin{itemize}
-    \item un problème appartient à la classe \textit{\textbf{P}} s'il existe un algorithme
+    \item un problème appartient à la classe \textbf{P} s'il existe un algorithme
         permettant de le résoudre en temps $O(n^k),\ k \in \mathbb{N}$
-    \item un problème appartient à la classe \textit{\textbf{NP}}, si la validité de ses
+    \item un problème appartient à la classe \textbf{NP}, si la validité de ses
         solutions est vérifiable en temps polynomial : l'algorithme permettant la vérification de la
-        solution s'exécute en temps $O(n^k)$\footnote{On parle alors de certicat
-        polynomial.}
+        solution s'exécute en temps $O(n^k)$, on parle alors de certicat polynomial.
     \item $\dots$
 \end{itemize}
 
-Enfin on dit qu'un problème est \npc, si et seulement il appartient à \textit{\textbf{NP}} et si
-tous les problèmes de \textit{\textbf{NP}} peuvent se réduirent à celui-ci en temps polynomial.
+Enfin on dit qu'un problème est \npc, si et seulement il appartient à \textbf{NP} et si
+tous les problèmes de \textbf{NP} peuvent se réduirent à celui-ci en temps polynomial.
 Autrement dit, l'existence d'un algorithme polynomial pour un problème \npc, implique l'existence
-d'un algorithme polynomial pour tous les problèmes appartenant à \textit{\textbf{NP}}.
+d'un algorithme polynomial pour tous les problèmes appartenant à \textbf{NP}.
 
 \subsection{Complexité Paramétrée}
 
