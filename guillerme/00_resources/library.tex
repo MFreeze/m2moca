@@ -100,16 +100,19 @@
 \newtheorem{note}{Note}[subsubsection]
 \newtheorem{pr}{Proposition}[subsection]
 \newtheorem{rmq}{Remarque}[subsubsection]
+\newtheorem{nott}{Notation}[subsection]
 % >>>
 % <<< AUTRES -- NUMÉROTATION CLASSIQUE
 \newtheorem{nnote}{Note}
 \newtheorem{npr}{Proposition}
 \newtheorem{nrmq}{Remarque}
+\newtheorem{nnot}{Notation}
 % >>>
 % <<< AUTRES -- NON NUMÉROTÉS
 \newtheorem*{note*}{Note}
 \newtheorem*{pr*}{Proposition}
 \newtheorem*{rmq*}{Remarque}
+\newtheorem*{not*}{Notation}
 % >>>
 % <<< EXEMPLES
 \newtheorem*{ex}{Exemple}
@@ -151,8 +154,10 @@
 \newcommand{\Taustar}[0]{\mathcal{T}^* = (T, \{X_t : t \in T\})}
 \newcommand{\Taugstar}[0]{\mathcal{T}_G^* = (T, \{X_t : t \in T\})}
 \newcommand{\pdsol}[1]{(X_{#1}^0, X_{#1}^1, X_{#1}^2, M_{#1})}
+
 \newcommand{\authmach}[1]{$#1$-\emph{disponible}}
 \newcommand{\tphase}[0]{phase}
+\newcommand{\nbphase}[0]{I_{max}}
 % >>>
 % <<< NOM DE PROBLEMES
 \newcommand{\hcycle}{\textsc{HAMILTONIAN CYCLE}}
@@ -360,7 +365,7 @@
 }
 % >>>
 
-%<<< Bullet itemize
+% <<< Bullet itemize
 \newenvironment{bitemize}{
     \begin{itemize}[label=$\bullet$]
 }
@@ -368,4 +373,15 @@
     \end{itemize}
 }
 % >>>
+% <<< Psubfig
+\newcounter{psubfig}
+\renewcommand{\thepsubfig}{\alph{psubfig}}
 
+\newcommand{\sfcaption}[1]{
+    \addtocounter{figure}{1}
+    \addtocounter{psubfig}{1}
+    \textsc{Figure} \thefigure.\thepsubfig{} $-$ #1
+    \addtocounter{figure}{-1}
+}
+
+% >>>

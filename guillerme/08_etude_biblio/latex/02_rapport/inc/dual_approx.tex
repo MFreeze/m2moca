@@ -5,9 +5,10 @@
 \begin{document}
 
 Au cours de cette section, nous allons définir un algorithme permettant d'obtenir une
-$2$-dual-approximation du problème \unitfisched{}. 
+$2$-dual-approximation\footnote{La définition d'une $\rho$-dual-approximation sera donnée dans le
+préambule du chapitre sur les algos d'approximation} du problème \unitfisched{}. 
 
-\section{Unalgorithme d'approximation}
+\section{Un algorithme d'approximation}
 
 Avant de présenter le principe général de l'algorithme, nous introduirons quelques notions
 nécessaires à la compréhension de ce dernier.
@@ -55,6 +56,31 @@ nécessaires à la compréhension de ce dernier.
     \end{itemize}
 \end{ndf}
 
+Finissons enfin par quelques notations que nous utiliserons à la
+sous-section~\ref{subsec:pres_algo}.
+
+\begin{nnot}
+    Le nombre de \tphase{}s d'un ordonnancement par phases est noté $\nbphase{}$.
+\end{nnot}
+
+\begin{nnot}
+    La date d'exécution de la $i^e$ \tphase{} est notée $t_i$.
+\end{nnot}
+
+\begin{nnot}
+    La date d'exécution de la $i^e$ \tphase{} est notée $t_i$.
+\end{nnot}
+
+\begin{nnot}
+    Le nombre de tâches composant la $i^e$ \tphase{} est noté $n_i$.
+\end{nnot}
+
+\begin{nnot}
+    L'ensemble des machines \authmach{k} au temps $t_i$ est notée $\mathcal{M}^{k}_{t_i}$. Au cours
+    de la sous-section~\ref{subsec:pres_algo}, nous utiliserons fréquemment la notation
+    $\mathcal{M}_{t_i}$ en lieu et place de $\mathcal{M}_{t_i}^{\frac{\omega}{2}}$.
+\end{nnot}
+
 \begin{figure}
     \centering
     \begin{ordo}[10]{1}{1}{12}
@@ -94,8 +120,7 @@ nécessaires à la compréhension de ce dernier.
 \end{figure}
 
 \subsection{Principe de l'algorithme}
-
-
+\label{subsec:pres_algo}
 
 %Étant donné un entier $\omega$, l'algorithme proposé réalise les étapes suivantes :
 %\begin{enumerate}
@@ -112,4 +137,363 @@ nécessaires à la compréhension de ce dernier.
 %au cours de son exécution, $\mathcal{M}_i = \emptyset$ et le nombre de tâches restant à ordonanncer
 %à l'instant $i$ est non nul.
 %
+Nous supposerons tout au long de cette section que les tâches à ordonnancer sont partionnées en
+$\nbphase{}$ \tphase{}s. Dans le cas contraire, il suffit de trier les tâches par dates d'exécution
+croissantes, toutes les tâches commençant à la même date définissent alors une \tphase{}.
+
+L'algorithme se base sur le principe que, étant donnée une longueur de trou dite longueur
+\emph{seuil}, il est préférable d'utiliser les machines ayant un trou à droite de longueur proche et
+supérieure à cette valeur seuil. Autrement dit, on préfère créer deux trous de taille moyenne plutôt
+que d'attendre et de créer un gros trou à gauche et un plus petit à droite. Ce principe est
+illustré à la figure~\ref{fig:principeordo}. Ici les tâches sont partitionnées en trois
+\tphase{}s : $\Theta_1 = \left\{ T_1 \right\}$, $\Theta_2 = \left\{ T_2 \right\}$ et $\Theta_3 =
+\left\{ T_3 \right\}$. Au temps $t_3 = 6$, l'ensemble des machines
+\authmach{\frac{\omega}{2}}, avec $\omega = 6$ est :  $\mathcal{M_{t_i}} = \left\{ M_1, M_2
+\right\}$. L'algorithme ordonnance alors la tâche $T_3$ sur la machine $M_2$ car son trou à droite
+$h_3$ a une longueur inférieure au trou à droite de $M_2$.
+
+\begin{figure}
+    \centering
+    \begin{minipage}[t]{6.5cm}
+        \begin{ordo}[5.2]{2}{2}{12}
+            \newtask{1}{2}{0}{$T_1$}
+            \newtask{1}{1}{2}{$T_2$}
+
+            \newtask{1}{3}{6}{$T_3$}
+            \newlabeledresa{1}{1}{12}{$R_1$}
+            \newlabeledresa{1}{2}{10}{$R_2$}
+
+            \newhole{5}{2}{1}{$h_1$}
+            \newhole{3}{1}{3}{$h_2$}
+            \newhole{3}{2}{7}{$h_3$}
+            \newhole{5}{1}{7}{$h_4$}
+
+        \end{ordo}
+        \sfcaption{Tâche d'une \tphase{} à ordonnancer}
+        \label{fig:ordo_phase}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{6.5cm}
+        \begin{ordo}[5.2]{2}{2}{12}
+            \newtask{1}{2}{0}{$T_1$}
+            \newtask{1}{1}{2}{$T_2$}
+
+            \newtask{1}{2}{6}{$T_3$}
+            \newlabeledresa{1}{1}{12}{$R_1$}
+            \newlabeledresa{1}{2}{10}{$R_2$}
+
+            \newhole{5}{2}{1}{$h_1$}
+            \newhole{3}{1}{3}{$h_2$}
+            \newhole{3}{2}{7}{$h_3$}
+            \newhole{5}{1}{7}{$h_4$}
+
+            \adjust{1}{3}
+        \end{ordo}
+        \sfcaption{Choix de l'algorithme}
+        \label{fig:ordo_choix}
+    \end{minipage}
+    \caption{Illustration de l'algorithme}
+    \label{fig:principeordo}
+\end{figure}
+
+La $2$-dual-approximation est donnée par l'algorithme~\ref{alg:dual_approx}.
+
+\begin{algorithm}
+    \caption{\unitfisched{} $2$-dual-approximation}
+    \label{alg:dual_approx}
+    \begin{algorithmic}[1]
+        \Require{$O$ une instance de \unitfisched{}, $P$ : une partition en phases de
+        $\mathcal{T}$, $\omega$ : un entier}
+        \For{$i$ de $1$ à $\nbphase{}$}
+            \State Calcul de $\mathcal{M}_{t_i}$
+            \If{$n_i < |\mathcal{M}_{t_i}|$}
+                \State \Return Fail
+            \EndIf
+            \State Ordonnancer les tâches sur les machines de $\mathcal{M}_{t_i}$ ayant les trous à
+            droite les plus petits
+        \EndFor
+        \Return Ordonnancement produit
+    \end{algorithmic}
+\end{algorithm}
+
+\begin{nthrm}
+    Si l'algorithme~\ref{alg:dual_approx} n'échoue pas, il fournit un ordonnancement valide tel que
+    la taille du trou minimum est au moins égale à $\omega / 2$.
+\end{nthrm}
+
+\begin{proof}
+    Nous supposons à présent que l'algorithme n'échoue pas. Alors :
+    \begin{bitemize}
+        \item\textbf{l'ordonnancement produit est valide} : l'algorithme a parcouru toutes les
+            \tphase{}s de la partition $P$ et donc par définition l'ensemble des tâches de
+            $\mathcal{T}$. Par hypothèse l'algorithme n'échoue pas, donc pour toutes les
+            \tphase{}s de $P$, $|\mathcal{M}_{t_i}| \geq n_i$, il est donc possible de d'affecter
+            chaque tâche à au moins une machine.
+        \item\textbf{la taille du trou est au moins égale à $\omega / 2$} : les tâches ne sont ordonnancées
+            que sur des machines appartenant à $\mathcal{M}_{t_i}$. Par définition, une machine
+            appartient à $\mathcal{M}_{t_i}$ si et seulement si elle est
+            \authmach{\frac{\omega}{2}} au temps $t_i$. Donc les trous générés à droite et à gauche
+            par l'ordonnancement d'une tâche sur une de ces machines ont une taille au moins égale à
+            $\omega / 2$.
+    \end{bitemize}
+\end{proof}
+
+\begin{nthrm}
+    Si l'algorithme échoue, alors il n'existe aucun ordonnancement valide ayant un trou minimum de
+    taille au moins égale à $\omega$.
+\end{nthrm}
+
+\begin{figure}[]
+    \centering
+    \begin{ordo}[11]{4}{1}{8}
+        
+        \newtask{1}{5}{4}{$T_1$}
+        \newtask{1}{6}{4}{$T_2$}
+        \newtask{1}{7}{4}{$T_3$}
+
+        \foreach \x in {1,...,4}{
+            \newbeghole{4}{\x}{$h > \omega / 2$}
+        }
+
+        \newlabeledresa{1}{1}{6}{$R_1$}
+        \newlabeledresa{1}{2}{6}{$R_2$}
+        \newlabeledresa{1}{4}{8}{$R_3$}
+
+        \newhole{1}{1}{5}{$h < \omega / 2$}
+        \newhole{1}{2}{5}{$h < \omega / 2$}
+        \newhole{3}{4}{5}{$h \geq \omega / 2$}
+        \newendhole{3}{3}{5}{$h > \omega / 2$}
+
+    \end{ordo}
+    \caption{Cas 1 : $\overline{\mathcal{M}_{t_i}^G} = \emptyset$}
+    \label{fig:cas1}
+\end{figure}
+\begin{figure}[]
+    \centering
+    \begin{ordo}[11]{4}{1}{8}
+        \newtask{1}{4}{0}{$T_1$}
+        \newtask{1}{3}{2}{$T_2$}
+        \newtask{1}{2}{2}{$T_3$}
+        
+        \newtask{1}{5}{6}{$T_4$}
+        \newtask{1}{6}{6}{$T_5$}
+        \newtask{1}{7}{6}{$T_6$}
+
+        \newhole{5}{4}{1}{$h \geq \omega / 2$}
+        \newhole{3}{3}{3}{$h < \omega / 2$}
+        \newhole{3}{2}{3}{$h < \omega / 2$}
+        \newbeghole{6}{1}{$h > \omega / 2$}
+
+        \foreach \x in {1,...,4}{
+            \newendhole{1}{\x}{7}{$h > \omega / 2$}
+        }
+    \end{ordo}
+    \caption{Cas 2 : $\overline{\mathcal{M}_{t_i}^D} = \emptyset$}
+    \label{fig:cas2}
+\end{figure}
+\begin{figure}[]
+    \centering
+    \begin{ordo}[11]{4}{1}{8}
+        \newtask{1}{3}{0}{$T_1$}
+        \newlabeledresa{1}{3}{6}{$R_1$}
+        \newtask{1}{1}{2}{$T_2$}
+        
+        \newtask{1}{5}{4}{$T_3$}
+        \newtask{1}{6}{4}{$T_4$}
+        \newtask{1}{7}{4}{$T_5$}
+
+        \newhole{1}{1}{3}{$h < \omega / 2$}
+        \newhole{3}{3}{1}{$h \geq \omega / 2$}
+        \newhole{1}{3}{5}{$h < \omega / 2$}
+        \newendhole{3}{1}{5}{$h > \omega / 2$}
+
+        \foreach \x in {2,4}{
+            \newbeghole{4}{\x}{$h > \omega / 2$}
+            \newendhole{3}{\x}{5}{$h > \omega / 2$}
+        }
+    \end{ordo}
+    \caption{Cas 3 : $\overline{\mathcal{M}_{t_i}^D} \neq \emptyset$ et $\overline{\mathcal{M}_{t_i}^D} \neq \emptyset$}
+    \label{fig:cas3}
+\end{figure}
+\begin{figure}[]
+    \centering
+    \begin{ordo}[11]{4}{1}{8}
+        \newtask{1}{1}{0}{$T_1$}
+        \newlabeledresa{1}{3}{6}{$R_1$}
+        \newtask{1}{3}{2}{$T_2$}
+        
+        \newtask{1}{1}{4}{$T_3$}
+        \newtask{1}{2}{4}{$T_4$}
+        \newtask{1}{4}{4}{$T_5$}
+
+        \newhole{3}{1}{1}{$h > \omega / 2$}
+        \newbeghole{2}{3}{$h > \omega$}
+        \newhole{3}{3}{3}{$h < \omega $}
+        \newendhole{3}{1}{5}{$h > \omega$}
+
+        \foreach \x in {2,4}{
+            \newbeghole{4}{\x}{$h > \omega$}
+            \newendhole{3}{\x}{5}{$h > \omega$}
+        }
+    \end{ordo}
+    \caption{Cas 3 : Optimal}
+    \label{fig:cas3opt}
+\end{figure}
+\begin{figure}[]
+    \centering
+    \begin{ordo}[11]{4}{1}{8}
+        \newtask{1}{1}{0}{$T_1$}
+        \newtask{1}{2}{2}{$T_2$}
+        \newtask{1}{3}{2}{$T_3$}
+        \newlabeledresa{1}{1}{6}{$R_1$}
+        \newlabeledresa{1}{2}{6}{$R_2$}
+        \newlabeledresa{1}{3}{8}{$R_3$}
+        
+        \newtask{1}{5}{4}{$T_4$}
+        \newtask{1}{6}{4}{$T_5$}
+
+        \newhole{3}{1}{1}{$h \geq \omega / 2$}
+        \newhole{1}{2}{3}{$ h < \omega / 2$}
+        \newhole{1}{3}{3}{$ h < \omega / 2$}
+        \newbeghole{4}{4}{$h > \omega / 2$}
+
+        \newhole{1}{1}{5}{$h < \omega / 2$}
+        \newhole{1}{2}{5}{$h < \omega / 2$}
+        \newhole{3}{3}{5}{$h \geq \omega / 2$}
+        \newendhole{3}{4}{5}{$h > \omega / 2$}
+
+    \end{ordo}
+    \caption{$\overline{M_{t_i}} \neq \emptyset$}
+    \label{fig:cas4}
+\end{figure}
+
+\begin{proof}
+    Supposons à présent que l'algorihtme échoue. On a donc $|\mathcal{M}_{t_i}| < n_i$, or si l'on
+    appelle : 
+    \begin{itemize}
+        \item $\overline{\mathcal{M}_{t_i}^G}$, l'ensemble des machines ayant, au temps $t_i$ un
+            trou à gauche de taille inférieure à $\omega / 2$,
+        \item $\overline{\mathcal{M}_{t_i}^D}$, l'ensemble des machines ayant, au temps $t_i$ un
+            trou à droite de taille inférieure à $\omega / 2$,
+        \item et $\overline{\mathcal{M}_{t_i}} = \overline{\mathcal{M}_{t_i}^G} \cap
+            \overline{\mathcal{M}_{t_i}^D}$,
+    \end{itemize}
+    on peut alors écrire : \begin{displaymath}
+        |\mathcal{M}_{t_i}| = m - |\overline{\mathcal{M}_{t_i}^G}| -
+        |\overline{\mathcal{M}_{t_i}^D}| +
+        |\overline{\mathcal{M}_{t_i}}|
+    \end{displaymath}
+    Raisonnons sur $\overline{\mathcal{M}_{t_i}}$ :
+    \begin{bitemize}
+        \item si $\overline{\mathcal{M}_{t_i}} = \emptyset$ alors nous pouvons distinguer trois cas
+            :
+            \begin{enumerate}
+                \item $\overline{\mathcal{M}_{t_i}^G} = \emptyset$, représenté à la
+                    figure~\ref{fig:cas1}. Dans ce cas de figure les machines sont rendues
+                    indisponibles uniquement à cause des réservations données en paramètre du
+                    problème. Dans une telle situation on a :
+                    \begin{displaymath}
+                        \begin{array}{rrcl}
+                            & |\mathcal{M}_{t_i}| & < & n_i \\
+                            \Rightarrow &  m - |\overline{\mathcal{M}_{t_i}^G}| -
+                            |\overline{\mathcal{M}_{t_i}^D}| +
+                            |\overline{\mathcal{M}_{t_i}}| & < & n_i \\
+                            \Rightarrow & m - |\overline{\mathcal{M}_{t_i}^D}| & < & n_i
+                        \end{array}
+                    \end{displaymath}
+                    Supposons un ordonnancement optimal $O^*$ et appelons
+                    $\mathcal{M}_{O^*}^i$ l'ensemble des machines auxquelles les tâches de la
+                    \tphase{} $i$ sont affectées et $\overline{\mathcal{M}_{O^*}^{iD}}$ les machines
+                    \authmach{\omega / 2} à droite au temps $t_i$. On a alors :
+                    \begin{displaymath}
+                        |\mathcal{M}_{O^*}^i| = n_i \quad \mbox{et} \quad
+                        \overline{\mathcal{M}_{O^*}^{iD}} = \overline{\mathcal{M}_{t_i}^D}
+                    \end{displaymath}
+                    On peut alors écrire :
+                    \begin{displaymath}
+                        \begin{array}{rrcl}
+                            & m - |\overline{\mathcal{M}_{t_i}^D}| & < & |\mathcal{M}_{O^*}^i| \\
+                            \Rightarrow & |\mathcal{M}| & < & |\mathcal{M}_{O^*}^i| +
+                            |\overline{\mathcal{M}_{t_i}^D}| \\
+                            \Rightarrow & |\mathcal{M}| & < & |\mathcal{M}_{O^*}^i| +
+                            |\overline{\mathcal{M}_{O^*}^{iD}}| \\
+                            \Rightarrow & |\mathcal{M}_{O^*}^i \cap
+                            \overline{\mathcal{M}_{O^*}^{iD}}| & > & 0 \\
+                        \end{array}
+                    \end{displaymath}
+                    Donc l'ordonnancement optimal $O^*$ utilise une machine non disponible et donc
+                    ayant un trou à droite au temps $t_i$ de taille inférieure à $\omega / 2$ et
+                    donc la taille maximale du trou minimimum est inférieure à
+                    $\omega/2$.
+                \item $\overline{\mathcal{M}_{t_i}^D} = \emptyset$, représenté à la
+                    figure~\ref{fig:cas2}. De la même manière que précédemment, nous prouvons que
+                    l'algorithme optimal utilise une machine indisponible et donc que le taille
+                    optimale du trou minimum est inférieure à $\omega / 2$.
+                \item $\overline{\mathcal{M}_{t_i}^D} \neq \emptyset$ et
+                    $\overline{\mathcal{M}_{t_i}^G} \neq \emptyset$, illustré à la
+                    figure~\ref{fig:cas3}. 
+                    Supposons un ordonnancement optimal $O^*$ tel que la taille du trou minimum est
+                    au moins égale à $\omega$, et appelons
+                    $\overline{\mathcal{M}_{O^*}^{iG}}$ l'ensemble des machines \authmach{\omega/2}
+                    à gauche au temps $t_i$, on peut alors écrire
+                    \begin{displaymath}
+                        |\mathcal{M}_{O^*}^i| = n_i \quad \mbox{et} \quad
+                        |\overline{\mathcal{M}_{O^*}^{iG}}| = |\overline{\mathcal{M}_{t_i}^{G}}|
+                    \end{displaymath} 
+                    Comme l'algorithme a échoué, nous pouvons écrire :
+                    \begin{displaymath}
+                        \begin{array}{rrcl}
+                            & m - |\overline{\mathcal{M}_{t_i}^D}| -
+                            |\overline{\mathcal{M}_{t_i}^G}| + |\overline{\mathcal{M}_{t_i}}| & < &
+                            |\mathcal{M}_{O^*}^i| \\
+                            \Rightarrow & |\mathcal{M}| - |\overline{\mathcal{M}_{O^*}^{iD}}| -
+                            |\overline{\mathcal{M}_{O^*}^{iG}}| + |\overline{\mathcal{M}_{t_i}}| & <
+                            & |\mathcal{M}_{O^*}^i| \\
+                        \end{array}
+                    \end{displaymath}
+                    Or l'ordonnancement optimal est tel que la taille du trou minimum est au moins
+                    égal à $\omega$, on peut donc écrire :
+                    \begin{displaymath}
+                        |\mathcal{M}| - |\overline{\mathcal{M}_{O^*}^{iD}}| -
+                        |\overline{\mathcal{M}_{O^*}^{iG}}| + |\overline{\mathcal{M}_{O^*}^{iD}}
+                        \cap \overline{\mathcal{M}_{O^*}^{iG}}|\geq |\mathcal{M}_{O^*}^i|
+                    \end{displaymath}
+                    Nous pouvons déduire des deux inéquations précédentes ce qui suit :
+                    \begin{displaymath}
+                        |\overline{\mathcal{M}_{O^*}^{iD}} \cap \overline{\mathcal{M}_{O^*}^{iG}}|
+                        \geq |\overline{\mathcal{M}_{t_i}}|
+                    \end{displaymath}
+                    Ce qui implique $\overline{\mathcal{M}_{O^*}^{iD}} \cap
+                    \overline{\mathcal{M}_{O^*}^{iG}} \neq 0$. Autrement dit, $O^*$ affecte à au
+                    moins une machine, ayant un trou à droite inférieur à $\omega / 2$ au temps
+                    $t_i$, une tâche générant un trou à gauche de taille inférieure à $\omega / 2$
+                    (comme le décrit la figure\ref{fig:cas3opt})
+                    et donc la taille du trou entre cette réservation et cette tâche est inférieure à
+                    $\omega$.
+            \end{enumerate}
+        \item si $\overline{\mathcal{M}_{t_i}} \neq \emptyset$, ce cas est illustré par la
+            figure~\ref{fig:cas4}. Supposons à nouveau pour ce cas, qu'il existe un ordonnancement
+            $O^*$ tel que la taille du trou minimum est supérieure ou égale à $\omega$. Donc au
+            temps $t_i$, en reprenant les notations précédentes, on a :
+            \begin{displaymath}
+                |\overline{\mathcal{M}_{O^*}^{iD}} \cap \overline{\mathcal{M}_{O^*}^{iG}}| = 0
+            \end{displaymath}
+            Si tel n'est pas le cas, nous avons vu au cours de l'étude du cas $3$ que la taille
+            du trou minimum ne peut être au moins égale à $\omega$. Or de telles contraintes nous
+            permettent d'écrire
+            \begin{displaymath}
+                \begin{array}{rrcl}
+                    & m - |\overline{\mathcal{M}_{O^*}^{iD}}| -
+                    |\overline{\mathcal{M}_{O^*}^{iG}}| & \geq & n_i \\
+                    \Rightarrow & m - |\overline{\mathcal{M}_{t_i}^D}| -
+                    |\overline{\mathcal{M}_{t_i}^G}| & \geq & n_i \\
+                \end{array}
+            \end{displaymath}
+            Or ceci est impossible puisque l'algorithme d'approximation a échoué.
+    \end{bitemize}
+
+    L'échec de l'algorithme implique donc que la taille optimale du trou minimum est inférieure au
+    $\omega$ donné en entrée.
+\end{proof}
+
 \end{document}
