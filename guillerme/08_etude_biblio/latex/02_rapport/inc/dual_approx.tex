@@ -15,7 +15,7 @@ nécessaires à la compréhension de ce dernier.
 
 \subsection{Quelques définitions}
 
-\begin{ndf}[Une \tphase{}]
+\begin{ndf}[Phases]
     Une \tphase{} d'un ensemble de tâches est un groupe de tâches telles que pour toutes les tâches
     appartenant à une même \tphase{} l'exécution commence au même instant et telles que deux tâches
     appartiennent à une \tphase{} différente si et seulement si elles ne s'exécutent pas en même
@@ -31,10 +31,10 @@ nécessaires à la compréhension de ce dernier.
 
 % TODO Preuve
 
-\begin{ndf}[Trous à gauche et à droite au temps $i$]
+\begin{ndf}[Trous à gauche et à droite à l'instant $i$]
     Soit $M_j \in \mathcal{M}$ une machine quelconque, soit $T_{M_j}$ la dernière tâche ordonnancée
-    sur la machine $M_j$ telle que $\st{T_j} <= i$ et soit $R_{M_j}$ la première réservation
-    affectéé à la machine $M_j$ telle que $\sres{R_j} >= i$. On définit alors le \emph{trou à gauche
+    sur la machine $M_j$ telle que $\st{T_j} \leq i$ et soit $R_{M_j}$ la première réservation
+    affectéé à la machine $M_j$ telle que $\sres{R_j} \geq i$. On définit alors le \emph{trou à gauche
     de $M_j$ au temps $i$} (respectivement \emph{le trou à droite de $M_j$ au temps $i$}), l'écart
     entre la fin (respectivement le début) d'exécution de la tâche $T_{M_j}$ (respectivement de la
     réservation $R_{M_j}$) et le temps $i$ (respectivement $i+1$).
@@ -84,10 +84,10 @@ sous-section~\ref{subsec:pres_algo}.
 \begin{figure}
     \centering
     \begin{ordo}[10]{1}{1}{12}
-        \newtask{1}{1}{0}{$T_{M_1}$}
-        \newlabeledresa{1}{1}{10}{$R_{M_1}$}
-        \newhole{3}{1}{1}{$h_1$}
-        \newhole{5}{1}{5}{$h_2$}
+        \newtask{1}{1}{0}{M_1}
+        \newlabeledresa{1}{1}{10}{M_1}
+        \newhole{3}{1}{1}{1}
+        \newhole{5}{1}{5}{2}
     \end{ordo}
     \caption{Trou à gauche et à droite au temps $4$}
     \label{fig:tagtad}
@@ -96,24 +96,24 @@ sous-section~\ref{subsec:pres_algo}.
 \begin{figure}
     \centering
     \begin{ordo}[10]{4}{1}{12}
-        \newtask{1}{1}{4}{$T_{M_1}$}
-        \newlabeledresa{1}{1}{8}{$R_{M_1}$}
+        \newtask{1}{1}{4}{M_1}
+        \newlabeledresa{1}{1}{8}{M_1}
 
-        \newhole{1}{1}{5}{$h_1$}
-        \newhole{1}{1}{7}{$h_2$}
+        \newhole{1}{1}{5}{1}
+        \newhole{1}{1}{7}{2}
 
-        \newtask{1}{2}{0}{$T_{M_2}$}
-        \newlabeledresa{1}{2}{10}{$R_{M_2}$}
+        \newtask{1}{2}{0}{M_2}
+        \newlabeledresa{1}{2}{10}{M_2}
 
-        \newhole{5}{2}{1}{$h_3$}
-        \newhole{3}{2}{7}{$h_4$}
+        \newhole{5}{2}{1}{3}
+        \newhole{3}{2}{7}{4}
 
-        \newlabeledresa{1}{3}{12}{$R_{M_3}$}
-        \newbeghole{6}{3}{$h_5$}
-        \newhole{5}{3}{7}{$h_6$}
+        \newlabeledresa{1}{3}{12}{M_3}
+        \newbeghole{6}{3}{5}
+        \newhole{5}{3}{7}{6}
 
-        \newbeghole{6}{4}{$h_7$}
-        \newendhole{5}{4}{7}{$h_8$}
+        \newbeghole{6}{4}{7}
+        \newendhole{5}{4}{7}{8}
     \end{ordo}
     \caption{Illustration des machines \authmach{k}s}
     \label{fig:kdisp}
@@ -156,17 +156,17 @@ $h_3$ a une longueur inférieure au trou à droite de $M_2$.
     \centering
     \begin{minipage}[t]{6.5cm}
         \begin{ordo}[5.2]{2}{2}{12}
-            \newtask{1}{2}{0}{$T_1$}
-            \newtask{1}{1}{2}{$T_2$}
+            \newtask{1}{2}{0}{1}
+            \newtask{1}{1}{2}{2}
 
-            \newtask{1}{3}{6}{$T_3$}
-            \newlabeledresa{1}{1}{12}{$R_1$}
-            \newlabeledresa{1}{2}{10}{$R_2$}
+            \newtask{1}{3}{6}{3}
+            \newlabeledresa{1}{1}{12}{1}
+            \newlabeledresa{1}{2}{10}{2}
 
-            \newhole{5}{2}{1}{$h_1$}
-            \newhole{3}{1}{3}{$h_2$}
-            \newhole{3}{2}{7}{$h_3$}
-            \newhole{5}{1}{7}{$h_4$}
+            \newhole{5}{2}{1}{1}
+            \newhole{3}{1}{3}{2}
+            \newhole{3}{2}{7}{3}
+            \newhole{5}{1}{7}{4}
 
         \end{ordo}
         \sfcaption{Tâche d'une \tphase{} à ordonnancer}
@@ -175,17 +175,17 @@ $h_3$ a une longueur inférieure au trou à droite de $M_2$.
     \hfill
     \begin{minipage}[t]{6.5cm}
         \begin{ordo}[5.2]{2}{2}{12}
-            \newtask{1}{2}{0}{$T_1$}
-            \newtask{1}{1}{2}{$T_2$}
+            \newtask{1}{2}{0}{1}
+            \newtask{1}{1}{2}{2}
 
-            \newtask{1}{2}{6}{$T_3$}
-            \newlabeledresa{1}{1}{12}{$R_1$}
-            \newlabeledresa{1}{2}{10}{$R_2$}
+            \newtask{1}{2}{6}{3}
+            \newlabeledresa{1}{1}{12}{1}
+            \newlabeledresa{1}{2}{10}{2}
 
-            \newhole{5}{2}{1}{$h_1$}
-            \newhole{3}{1}{3}{$h_2$}
-            \newhole{3}{2}{7}{$h_3$}
-            \newhole{5}{1}{7}{$h_4$}
+            \newhole{5}{2}{1}{1}
+            \newhole{3}{1}{3}{2}
+            \newhole{3}{2}{7}{3}
+            \newhole{5}{1}{7}{4}
 
             \adjust{1}{3}
         \end{ordo}
@@ -247,17 +247,17 @@ La $2$-dual-approximation est donnée par l'algorithme~\ref{alg:dual_approx}.
     \centering
     \begin{ordo}[11]{4}{1}{8}
         
-        \newtask{1}{5}{4}{$T_1$}
-        \newtask{1}{6}{4}{$T_2$}
-        \newtask{1}{7}{4}{$T_3$}
+        \newtask{1}{5}{4}{1}
+        \newtask{1}{6}{4}{2}
+        \newtask{1}{7}{4}{3}
 
         \foreach \x in {1,...,4}{
             \newbeghole{4}{\x}{$h > \omega / 2$}
         }
 
-        \newlabeledresa{1}{1}{6}{$R_1$}
-        \newlabeledresa{1}{2}{6}{$R_2$}
-        \newlabeledresa{1}{4}{8}{$R_3$}
+        \newlabeledresa{1}{1}{6}{1}
+        \newlabeledresa{1}{2}{6}{2}
+        \newlabeledresa{1}{4}{8}{3}
 
         \newhole{1}{1}{5}{$h < \omega / 2$}
         \newhole{1}{2}{5}{$h < \omega / 2$}

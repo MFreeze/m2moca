@@ -18,8 +18,8 @@
 %Ainsi l'étude de la théorie de l'ordonnancement, de par son fort potentiel applicatif, a été très
 %largement étudiée, ce qui a donné naissance à une multitude de problèmes. Dans la littérature, les
 %problème d'ordonnancement de décrivent généralement de la manière suivante : un ensemble de tâches
-%$\mathcal{T} = \{j_1, j_2, \dots, j_n\}$, un ensemble de machines $\mathcal{M} = \{m_1, m_2, \dots,
-%m_k\}$. Un ordonnancement consiste donc à affecter l'ensemble des tâches à l'ensemble des machines
+%$\mathcal{T} = \{T_1, T_2, \dots, T_n\}$, un ensemble de machines $\mathcal{M} = \{M_1, M_2, \dots,
+%M_k\}$. Un ordonnancement consiste donc à affecter l'ensemble des tâches à l'ensemble des machines
 %en respectant des contraintes imposées. Deux de ces contraintes, sûrement les plus répandues dans les
 %problèmes d'ordonnancement, imposent qu'à chaque instant, chaque machine n'est capable de d'exécuter au
 %plus qu'une seule tâche et que chaque tâche n'est exécutée que par une seule machine.
@@ -294,11 +294,11 @@ la notion de taches.
 
 % {{{ DEF : Réservation
 \begin{ndf}[Réservation]
-    Étant donnée une machine $m_i$, une réservation sur $m_i$ est une plage d'activité ou
+    Étant donnée une machine $M_i$, une réservation sur $M_i$ est une plage d'activité ou
     d'inactivité de la machine pendant laquelle les ressources de calcul de cette dernière sont
     indisponibles. Une réservation $l$ est caractérisée par une date de début $\sres{l}$ et une date de fin
     $\cres{l}$ et est relatif à une machine donnée. Elle est donc représentable par un couple composé
-    d'une machine $m_i$ et d'un intervalle de la forme $[\sres{l}, \cres{l}]$ avec $\sres{l} < \cres{l}$.
+    d'une machine $M_i$ et d'un intervalle de la forme $[\sres{l}, \cres{l}]$ avec $\sres{l} < \cres{l}$.
     La durée d'une réservation $\pres{l}$ est définie par :  $\pres{l} = \cres{l} - \sres{l}$. Si
     $\pres{i} = 1$, la tâche est dite unitaire.
 
@@ -307,7 +307,7 @@ la notion de taches.
 % }}}
 
 %{{{ RMQ : Événements
-\begin{ndf}
+\begin{ndf}[Événements]
     Nous appellerons \emph{événement} tout entité étant soit une tâche soit une réservation.
     L'ensemble des événement sera noté $\mathcal{E} = \mathcal{T} \cup \mathcal{R}$.
 \end{ndf}
@@ -315,7 +315,7 @@ la notion de taches.
 
 % {{{ DEF : Trou
 \begin{ndf}[Trou]
-    Étant donnés un ensemble de machine $\mathcal{M} = \{m_1, m_2, \dots, m_k\}$, un ensemble de
+    Étant donnés un ensemble de machine $\mathcal{M} = \{M_1, M_2, \dots, M_k\}$, un ensemble de
     tâches $\mathcal{T}$ et un ordonnancement $\mathcal{O}$ de ces tâches sur $\mathcal{M}$, un trou
     dans l'ordonnancement $\mathcal{O}$ est une plage d'inactivité non nulle de la machine, pendant
     laquelle les ressources de calcul de cette dernière sont disponibles et peuvent être utilisées à
@@ -365,9 +365,9 @@ section~\ref{scomplexite}.
 
 % {{{ PROBLEME : Flexible Interval Scheduling
 \dfopt{\fisched}
-{Un ensemble $\mathcal{M} = \{m_1, \dots, m_k\}$ de $k$ machines, un ensemble $\mathcal{T} = \{j_1,
-    j_2, \dots j_n\}$ de tâches avec $j_i$ représentant l'intervalle $[\st{j_i}, \ct{j_i}]$, un
-ensemble $\mathcal{R}$ de réservations $l = (m_i, [\sres{l}, \cres{l}])$.} 
+{Un ensemble $\mathcal{M} = \{M_1, \dots, M_k\}$ de $k$ machines, un ensemble $\mathcal{T} = \{T_1,
+    T_2, \dots T_n\}$ de tâches avec $T_i$ représentant l'intervalle $[\st{T_i}, \ct{T_i}]$, un
+ensemble $\mathcal{R}$ de réservations $l = (M_i, [\sres{l}, \cres{l}])$.} 
 {Un ordonnancement $\mathcal{O}$ des tâches sur les $k$ machines maximisant le trou
 minimum.}
 % }}}
@@ -376,9 +376,9 @@ et son problème de décision associé :
 
 % {{{ PROBLEME : Flexible Interval Scheduling Decision
 \dfdec{\fischedpi{}}
-{Un ensemble de $k$ machines, un ensemble $\mathcal{T} = \{j_1, j_2, \dots, j_n\}$ de tâches avec
-    $j_i$ représentant l'intervalle $[\st{j_i}, \ct{j_i}]$, un ensemble $\mathcal{R}$ de
-réservations $l = (m_i, [\sres{l}, \cres{l}])$, un entier $z$.}
+{Un ensemble de $k$ machines, un ensemble $\mathcal{T} = \{T_1, T_2, \dots, T_n\}$ de tâches avec
+    $T_i$ représentant l'intervalle $[\st{T_i}, \ct{T_i}]$, un ensemble $\mathcal{R}$ de
+réservations $l = (M_i, [\sres{l}, \cres{l}])$, un entier $z$.}
 {Existe-t-il un ordonnancement $\mathcal{O}$ des tâches sur les $k$ machines tel que la taille du
 trou minimum soit au moins égale à $z$?}
 % }}}
@@ -388,9 +388,9 @@ intervalles unitaires\footnote{Des intervalles de longueur $1$.} ayant des dates
 
 % {{{ PROBLEME : Unit Flexible Interval Scheduling Decision
 \dfdec[unitfischedpi]{\unitfischedpi{}}
-{Un ensemble de $k$ machines, un ensemble $\mathcal{T} = \{j_1, j_2, \dots, j_n\}$ de tâches
-unitaire avec $j_i$ représentant l'intervalle $[\st{j_i}, \ct{j_i}]$ avec $\ct{j_i} = \st{j_i} +
-1$ et $\st{j_i}$ pair, un ensemble $\mathcal{R}$ de réservations $l = (m_i, [\sres{l}, \cres{l}])$,
+{Un ensemble de $k$ machines, un ensemble $\mathcal{T} = \{T_1, T_2, \dots, T_n\}$ de tâches
+unitaire avec $T_i$ représentant l'intervalle $[\st{T_i}, \ct{T_i}]$ avec $\ct{T_i} = \st{T_i} +
+1$ et $\st{T_i}$ pair, un ensemble $\mathcal{R}$ de réservations $l = (M_i, [\sres{l}, \cres{l}])$,
 un entier $z$.}
 {Existe-t-il un ordonnancement $\mathcal{O}$ des tâches sur les $k$ machines tel que la taille du
 trou minimum soit au moins égale à $z$?}
@@ -408,13 +408,13 @@ trou minimum soit au moins égale à $z$?}
         \right .
     \]
     qui, étant donné un ordonnancement $\mathcal{O}$, associe à une tâche ou une réservation $j$, la
-    machine $m_i$ sur laquelle s'exécute cette tâche pour l'ordonnancement donné\footnote{Dans le
+    machine $M_i$ sur laquelle s'exécute cette tâche pour l'ordonnancement donné\footnote{Dans le
     cas d'une réservation, le résultat de la fonction est indépendant de l'ordonnancement
     considéré.}, on peut alors définir de manière plus formelle : \begin{bitemize}
         \item l'ensemble des tâches : \hfill $ \mathcal{T} = \{[\st{j}, \ct{j}]   \colon  
             \ct{j} - \st{j} = \pt{j} \} $
-        \item l'ensemble des réservations : \hfill $\mathcal{R} = \{l = (m_p, [\sres{l}, \cres{l}])  
-            \colon   \cres{l} - \sres{l} = \pres{l},\ f(l) = m_p\}$
+        \item l'ensemble des réservations : \hfill $\mathcal{R} = \{l = (M_p, [\sres{l}, \cres{l}])  
+            \colon   \cres{l} - \sres{l} = \pres{l},\ f(l) = M_p\}$
         \item la fonction objectif étudiée : \hfill $H_{\min} = \min \{ \sgen{i} - \cgen{i'} > 0  
             \colon   i,i' \in \mathcal{T} \cup \mathcal{R},\ f(i) = f(i')\}$
     \end{bitemize}
@@ -454,23 +454,23 @@ trou minimum soit au moins égale à $z$?}
 \begin{figure}
     \begin{center}
         \begin{ordo}[10]{3}{1}{9}
-            \newtask{2}{1}{1}{$t_1$}
-            \newtask{1}{1}{7}{$t_2$}
-            \newhole{4}{1}{3}{$h_1$}Optimisation
+            \newtask{2}{1}{1}{1}
+            \newtask{1}{1}{7}{2}
+            \newhole{4}{1}{3}{1}Optimisation
 
-            \newlabeledresa{2}{2}{0}{$l_1$}
-            \newtask{3}{2}{4}{$t_3$}
-            \newhole{2}{2}{2}{$h_2$}
+            \newresa{2}{2}{0}{1}
+            \newtask{3}{2}{4}{3}
+            \newhole{2}{2}{2}{2}
 
-            \newlabeledresa{3}{3}{2}{$l_2$}
-            \newlabeledresa{2}{3}{7}{$l_3$}
-            \newhole{2}{3}{5}{$h_3$}
+            \newresa{3}{3}{2}{2}
+            \newresa{2}{3}{7}{3}
+            \newhole{2}{3}{5}{3}
 
-            \newbeghole{1}{1}{$h_4$}
-            \newbeghole{2}{3}{$h_7$}
+            \newbeghole{1}{1}{4}
+            \newbeghole{2}{3}{7}
 
-            \newendhole{1}{1}{8}{$h_5$}
-            \newendhole{2}{2}{7}{$h_6$}
+            \newendhole{1}{1}{8}{5}
+            \newendhole{2}{2}{7}{6}
         \end{ordo}
     \end{center}
     \caption{Illustration des différents cas de figures}
@@ -482,19 +482,19 @@ trou minimum soit au moins égale à $z$?}
 \begin{figure}
     \begin{center}
         \begin{ordo}[10]{3}{1}{10}
-            \newlabeledresa{1}{1}{1}{$l_1$}
-            \newlabeledresa{1}{2}{3}{$l_2$}
+            \newresa{1}{1}{1}{1}
+            \newresa{1}{2}{3}{2}
 
-            \newtask{3}{3}{0}{$j_1$}
-            \newtask{1}{2}{0}{$j_2$}
-            \newtask{3}{1}{4}{$j_3$}
-            \newtask{1}{2}{9}{$j_4$}
-            \newtask{1}{3}{9}{$j_5$}
+            \newtask{3}{3}{0}{1}
+            \newtask{1}{2}{0}{2}
+            \newtask{3}{1}{4}{3}
+            \newtask{1}{2}{9}{4}
+            \newtask{1}{3}{9}{5}
 
-            \newhole{2}{1}{2}{$h_1$}
-            \newhole{2}{2}{1}{$h_2$}
-            \newhole{5}{2}{4}{$h_3$}
-            \newhole{6}{3}{3}{$h_4$}
+            \newhole{2}{1}{2}{1}
+            \newhole{2}{2}{1}{2}
+            \newhole{5}{2}{4}{3}
+            \newhole{6}{3}{3}{4}
         \end{ordo}
     \end{center}
     \caption{Un ordonnancement quelconque}
@@ -504,16 +504,16 @@ trou minimum soit au moins égale à $z$?}
 \begin{figure}
     \begin{center}
         \begin{ordo}[10]{3}{1}{10}
-            \newlabeledresa{1}{1}{1}{$l_1$}
-            \newlabeledresa{1}{2}{3}{$l_2$}
+            \newresa{1}{1}{1}{1}
+            \newresa{1}{2}{3}{2}
 
-            \newtask{3}{2}{0}{$j_1$}
-            \newtask{1}{1}{0}{$j_2$}
-            \newtask{3}{2}{4}{$j_3$}
-            \newtask{1}{1}{9}{$j_4$}
-            \newtask{1}{3}{9}{$j_5$}
+            \newtask{3}{2}{0}{1}
+            \newtask{1}{1}{0}{2}
+            \newtask{3}{2}{4}{3}
+            \newtask{1}{1}{9}{4}
+            \newtask{1}{3}{9}{5}
 
-            \newhole{7}{1}{2}{$h_1$}
+            \newhole{7}{1}{2}{1}
         \end{ordo}
     \end{center}
     \caption{Un ordonnancement optimal}
@@ -524,8 +524,8 @@ trou minimum soit au moins égale à $z$?}
 % {{{ EXEMPLE : Un ordonnancement quelconque et un optimal
 \begin{ex}
     Considérons un ensemble de cinq tâches $\mathcal{T} = \{[0, 3], [0,1], [4,7],
-    [9,10], [9,10]\}$, un ensemble de trois machines $\mathcal{M} = \{m_1, m_2, m_3\}$ et un
-    ensemble de deux réservations $\mathcal{R} = \{(m_1, [1,2]), (m_2, [3,4])\}$.
+    [9,10], [9,10]\}$, un ensemble de trois machines $\mathcal{M} = \{M_1, M_2, M_3\}$ et un
+    ensemble de deux réservations $\mathcal{R} = \{(M_1, [1,2]), (M_2, [3,4])\}$.
 
     Un ordonnancement quelconque est donné à la figure~\ref{ex1ordquelc}, la valeur du trou minimum
     est donnée par $h_1$ et $h_2$ et est égale à $2$, un ordonnancement optimal est donné à la
@@ -548,7 +548,7 @@ Pour étudier la complexité de ce problème, considérons le problème suivant 
 % {{{ PROBLEME : Precoloring extension
 \dfdec{\precolor{}}
 {Un graphe $G=(V, E)$, un sous-ensemble $W \subset V,\ W \neq \emptyset$, une coloration $c'$ de $G[W]$ et un
-entier $k$}
+entier $k$.}
 {Existe-t-il une $k-$coloration $c$ de $G$ telle que pour tout sommet $v \in W$, $c(v) =
 c'(v)$?}
 % }}}
@@ -568,6 +568,7 @@ $G$.
 \end{nthrm}
 
 % {{{ PREUVE NP-COMPLETUDE
+\begin{proof}
 Nous considérerons une instance quelconque du problème \precolor{} et construirons une instance de
 \fischedpi{}.
 
@@ -578,19 +579,19 @@ une couleur.
 
 La transformation se fait alors comme suit : 
 \begin{enumerate}
-    \item À chaque couleur $i$, on associe une machine $m_i$, on a donc un ensemble
+    \item À chaque couleur $i$, on associe une machine $M_i$, nous obtenons donc un ensemble
         $\mathcal{M}$ de $k$ machines.
     \item À chaque sommet $w \in W$, on associe une réservation sur la machine associée à la
         couleur de $w$ par la coloration $c'$ dont les dates de début et de fin sont données par
         le début et la fin de l'intervalle associé à $w$ : \[
-            l_w = (m_{c'(w)}, [\sres{l_w} = \sint{i_w}, \cres{l_w} = \cint{i_w}])
+            R_w = (M_{c'(w)}, [\sres{R_w} = \sint{i_w}, \cres{R_w} = \cint{i_w}])
         \]
-        On a alors $\mathcal{R} = \{l_w : w \in W\}$.
-    \item À chaque sommet $v \in V \backslash W$, on associe une tâche $j_v$ avec $\st{j_v} =
-        \sint{v}$ et $\ct{j_v} = \cint{v}$, on a alors $\mathcal{T} = \{j_v\ \colon\ v \in V
+        Ainsi l'ensemble des réservations est $\mathcal{R} = \{R_w : w \in W\}$.
+    \item À chaque sommet $v \in V \backslash W$, on associe une tâche $T_v$ avec $\st{T_v} =
+        \sint{v}$ et $\ct{T_v} = \cint{v}$, on a alors $\mathcal{T} = \{T_v\ \colon\ v \in V
         \backslash W\}$.
-    \item pour chaque paire d'intervalle $(i_u, i_v)$, on calcule l'écart entre la fin de $i_u$ et
-        le début de $i_v$ : $\Delta_{i_ui_v} = \sint{i_v} - \cint{i_u}$. De par sa définition si
+    \item Pour chaque paire d'intervalles $(i_u, i_v)$, on calcule l'écart entre la fin de $i_u$ et
+        le début de $i_v$ : $\Delta_{i_ui_v} = \sint{i_v} - \cint{i_u}$. Par définition, si
         $\Delta_{i_ui_v}$ est négatif, alors le début de $i_v$ précède la fin de $i_u$, s'il est nul
         $i_u = i_v$ et s'il est positif alors $i_u$ précède temporellement $i_v$ et $i_u$ et $i_v$
         ne se chevauchent pas. On peut alors calculer $z = \min\{\Delta_{i_ui_v} > 0\ :\ i_u, i_v
@@ -602,16 +603,13 @@ La transformation se fait alors comme suit :
 \end{enumerate}
 
 Cette transformation se fait en temps linéaire\footnote{Un algorithme permettant de calculer $z$ en
-temps linéaire est donné en annexe.} en le nombre de sommets et donc en le nombre
-d'événements.
+temps linéaire est donné en annexe.}.
 
+Le problème \fischedpi{} appartient à la classe \textbf{NP}.
 Considérons un ordonnancement $\mathcal{O}$ qui à chaque tâche associe une machine, l'algorithme
 naïf, consistant pour chacune des tâches à vérifier qu'aucun autre événement n'est assigné à la
 même machine au même moment, permet de vérifier la validité de $\mathcal{O}$ en un temps
-$O(e^2)$ polynomial en le nombre d'événements. Le problème \fischedpi{} appartient à la classe
-\textbf{NP}.
-
-Nous allons à présent mettre en évidence l'équivalence entre les deux problèmes :
+$O(e^2)$ polynomial en le nombre d'événements. En effet :
 \begin{bitemize}
     \item Supposons qu'il existe une coloration $c$ qui étend $c'$ sur $G$, on peut alors
         construire un ordonnancement à partir de $c$ en affectant à chaque événement $e_v$,
@@ -646,6 +644,7 @@ transformation exposée ci-dessus étant polynomiale, \fischedpi{} est alors \np
 %Soient deux intervalles $i, j \in \mathcal{I}$, notons $z_{ij} = \|\sint{j} - \cint{i}\|$
 %l'écart entre le début de l'intervalle $j$ et la fin de l'intervalle $i$, on introduit alors :
 %$z = \min_{i,j \in \mathcal{I}} \{z_{ij} : z_{ij} \neq 0\}$.
+\end{proof}
 % }}}
 
 % {{{ Exemple
@@ -714,14 +713,14 @@ transformation exposée ci-dessus étant polynomiale, \fischedpi{} est alors \np
             
             \draw[-] (7) to (8);
 
-            \draw[-] (0, -2) to node[above] {$i_1,\ [0,4]$} (4, -2);
-            \draw[-] (1, -3) to node[above] {$i_2,\ [1,5]$} (5, -3);
-            \draw[-] (2, -4) to node[above] {$i_3,\ [2,6]$} (6, -4);
-            \draw[-] (3, -5) to node[above] {$i_4,\ [3,7]$} (7, -5);
-            \draw[-] (6, -3) to node[above] {$i_5,\ [6,9]$} (9, -3);
-            \draw[-] (8, -2) to node[above] {$i_6,\ [8,12]$} (12, -2);
-            \draw[-] (10, -3) to node[above] {$i_7,\ [10, 13]$} (13, -3);
-            \draw[-] (11, -4) to node[above] {$i_8,\ [11, 14]$} (14, -4);
+            \draw[-] (0, -1.6) to node[above] {$i_1,\ [0,4]$} (4, -1.6);
+            \draw[-] (1, -2.2) to node[above] {$i_2,\ [1,5]$} (5, -2.2);
+            \draw[-] (2, -2.8) to node[above] {$i_3,\ [2,6]$} (6, -2.8);
+            \draw[-] (3, -3.4) to node[above] {$i_4,\ [3,7]$} (7, -3.4);
+            \draw[-] (6, -2.2) to node[above] {$i_5,\ [6,9]$} (9, -2.2);
+            \draw[-] (8, -1.6) to node[above] {$i_6,\ [8,12]$} (12, -1.6);
+            \draw[-] (10, -2.2) to node[above] {$i_7,\ [10, 13]$} (13, -2.2);
+            \draw[-] (11, -2.8) to node[above] {$i_8,\ [11, 14]$} (14, -2.8);
         \end{tikzpicture}
     \end{center}
     \caption{Une instance de \precolor{} sur un graphe d'intervalles propre}
@@ -792,13 +791,13 @@ transformation exposée ci-dessus étant polynomiale, \fischedpi{} est alors \np
                 \foreach \y/\color in {1/red!80,2/blue!70,3/green!80,4/orange!80}{
                     \pgfmathparse{\y - 0.5} \let\ordlabel\pgfmathresult
 
-                    \node[left, \color] at (0, \ordlabel) {$m_\y$};
+                    \node[left, \color] at (0, \ordlabel) {$M_\y$};
                     \draw[dotted] (0, \y) to (9, \y);
                 }
 
-                \newlabeledresa{4}{1}{1}{$l_2$}
-                \newlabeledresa{4}{2}{2}{$l_3$}
-                \newlabeledresa{3}{4}{10}{$l_7$}
+                \newresa{4}{1}{1}{2}
+                \newresa{4}{2}{2}{3}
+                \newresa{3}{4}{10}{7}
             \end{tikzpicture}
         \end{minipage}
         % }}}
@@ -863,23 +862,23 @@ transformation exposée ci-dessus étant polynomiale, \fischedpi{} est alors \np
                 \foreach \y/\color in {1/red!80,2/blue!70,3/green!80,4/orange!80}{
                     \pgfmathparse{\y - 0.5} \let\ordlabel\pgfmathresult
 
-                    \node[left, \color] at (0, \ordlabel) {$m_\y$};
+                    \node[left, \color] at (0, \ordlabel) {$M_\y$};
                     \draw[dotted] (0, \y) to (9, \y);
                 }
 
-                \newlabeledresa{4}{1}{1}{$l_2$}
-                \newlabeledresa{4}{2}{2}{$l_3$}
-                \newlabeledresa{3}{4}{10}{$l_7$}
+                \newresa{4}{1}{1}{2}
+                \newresa{4}{2}{2}{3}
+                \newresa{3}{4}{10}{7}
 
-                \newtask{4}{4}{0}{$j_1$}
-                \newtask{4}{3}{3}{$j_4$}
-                \newtask{3}{2}{6}{$j_5$}
-                \newtask{4}{3}{8}{$j_6$}
-                \newtask{3}{1}{11}{$j_8$}
+                \newtask{4}{4}{0}{1}
+                \newtask{4}{3}{3}{4}
+                \newtask{3}{2}{6}{5}
+                \newtask{4}{3}{8}{6}
+                \newtask{3}{1}{11}{8}
 
-                \newhole{6}{1}{5}{$h_1$}
-                \newhole{1}{3}{7}{$h_2$}
-                \newhole{6}{4}{4}{$h_3$}
+                \newhole{6}{1}{5}{1}
+                \newhole{1}{3}{7}{2}
+                \newhole{6}{4}{4}{3}
             \end{tikzpicture}
         \end{minipage}
         % }}}
@@ -896,7 +895,8 @@ transformation exposée ci-dessus étant polynomiale, \fischedpi{} est alors \np
 
 Considérons le problème~\ref{unitfischedpi} (p.~\pageref{unitfischedpi}), pour étudier sa
 complexité, nous utiliserons à nouveau une réduction depuis \precolor{}, mais cette fois ci sur des
-graphes d'intervalles de même longueur dont les dates de début et de fin sont entières.
+graphes d'intervalles propres tels que les intervalles ont même longueur et présentent des dates de
+début et de fin sont entières.
 
 \begin{nprop}
     Le problème \precolor{} sur les graphes d'intervalles de même longueur et dont les dates de début
@@ -909,7 +909,9 @@ unitaire~\cite{bogart1999short}, il est ensuite possible d'obtenir par dilatatio
 d'intervalles de même longueur ayant des dates de début et de fin entières.
 
 \begin{ncorol}
-    Le problème \precolor{} reste \textbf{NP}-complet sur la famille de graphes que nous considérons.
+    Le problème \precolor{} reste \textbf{NP}-complet sur la famille des graphes d'intervalles
+    propres tels que les intervalles ont même longueur et présentent des datesd e début et de fin
+    entières.
 \end{ncorol}
 
 \begin{nthrm}
@@ -934,19 +936,20 @@ sont paires.
 
 La transformation se fait comme suit :
 \begin{enumerate}
-    \item À chaque couleur $i$, on associe une machine $m_i$, on a donc un ensemble $\mathcal{M}$ de
+    \item À chaque couleur $i$, on associe une machine $M_i$, on a donc un ensemble $\mathcal{M}$ de
         $k$ machines.
-    \item À chaque sommet $w \in W$, on associe une réservation unitaire $l_w$ sur la machine associée à
+    \item À chaque sommet $w \in W$, on associe une réservation unitaire $R_w$ sur la machine associée à
         la couleur de $w$ par la coloration $c'$ dont la date de début est donnée par le
         début de l'intervalle associé à $w$
         \[
-            l = (m_{c'(w)}, [\sres{l_w} = \sint{i_w}, \cres{l_w} = \sres{l_w} + 1])
+            R_w = (M_{c'(w)}, [\sres{R_w} = \sint{i_w}, \cres{R_w} = \sres{R_w} + 1])
         \]
-        On a alors un ensemble de réservations $R = \{l_w : w \in W\}$.
-    \item À chaque sommet $v \in V \backslash W$, on associe une tâche unitaire $j_v$ avec $\st{j_v}
-        = \sint{i_v}$ et $\ct{j_v} = \st{j_v} + 1$. On a alors un ensemble de tâches $\mathcal{T} =
-        \{j_v : v \in V \backslash W \}$.
-    \item $z$ est défini comme la taille commune de chaque intervalle de $\mathcal{I}'$ moins 1
+        Nous obtenons alors un ensemble de réservations $R = \{R_w : w \in W\}$.
+    \item À chaque sommet $v \in V \backslash W$, on associe une tâche unitaire $T_v$ avec $\st{T_v}
+        = \sint{i_v}$ et $\ct{T_v} = \st{T_v} + 1$. On a alors un ensemble de tâches $\mathcal{T} =
+        \{T_v : v \in V \backslash W \}$.
+    \item $z$ est défini comme la taille commune de chaque intervalle de $\mathcal{I}'$ moins $1$
+        (la durée d'exécution d'une tâche unitaire).
 \end{enumerate}
 Cette transformation se fait en temps linéaire en le nombre de sommets de $G$ et donc en le nombre
 d'événements.
@@ -959,13 +962,12 @@ Mettons en évidence l'équivalence entre les deux problèmes :
     \item Supposons qu'il existe une coloration $c$ étendant $c'$ sur $G$, on peut obtenir un
         ordonnancement valide $\mathcal{O}$ en affectant à chaque événement $e_v$ associé au sommet
         $v \in V$, la machine correspondant à la couleur $c(v)$. Par définition de la coloration,
-        deux sommets adjacents ont une couleur différentes, et leur tâche associée\footnote{Les
+        deux sommets adjacents ont une couleur différente, et leur tâche associée\footnote{Les
         tâches sont concurrentes, puisque $G$ est un graphe d'intervalles.} s'exécutent sur des
         machines différentes, l'ordonnancement est donc valide. 
 
-        De plus le plus petit écart entre deux tâches non concurrentes est au moins égal à
-        $z$\footnote{Rappel : Il s'agit de la longueur de tous les intervalles moins $1$.} et ce par
-        construction
+        De plus, le plus petit écart entre deux tâches non concurrentes est au moins égal à
+        $z$ et ce par construction.
     \item Supposons maintenant qu'il existe un ordonnancement valide $\mathcal{O}$ dont le trou
         minimum est au moins égal à $z$, une coloration $c$ étendant $c'$ à $G$ peut être obtenue en
         associant à chaque sommet $v \in V$ la couleur correspondant à la machine sur laquelle est
@@ -975,9 +977,9 @@ Mettons en évidence l'équivalence entre les deux problèmes :
         la coloration. Supposons qu'il existe un ordonnancement valide, tel que le trou minimum est
         au moins égal à $z$ et tel que deux sommets adjacents $u$ et $v$ ont même couleur par la
         transformation précédente. Si $u$ et $v$ ont même couleur, ils s'exécutent sur la même
-        machine. Le trou séparant $j_u$ et $j_v$ est par hypothèse supérieur ou égal à $z$, de plus
+        machine. Le trou séparant $T_u$ et $T_v$ est par hypothèse supérieur ou égal à $z$, de plus
         $u$ et $v$ étant adjacents, les intervalles $i_u$ et $i_v$ s'intersectent. Or, $\sint{i_u} =
-        \st{j_u}$ et $\sint{i_v} = \st{j_v}$ et donc $\pint{i_u} > z+1$ ou $\pint{i_v} > z+1$.
+        \st{T_u}$ et $\sint{i_v} = \st{T_v}$ et donc $\pint{i_u} > z+1$ ou $\pint{i_v} > z+1$.
         Contradiction.
 \end{bitemize}
 
@@ -1034,14 +1036,14 @@ Le problème \unitfischedpi{} appartenant à \textbf{NP}, la transformation éta
             
             \draw[-] (7) to (8);
 
-            \draw[-] (0, -2) to node[above] {$i_1,\ [0,4]$} (4, -2);
-            \draw[-] (1, -3) to node[above] {$i_2,\ [1,5]$} (5, -3);
-            \draw[-] (2, -4) to node[above] {$i_3,\ [2,6]$} (6, -4);
-            \draw[-] (3, -5) to node[above] {$i_4,\ [3,7]$} (7, -5);
-            \draw[-] (6, -3) to node[above] {$i_5,\ [6,10]$} (10, -3);
-            \draw[-] (8, -2) to node[above] {$i_6,\ [8,12]$} (12, -2);
-            \draw[-] (10, -4) to node[above] {$i_7,\ [10, 14]$} (14, -4);
-            \draw[-] (11, -5) to node[above] {$i_8,\ [11, 15]$} (15, -5);
+            \draw[-] (0, -1.6) to node[above] {$i_1,\ [0,4]$} (4, -1.6);
+            \draw[-] (1, -2.2) to node[above] {$i_2,\ [1,5]$} (5, -2.2);
+            \draw[-] (2, -2.8) to node[above] {$i_3,\ [2,6]$} (6, -2.8);
+            \draw[-] (3, -3.4) to node[above] {$i_4,\ [3,7]$} (7, -3.4);
+            \draw[-] (6, -2.2) to node[above] {$i_5,\ [6,10]$} (10, -2.2);
+            \draw[-] (8, -1.6) to node[above] {$i_6,\ [8,12]$} (12, -1.6);
+            \draw[-] (10, -2.8) to node[above] {$i_7,\ [10, 14]$} (14, -2.8);
+            \draw[-] (11, -3.4) to node[above] {$i_8,\ [11, 15]$} (15, -3.4);
         \end{tikzpicture}
     \end{center}
     \caption{Une instance de \precolor{} sur un graphe d'intervalles de même longueur à valeurs
@@ -1084,14 +1086,14 @@ Le problème \unitfischedpi{} appartenant à \textbf{NP}, la transformation éta
             
             \draw[-] (7) to (8);
 
-            \draw[-] (0, -2) to node[above] {$i_1,\ [0,8]$} (4, -2);
-            \draw[-] (1, -3) to node[above] {$i_2,\ [2,10]$} (5, -3);
-            \draw[-] (2, -4) to node[above] {$i_3,\ [4,12]$} (6, -4);
-            \draw[-] (3, -5) to node[above] {$i_4,\ [6,14]$} (7, -5);
-            \draw[-] (6, -3) to node[above] {$i_5,\ [12,20]$} (10, -3);
-            \draw[-] (8, -2) to node[above] {$i_6,\ [16,24]$} (12, -2);
-            \draw[-] (10, -4) to node[above] {$i_7,\ [20, 28]$} (14, -4);
-            \draw[-] (11, -5) to node[above] {$i_8,\ [22, 30]$} (15, -5);
+            \draw[-] (0, -1.6) to node[above] {$i_1,\ [0,8]$} (4, -1.6);
+            \draw[-] (1, -2.2) to node[above] {$i_2,\ [2,10]$} (5, -2.2);
+            \draw[-] (2, -2.8) to node[above] {$i_3,\ [4,12]$} (6, -2.8);
+            \draw[-] (3, -3.4) to node[above] {$i_4,\ [6,14]$} (7, -3.4);
+            \draw[-] (6, -2.2) to node[above] {$i_5,\ [12,20]$} (10, -2.2);
+            \draw[-] (8, -1.6) to node[above] {$i_6,\ [16,24]$} (12, -1.6);
+            \draw[-] (10, -2.8) to node[above] {$i_7,\ [20, 28]$} (14, -2.8);
+            \draw[-] (11, -3.4) to node[above] {$i_8,\ [22, 30]$} (15, -3.4);
         \end{tikzpicture}
     \end{center}
     \caption{Une instance de \precolor{} sur un graphe d'intervalles de même longueur à valeurs
@@ -1163,13 +1165,13 @@ Le problème \unitfischedpi{} appartenant à \textbf{NP}, la transformation éta
                 \foreach \y/\color in {1/red!80,2/blue!70,3/green!80,4/orange!80}{
                     \pgfmathparse{\y - 0.5} \let\ordlabel\pgfmathresult
 
-                    \node[left, \color] at (0, \ordlabel) {$m_\y$};
+                    \node[left, \color] at (0, \ordlabel) {$M_\y$};
                     \draw[dotted] (0, \y) to (9, \y);
                 }
 
-                \newlabeledresa{1}{1}{2}{$l_2$}
-                \newlabeledresa{1}{2}{4}{$l_3$}
-                \newlabeledresa{1}{4}{20}{$l_7$}
+                \newresa{1}{1}{2}{2}
+                \newresa{1}{2}{4}{3}
+                \newresa{1}{4}{20}{7}
             \end{tikzpicture}
         \end{minipage}
         % }}}
@@ -1234,24 +1236,24 @@ Le problème \unitfischedpi{} appartenant à \textbf{NP}, la transformation éta
                 \foreach \y/\color in {1/red!80,2/blue!70,3/green!80,4/orange!80}{
                     \pgfmathparse{\y - 0.5} \let\ordlabel\pgfmathresult
 
-                    \node[left, \color] at (0, \ordlabel) {$m_\y$};
+                    \node[left, \color] at (0, \ordlabel) {$M_\y$};
                     \draw[dotted] (0, \y) to (9, \y);
                 }
 
-                \newlabeledresa{1}{1}{2}{$l_2$}
-                \newlabeledresa{1}{2}{4}{$l_3$}
-                \newlabeledresa{1}{4}{20}{$l_7$}
+                \newresa{1}{1}{2}{2}
+                \newresa{1}{2}{4}{3}
+                \newresa{1}{4}{20}{7}
 
-                \newtask{1}{4}{0}{$j_1$}
-                \newtask{1}{3}{6}{$j_4$}
-                \newtask{1}{2}{12}{$j_5$}
-                \newtask{1}{3}{16}{$j_6$}
-                \newtask{1}{1}{22}{$j_8$}
+                \newtask{1}{4}{0}{1}
+                \newtask{1}{3}{6}{4}
+                \newtask{1}{2}{12}{5}
+                \newtask{1}{3}{16}{6}
+                \newtask{1}{1}{22}{8}
 
-                \newhole{19}{1}{3}{$h_1$}
-                \newhole{7}{2}{5}{$h_2$}
-                \newhole{9}{3}{7}{$h_3$}
-                \newhole{19}{4}{1}{$h_4$}
+                \newhole{19}{1}{3}{1}
+                \newhole{7}{2}{5}{2}
+                \newhole{9}{3}{7}{3}
+                \newhole{19}{4}{1}{4}
             \end{tikzpicture}
         \end{minipage}
         % }}}
