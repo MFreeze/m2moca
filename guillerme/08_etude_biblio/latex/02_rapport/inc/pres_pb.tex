@@ -144,7 +144,7 @@ notations plus spécifiques au problème considéré.
 
 D'ordinaire, les problèmes d'ordonnancement sont définis par un ensemble de $n$ tâches $\mathcal{T} =
 \{T_1, T_2, \dots, T_n\}$ et par un ensemble de $m$ processeurs\footnote{On les appelle aussi des
-machines.} $\mathcal{P} = \{\pi_1, \pi_2, \dots, \pi_m\}$. L'ordonnancement consiste à affecter les
+machines.} $\mathcal{M} = \{M_1, M_2, \dots, M_m\}$. L'ordonnancement consiste à affecter les
 tâches $\mathcal{T}$ aux processeurs $\mathcal{P}$ tout en respectant les contraintes définies par
 le problème initial. On peut citer deux contraintes largement répandues dans la théorie de
 l'ordonnancement :
@@ -168,7 +168,7 @@ nous invitons les intéressés à la lecture du livre~\cite{blazewicz_handbook_2
 
 Les processeurs parallèles se décomposent en trois catégories :
 \begin{enumerate}
-    \item identiques : tous les processeurs de $\mathcal{P}$ admettent la même vitesse de traitement
+    \item identiques : tous les processeurs de $\mathcal{M}$ admettent la même vitesse de traitement
     \item uniformes : les vitesses de traitement diffèrent mais la vitesse de traitement est
         proportionnelle à un coefficient propre à chaque machine appelé facteur d'accélération
     \item généraux : les vitesses de traitement dépendent des tâches à effectuer
@@ -181,15 +181,15 @@ que sur des processeurs identiques.
 
 Généralement, en ordonnancement, une tâche est définie par cinq paramètres :
 \begin{enumerate}
-    \item un vecteur de temps d'exécution $p_j = ^t(p_{j1}, p_{j2}, \dots, p_{jm})$ où $p_{ji}$
-        représente le temps nécessaire à l'exécution de la tâche $j$ sur la machine $i$. Dans le cas
+    \item un vecteur de temps d'exécution $p_T = ^t(p_{T1}, p_{T2}, \dots, p_{Tm})$ où $p_{Ti}$
+        représente le temps nécessaire à l'exécution de la tâche $T$ sur la machine $i$. Dans le cas
         de machines identiques et uniformes, ce vecteur ne présente qu'une seule composante,
-    \item une date de disponibilité $r_j$, désignant la date à partir de laquelle la tâche est prête
+    \item une date de disponibilité $r_T$, désignant la date à partir de laquelle la tâche est prête
         à être exécutée,
-    \item une date d'échéance $d_j$, désignant la date souhaitée à laquelle la tâche $j$ devrait
+    \item une date d'échéance $d_T$, désignant la date souhaitée à laquelle la tâche $T$ devrait
         être exécutée,
-    \item une date de fin impérative$\widetilde{d_j}$, date à laquelle la tâche doit obligatoirement être exécutée,
-    \item un poids $w_j$, représentant l'urgence relative de la tâche.
+    \item une date de fin impérative$\widetilde{d_T}$, date à laquelle la tâche doit obligatoirement être exécutée,
+    \item un poids $w_T$, représentant l'urgence relative de la tâche.
 \end{enumerate}
 
 Les tâches ainsi définies peuvent être soumises à certaines contraintes, telles que des contraintes
@@ -232,7 +232,7 @@ ces paramètres :
                 \end{itemize}
             \item $\beta_2$ représentant les temps d'exécution des tâches :
                 \begin{itemize}
-                    \item $\beta_2 = p_j = 1$ : les tâches sont unitaires, leur durée est égale à
+                    \item $\beta_2 = p_T = 1$ : les tâches sont unitaires, leur durée est égale à
                         $1$
                     \item $\beta_2 = .$ : les durées des tâches sont données par le graphe
                 \end{itemize}
@@ -278,9 +278,9 @@ la notion de taches.
 \begin{ndf}[Tâche]
     Une tâche est une entité élémentaire indivisible dont la réalisation nécessite une certaine
     quantité de ressources, dans notre cas un certain temps de calcul d'une machine. Considérons une
-    tâche $j$, elle est caractérisée par une date de début $\st{j}$ et une date de fin $\ct{j}$ et donc
-    représentable par un intervalle de la forme $[\st{j}, \ct{j}]$ avec $\st{j} < \ct{j}$. La durée d'exécution
-    de la tâche est notée $\pt{j}$ et est définie par : $\pt{j} = \ct{j} - \st{j}$. Si $\pt{j} = 1$,
+    tâche $T$, elle est caractérisée par une date de début $\st{T}$ et une date de fin $\ct{T}$ et donc
+    représentable par un intervalle de la forme $[\st{T}, \ct{T}]$ avec $\st{T} < \ct{T}$. La durée d'exécution
+    de la tâche est notée $\pt{T}$ et est définie par : $\pt{T} = \ct{T} - \st{T}$. Si $\pt{T} = 1$,
     la tâche est dite unitaire.
 
     L'ensemble des tâches considérées est noté $\mathcal{T}$.
@@ -296,11 +296,11 @@ la notion de taches.
 \begin{ndf}[Réservation]
     Étant donnée une machine $M_i$, une réservation sur $M_i$ est une plage d'activité ou
     d'inactivité de la machine pendant laquelle les ressources de calcul de cette dernière sont
-    indisponibles. Une réservation $l$ est caractérisée par une date de début $\sres{l}$ et une date de fin
-    $\cres{l}$ et est relatif à une machine donnée. Elle est donc représentable par un couple composé
-    d'une machine $M_i$ et d'un intervalle de la forme $[\sres{l}, \cres{l}]$ avec $\sres{l} < \cres{l}$.
-    La durée d'une réservation $\pres{l}$ est définie par :  $\pres{l} = \cres{l} - \sres{l}$. Si
-    $\pres{i} = 1$, la tâche est dite unitaire.
+    indisponibles. Une réservation $R$ est caractérisée par une date de début $\sres{R}$ et une date de fin
+    $\cres{R}$ et est relatif à une machine donnée. Elle est donc représentable par un couple composé
+    d'une machine $M_i$ et d'un intervalle de la forme $[\sres{R}, \cres{R}]$ avec $\sres{R} < \cres{R}$.
+    La durée d'une réservation $\pres{R}$ est définie par :  $\pres{R} = \cres{R} - \sres{R}$. Si
+    $\pres{R} = 1$, la réservation est dite unitaire.
 
     L'ensemble des réservations considérées est noté $\mathcal{R}$.
 \end{ndf}
@@ -367,7 +367,7 @@ section~\ref{scomplexite}.
 \dfopt{\fisched}
 {Un ensemble $\mathcal{M} = \{M_1, \dots, M_k\}$ de $k$ machines, un ensemble $\mathcal{T} = \{T_1,
     T_2, \dots T_n\}$ de tâches avec $T_i$ représentant l'intervalle $[\st{T_i}, \ct{T_i}]$, un
-ensemble $\mathcal{R}$ de réservations $l = (M_i, [\sres{l}, \cres{l}])$.} 
+ensemble $\mathcal{R}$ de réservations $l = (M_i, [\sres{R}, \cres{R}])$.} 
 {Un ordonnancement $\mathcal{O}$ des tâches sur les $k$ machines maximisant le trou
 minimum.}
 % }}}
@@ -378,7 +378,7 @@ et son problème de décision associé :
 \dfdec{\fischedpi{}}
 {Un ensemble de $k$ machines, un ensemble $\mathcal{T} = \{T_1, T_2, \dots, T_n\}$ de tâches avec
     $T_i$ représentant l'intervalle $[\st{T_i}, \ct{T_i}]$, un ensemble $\mathcal{R}$ de
-réservations $l = (M_i, [\sres{l}, \cres{l}])$, un entier $z$.}
+réservations $l = (M_i, [\sres{R}, \cres{R}])$, un entier $z$.}
 {Existe-t-il un ordonnancement $\mathcal{O}$ des tâches sur les $k$ machines tel que la taille du
 trou minimum soit au moins égale à $z$?}
 % }}}
@@ -390,7 +390,7 @@ intervalles unitaires\footnote{Des intervalles de longueur $1$.} ayant des dates
 \dfdec[unitfischedpi]{\unitfischedpi{}}
 {Un ensemble de $k$ machines, un ensemble $\mathcal{T} = \{T_1, T_2, \dots, T_n\}$ de tâches
 unitaire avec $T_i$ représentant l'intervalle $[\st{T_i}, \ct{T_i}]$ avec $\ct{T_i} = \st{T_i} +
-1$ et $\st{T_i}$ pair, un ensemble $\mathcal{R}$ de réservations $l = (M_i, [\sres{l}, \cres{l}])$,
+1$ et $\st{T_i}$ pair, un ensemble $\mathcal{R}$ de réservations $l = (M_i, [\sres{R}, \cres{R}])$,
 un entier $z$.}
 {Existe-t-il un ordonnancement $\mathcal{O}$ des tâches sur les $k$ machines tel que la taille du
 trou minimum soit au moins égale à $z$?}
@@ -403,18 +403,18 @@ trou minimum soit au moins égale à $z$?}
     nous noterons cette fonction $f$ en lieu et place de $f_{\mathcal{O}}$.}: \[
         f_{\mathcal{O}} : \left \lbrace \begin{array}{rcl}
             \mathcal{T} \cup \mathcal{R} & \longrightarrow & \mathcal{M} \\
-            j & \mapsto & f_{\mathcal{O}}(j) \\
+            T & \mapsto & f_{\mathcal{O}}(T) \\
         \end{array}
         \right .
     \]
-    qui, étant donné un ordonnancement $\mathcal{O}$, associe à une tâche ou une réservation $j$, la
+    qui, étant donné un ordonnancement $\mathcal{O}$, associe à une tâche ou une réservation $T$, la
     machine $M_i$ sur laquelle s'exécute cette tâche pour l'ordonnancement donné\footnote{Dans le
     cas d'une réservation, le résultat de la fonction est indépendant de l'ordonnancement
     considéré.}, on peut alors définir de manière plus formelle : \begin{bitemize}
-        \item l'ensemble des tâches : \hfill $ \mathcal{T} = \{[\st{j}, \ct{j}]   \colon  
-            \ct{j} - \st{j} = \pt{j} \} $
-        \item l'ensemble des réservations : \hfill $\mathcal{R} = \{l = (M_p, [\sres{l}, \cres{l}])  
-            \colon   \cres{l} - \sres{l} = \pres{l},\ f(l) = M_p\}$
+        \item l'ensemble des tâches : \hfill $ \mathcal{T} = \{[\st{T}, \ct{T}]   \colon  
+            \ct{T} - \st{T} = \pt{T} \} $
+        \item l'ensemble des réservations : \hfill $\mathcal{R} = \{l = (M_p, [\sres{R}, \cres{R}])  
+            \colon   \cres{R} - \sres{R} = \pres{R},\ f(l) = M_p\}$
         \item la fonction objectif étudiée : \hfill $H_{\min} = \min \{ \sgen{i} - \cgen{i'} > 0  
             \colon   i,i' \in \mathcal{T} \cup \mathcal{R},\ f(i) = f(i')\}$
     \end{bitemize}
@@ -436,7 +436,7 @@ trou minimum soit au moins égale à $z$?}
             $+\infty$ de manière à ce que les trous finaux aient eux aussi une taille infinie. On a
             alors : $\pho{h_5} = \pho{h_6} = \infty$.
         \item le temps $t_0$ est défini comme suit : \[
-                t_0 = \min\{\min\{\st{j} : j \in \mathcal{T}\}, \min\{\sres{l} : l \in \mathcal{R}\}\}
+                t_0 = \min\{\min\{\st{T} : T \in \mathcal{T}\}, \min\{\sres{R} : l \in \mathcal{R}\}\}
             \]
             $t_0$ représente le point $0$ de l'échelle de temps relative utilisée pour les
             intervalles.
@@ -454,23 +454,23 @@ trou minimum soit au moins égale à $z$?}
 \begin{figure}
     \begin{center}
         \begin{ordo}[10]{3}{1}{9}
-            \newtask{2}{1}{1}{1}
-            \newtask{1}{1}{7}{2}
-            \newhole{4}{1}{3}{1}Optimisation
+            \newtask[1]{2}{1}{1}
+            \newtask[2]{1}{1}{7}
+            \newhole[1]{4}{1}{3}Optimisation
 
-            \newresa{2}{2}{0}{1}
-            \newtask{3}{2}{4}{3}
-            \newhole{2}{2}{2}{2}
+            \newresa[1]{2}{2}{0}
+            \newtask[3]{3}{2}{4}
+            \newhole[2]{2}{2}{2}
 
-            \newresa{3}{3}{2}{2}
-            \newresa{2}{3}{7}{3}
-            \newhole{2}{3}{5}{3}
+            \newresa[2]{3}{3}{2}
+            \newresa[3]{2}{3}{7}
+            \newhole[3]{2}{3}{5}
 
-            \newbeghole{1}{1}{4}
-            \newbeghole{2}{3}{7}
+            \newbeghole[4]{1}{1}
+            \newbeghole[7]{2}{3}
 
-            \newendhole{1}{1}{8}{5}
-            \newendhole{2}{2}{7}{6}
+            \newendhole[5]{1}{1}{8}
+            \newendhole[6]{2}{2}{7}
         \end{ordo}
     \end{center}
     \caption{Illustration des différents cas de figures}
@@ -482,19 +482,19 @@ trou minimum soit au moins égale à $z$?}
 \begin{figure}
     \begin{center}
         \begin{ordo}[10]{3}{1}{10}
-            \newresa{1}{1}{1}{1}
-            \newresa{1}{2}{3}{2}
+            \newresa[1]{1}{1}{1}
+            \newresa[2]{1}{2}{3}
 
-            \newtask{3}{3}{0}{1}
-            \newtask{1}{2}{0}{2}
-            \newtask{3}{1}{4}{3}
-            \newtask{1}{2}{9}{4}
-            \newtask{1}{3}{9}{5}
+            \newtask[1]{3}{3}{0}
+            \newtask[2]{1}{2}{0}
+            \newtask[3]{3}{1}{4}
+            \newtask[4]{1}{2}{9}
+            \newtask[5]{1}{3}{9}
 
-            \newhole{2}{1}{2}{1}
-            \newhole{2}{2}{1}{2}
-            \newhole{5}{2}{4}{3}
-            \newhole{6}{3}{3}{4}
+            \newhole[1]{2}{1}{2}
+            \newhole[2]{2}{2}{1}
+            \newhole[3]{5}{2}{4}
+            \newhole[4]{6}{3}{3}
         \end{ordo}
     \end{center}
     \caption{Un ordonnancement quelconque}
@@ -504,16 +504,16 @@ trou minimum soit au moins égale à $z$?}
 \begin{figure}
     \begin{center}
         \begin{ordo}[10]{3}{1}{10}
-            \newresa{1}{1}{1}{1}
-            \newresa{1}{2}{3}{2}
+            \newresa[1]{1}{1}{1}
+            \newresa[2]{1}{2}{3}
 
-            \newtask{3}{2}{0}{1}
-            \newtask{1}{1}{0}{2}
-            \newtask{3}{2}{4}{3}
-            \newtask{1}{1}{9}{4}
-            \newtask{1}{3}{9}{5}
+            \newtask[1]{3}{2}{0}
+            \newtask[2]{1}{1}{0}
+            \newtask[3]{3}{2}{4}
+            \newtask[4]{1}{1}{9}
+            \newtask[5]{1}{3}{9}
 
-            \newhole{7}{1}{2}{1}
+            \newhole[1]{7}{1}{2}
         \end{ordo}
     \end{center}
     \caption{Un ordonnancement optimal}
@@ -795,9 +795,9 @@ transformation exposée ci-dessus étant polynomiale, \fischedpi{} est alors \np
                     \draw[dotted] (0, \y) to (9, \y);
                 }
 
-                \newresa{4}{1}{1}{2}
-                \newresa{4}{2}{2}{3}
-                \newresa{3}{4}{10}{7}
+                \newresa[2]{4}{1}{1}
+                \newresa[3]{4}{2}{2}
+                \newresa[7]{3}{4}{10}
             \end{tikzpicture}
         \end{minipage}
         % }}}
@@ -866,19 +866,19 @@ transformation exposée ci-dessus étant polynomiale, \fischedpi{} est alors \np
                     \draw[dotted] (0, \y) to (9, \y);
                 }
 
-                \newresa{4}{1}{1}{2}
-                \newresa{4}{2}{2}{3}
-                \newresa{3}{4}{10}{7}
+                \newresa[2]{4}{1}{1}
+                \newresa[3]{4}{2}{2}
+                \newresa[7]{3}{4}{10}
 
-                \newtask{4}{4}{0}{1}
-                \newtask{4}{3}{3}{4}
-                \newtask{3}{2}{6}{5}
-                \newtask{4}{3}{8}{6}
-                \newtask{3}{1}{11}{8}
+                \newtask[1]{4}{4}{0}
+                \newtask[4]{4}{3}{3}
+                \newtask[5]{3}{2}{6}
+                \newtask[6]{4}{3}{8}
+                \newtask[8]{3}{1}{11}
 
-                \newhole{6}{1}{5}{1}
-                \newhole{1}{3}{7}{2}
-                \newhole{6}{4}{4}{3}
+                \newhole[1]{6}{1}{5}
+                \newhole[2]{1}{3}{7}
+                \newhole[3]{6}{4}{4}
             \end{tikzpicture}
         \end{minipage}
         % }}}
@@ -1169,9 +1169,9 @@ Le problème \unitfischedpi{} appartenant à \textbf{NP}, la transformation éta
                     \draw[dotted] (0, \y) to (9, \y);
                 }
 
-                \newresa{1}{1}{2}{2}
-                \newresa{1}{2}{4}{3}
-                \newresa{1}{4}{20}{7}
+                \newresa[2]{1}{1}{2}
+                \newresa[3]{1}{2}{4}
+                \newresa[7]{1}{4}{20}
             \end{tikzpicture}
         \end{minipage}
         % }}}
@@ -1240,20 +1240,20 @@ Le problème \unitfischedpi{} appartenant à \textbf{NP}, la transformation éta
                     \draw[dotted] (0, \y) to (9, \y);
                 }
 
-                \newresa{1}{1}{2}{2}
-                \newresa{1}{2}{4}{3}
-                \newresa{1}{4}{20}{7}
+                \newresa[2]{1}{1}{2}
+                \newresa[3]{1}{2}{4}
+                \newresa[7]{1}{4}{20}
 
-                \newtask{1}{4}{0}{1}
-                \newtask{1}{3}{6}{4}
-                \newtask{1}{2}{12}{5}
-                \newtask{1}{3}{16}{6}
-                \newtask{1}{1}{22}{8}
+                \newtask[1]{1}{4}{0}
+                \newtask[4]{1}{3}{6}
+                \newtask[5]{1}{2}{12}
+                \newtask[6]{1}{3}{16}
+                \newtask[8]{1}{1}{22}
 
-                \newhole{19}{1}{3}{1}
-                \newhole{7}{2}{5}{2}
-                \newhole{9}{3}{7}{3}
-                \newhole{19}{4}{1}{4}
+                \newhole[1]{19}{1}{3}
+                \newhole[2]{7}{2}{5}
+                \newhole[3]{9}{3}{7}
+                \newhole[4]{19}{4}{1}
             \end{tikzpicture}
         \end{minipage}
         % }}}

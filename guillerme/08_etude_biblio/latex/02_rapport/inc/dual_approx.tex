@@ -35,7 +35,7 @@ nécessaires à la compréhension de ce dernier.
     Soit $M_j \in \mathcal{M}$ une machine quelconque, soit $T_{M_j}$ la dernière tâche ordonnancée
     sur la machine $M_j$ telle que $\st{T_j} \leq i$ et soit $R_{M_j}$ la première réservation
     affectéé à la machine $M_j$ telle que $\sres{R_j} \geq i$. On définit alors le \emph{trou à gauche
-    de $M_j$ au temps $i$} (respectivement \emph{le trou à droite de $M_j$ au temps $i$}), l'écart
+    de $M_j$ à l'instant $i$} (respectivement \emph{le trou à droite de $M_j$ à l'instant $i$}), l'écart
     entre la fin (respectivement le début) d'exécution de la tâche $T_{M_j}$ (respectivement de la
     réservation $R_{M_j}$) et le temps $i$ (respectivement $i+1$).
 
@@ -43,11 +43,11 @@ nécessaires à la compréhension de ce dernier.
     (respectivement $h_2$) de la figure~\ref{fig:tagtad}.
 \end{ndf}
 
-\begin{ndf}[Machine \authmach{k} au temps $i$]
-    Une machine $M_j$ est dite \authmach{k} au temps $i$ si et seulement si ses trous à gauche et à
+\begin{ndf}[Machine \authmach{k} à l'instant $i$]
+    Une machine $M_j$ est dite \authmach{k} à l'instant $i$ si et seulement si ses trous à gauche et à
     droite ont une longueur au moins égale à $k$.
 
-    Quelques exemples sont donnés à la figure~\ref{fig:kdisp}, au temps $6$ : 
+    Quelques exemples sont donnés à la figure~\ref{fig:kdisp}, à l'instant $6$ : 
     \begin{itemize}
         \item $M_1$ est \authmach{1}
         \item $M_2$ est \authmach{3}
@@ -76,7 +76,7 @@ sous-section~\ref{subsec:pres_algo}.
 \end{nnot}
 
 \begin{nnot}
-    L'ensemble des machines \authmach{k} au temps $t_i$ est notée $\mathcal{M}^{k}_{t_i}$. Au cours
+    L'ensemble des machines \authmach{k} à l'instant $t_i$ est notée $\mathcal{M}^{k}_{t_i}$. Au cours
     de la sous-section~\ref{subsec:pres_algo}, nous utiliserons fréquemment la notation
     $\mathcal{M}_{t_i}$ en lieu et place de $\mathcal{M}_{t_i}^{\frac{\omega}{2}}$.
 \end{nnot}
@@ -84,36 +84,36 @@ sous-section~\ref{subsec:pres_algo}.
 \begin{figure}
     \centering
     \begin{ordo}[10]{1}{1}{12}
-        \newtask{1}{1}{0}{M_1}
-        \newlabeledresa{1}{1}{10}{M_1}
-        \newhole{3}{1}{1}{1}
-        \newhole{5}{1}{5}{2}
+        \newtask[$T_{M_1}$]{1}{1}{0}
+        \newresa[$R_{M_1}$]{1}{1}{10}
+        \newhole{3}{1}{1}
+        \newhole{5}{1}{5}
     \end{ordo}
-    \caption{Trou à gauche et à droite au temps $4$}
+    \caption{Trou à gauche et à droite à l'instant $4$}
     \label{fig:tagtad}
 \end{figure}
 
 \begin{figure}
     \centering
     \begin{ordo}[10]{4}{1}{12}
-        \newtask{1}{1}{4}{M_1}
-        \newlabeledresa{1}{1}{8}{M_1}
+        \newtask[$T_{M_1}$]{1}{1}{4}
+        \newresa[$R_{M_1}$]{1}{1}{8}
 
-        \newhole{1}{1}{5}{1}
-        \newhole{1}{1}{7}{2}
+        \newhole{1}{1}{5}
+        \newhole{1}{1}{7}
 
-        \newtask{1}{2}{0}{M_2}
-        \newlabeledresa{1}{2}{10}{M_2}
+        \newtask[$T_{M_2}$]{1}{2}{0}
+        \newresa[$R_{M_2}$]{1}{2}{10}
 
-        \newhole{5}{2}{1}{3}
-        \newhole{3}{2}{7}{4}
+        \newhole{5}{2}{1}
+        \newhole{3}{2}{7}
 
-        \newlabeledresa{1}{3}{12}{M_3}
-        \newbeghole{6}{3}{5}
-        \newhole{5}{3}{7}{6}
+        \newresa[$R_{M_3}$]{1}{3}{12}
+        \newbeghole{6}{3}
+        \newhole{5}{3}{7}
 
-        \newbeghole{6}{4}{7}
-        \newendhole{5}{4}{7}{8}
+        \newbeghole{6}{4}
+        \newendhole{5}{4}{7}
     \end{ordo}
     \caption{Illustration des machines \authmach{k}s}
     \label{fig:kdisp}
@@ -126,10 +126,10 @@ sous-section~\ref{subsec:pres_algo}.
 %\begin{enumerate}
 %    \item l'ensemble de tâches est partitionné en \nbphase{} \tphase{}s,
 %    \item les \tphase{}s sont triées par date de début croissant, et parcourues dans cet ordre,
-%    \item l'ensemble des machines \authmach{\frac{\omega}{2}} au temps $0$ est calculé et sera
+%    \item l'ensemble des machines \authmach{\frac{\omega}{2}} à l'instant $0$ est calculé et sera
 %        maintenu tout au long du parcours. L'ensemble des machines \authmach{\frac{\omega}{2}} au
 %        temps $i$ est noté $\mathcal{M}_i$,
-%    \item les tâches à ordonnancer au temps $i$ sont ordonnancées sur les machines appartenant à
+%    \item les tâches à ordonnancer à l'instant $i$ sont ordonnancées sur les machines appartenant à
 %        $\mathcal{M}_i$, ayant le plus petit trou à droite.
 %\end{enumerate}
 %
@@ -147,7 +147,7 @@ supérieure à cette valeur seuil. Autrement dit, on préfère créer deux trous
 que d'attendre et de créer un gros trou à gauche et un plus petit à droite. Ce principe est
 illustré à la figure~\ref{fig:principeordo}. Ici les tâches sont partitionnées en trois
 \tphase{}s : $\Theta_1 = \left\{ T_1 \right\}$, $\Theta_2 = \left\{ T_2 \right\}$ et $\Theta_3 =
-\left\{ T_3 \right\}$. Au temps $t_3 = 6$, l'ensemble des machines
+\left\{ T_3 \right\}$. à l'instant $t_3 = 6$, l'ensemble des machines
 \authmach{\frac{\omega}{2}}, avec $\omega = 6$ est :  $\mathcal{M_{t_i}} = \left\{ M_1, M_2
 \right\}$. L'algorithme ordonnance alors la tâche $T_3$ sur la machine $M_2$ car son trou à droite
 $h_3$ a une longueur inférieure au trou à droite de $M_2$.
@@ -156,17 +156,17 @@ $h_3$ a une longueur inférieure au trou à droite de $M_2$.
     \centering
     \begin{minipage}[t]{6.5cm}
         \begin{ordo}[5.2]{2}{2}{12}
-            \newtask{1}{2}{0}{1}
-            \newtask{1}{1}{2}{2}
+            \newtask{1}{2}{0}
+            \newtask{1}{1}{2}
 
-            \newtask{1}{3}{6}{3}
-            \newlabeledresa{1}{1}{12}{1}
-            \newlabeledresa{1}{2}{10}{2}
+            \newtask{1}{3}{6}
+            \newresa{1}{1}{12}
+            \newresa{1}{2}{10}
 
-            \newhole{5}{2}{1}{1}
-            \newhole{3}{1}{3}{2}
-            \newhole{3}{2}{7}{3}
-            \newhole{5}{1}{7}{4}
+            \newhole{5}{2}{1}
+            \newhole{3}{1}{3}
+            \newhole{3}{2}{7}
+            \newhole{5}{1}{7}
 
         \end{ordo}
         \sfcaption{Tâche d'une \tphase{} à ordonnancer}
@@ -175,17 +175,17 @@ $h_3$ a une longueur inférieure au trou à droite de $M_2$.
     \hfill
     \begin{minipage}[t]{6.5cm}
         \begin{ordo}[5.2]{2}{2}{12}
-            \newtask{1}{2}{0}{1}
-            \newtask{1}{1}{2}{2}
+            \newtask{1}{2}{0}
+            \newtask{1}{1}{2}
 
-            \newtask{1}{2}{6}{3}
-            \newlabeledresa{1}{1}{12}{1}
-            \newlabeledresa{1}{2}{10}{2}
+            \newtask{1}{2}{6}
+            \newresa{1}{1}{12}
+            \newresa{1}{2}{10}
 
-            \newhole{5}{2}{1}{1}
-            \newhole{3}{1}{3}{2}
-            \newhole{3}{2}{7}{3}
-            \newhole{5}{1}{7}{4}
+            \newhole{5}{2}{1}
+            \newhole{3}{1}{3}
+            \newhole{3}{2}{7}
+            \newhole{5}{1}{7}
 
             \adjust{1}{3}
         \end{ordo}
@@ -232,7 +232,7 @@ La $2$-dual-approximation est donnée par l'algorithme~\ref{alg:dual_approx}.
         \item\textbf{la taille du trou est au moins égale à $\omega / 2$} : les tâches ne sont ordonnancées
             que sur des machines appartenant à $\mathcal{M}_{t_i}$. Par définition, une machine
             appartient à $\mathcal{M}_{t_i}$ si et seulement si elle est
-            \authmach{\frac{\omega}{2}} au temps $t_i$. Donc les trous générés à droite et à gauche
+            \authmach{\frac{\omega}{2}} à l'instant $t_i$. Donc les trous générés à droite et à gauche
             par l'ordonnancement d'une tâche sur une de ces machines ont une taille au moins égale à
             $\omega / 2$.
     \end{bitemize}
@@ -247,22 +247,22 @@ La $2$-dual-approximation est donnée par l'algorithme~\ref{alg:dual_approx}.
     \centering
     \begin{ordo}[11]{4}{1}{8}
         
-        \newtask{1}{5}{4}{1}
-        \newtask{1}{6}{4}{2}
-        \newtask{1}{7}{4}{3}
+        \newtask{1}{5}{4}
+        \newtask{1}{6}{4}
+        \newtask{1}{7}{4}
 
         \foreach \x in {1,...,4}{
-            \newbeghole{4}{\x}{$h > \omega / 2$}
+            \newbeghole[$h > \omega / 2$]{4}{\x}
         }
 
-        \newlabeledresa{1}{1}{6}{1}
-        \newlabeledresa{1}{2}{6}{2}
-        \newlabeledresa{1}{4}{8}{3}
+        \newresa{1}{1}{6}
+        \newresa{1}{2}{6}
+        \newresa{1}{4}{8}
 
-        \newhole{1}{1}{5}{$h < \omega / 2$}
-        \newhole{1}{2}{5}{$h < \omega / 2$}
-        \newhole{3}{4}{5}{$h \geq \omega / 2$}
-        \newendhole{3}{3}{5}{$h > \omega / 2$}
+        \newhole[$h < \omega / 2$]   {1}{1}{5}
+        \newhole[$h < \omega / 2$]   {1}{2}{5}
+        \newhole[$h \geq \omega / 2$]{3}{4}{5}
+        \newendhole[$h > \omega / 2$]{3}{3}{5}
 
     \end{ordo}
     \caption{Cas 1 : $\overline{\mathcal{M}_{t_i}^G} = \emptyset$}
@@ -271,21 +271,21 @@ La $2$-dual-approximation est donnée par l'algorithme~\ref{alg:dual_approx}.
 \begin{figure}[]
     \centering
     \begin{ordo}[11]{4}{1}{8}
-        \newtask{1}{4}{0}{$T_1$}
-        \newtask{1}{3}{2}{$T_2$}
-        \newtask{1}{2}{2}{$T_3$}
+        \newtask{1}{4}{0}
+        \newtask{1}{3}{2}
+        \newtask{1}{2}{2}
         
-        \newtask{1}{5}{6}{$T_4$}
-        \newtask{1}{6}{6}{$T_5$}
-        \newtask{1}{7}{6}{$T_6$}
+        \newtask{1}{5}{6}
+        \newtask{1}{6}{6}
+        \newtask{1}{7}{6}
 
-        \newhole{5}{4}{1}{$h \geq \omega / 2$}
-        \newhole{3}{3}{3}{$h < \omega / 2$}
-        \newhole{3}{2}{3}{$h < \omega / 2$}
-        \newbeghole{6}{1}{$h > \omega / 2$}
+        \newhole[$h \geq \omega / 2$]{5}{4}{1}
+        \newhole[$h < \omega / 2$]{3}{3}{3}
+        \newhole[$h < \omega / 2$]{3}{2}{3}
+        \newbeghole[$h > \omega / 2$]{6}{1}
 
         \foreach \x in {1,...,4}{
-            \newendhole{1}{\x}{7}{$h > \omega / 2$}
+            \newendhole[$h > \omega / 2$]{1}{\x}{7}
         }
     \end{ordo}
     \caption{Cas 2 : $\overline{\mathcal{M}_{t_i}^D} = \emptyset$}
@@ -294,22 +294,22 @@ La $2$-dual-approximation est donnée par l'algorithme~\ref{alg:dual_approx}.
 \begin{figure}[]
     \centering
     \begin{ordo}[11]{4}{1}{8}
-        \newtask{1}{3}{0}{$T_1$}
-        \newlabeledresa{1}{3}{6}{$R_1$}
-        \newtask{1}{1}{2}{$T_2$}
+        \newtask[$T_1$]{1}{3}{0}
+        \newresa[$R_1$]{1}{3}{6}
+        \newtask[$T_2$]{1}{1}{2}
         
-        \newtask{1}{5}{4}{$T_3$}
-        \newtask{1}{6}{4}{$T_4$}
-        \newtask{1}{7}{4}{$T_5$}
+        \newtask[$T_3$]{1}{5}{4}
+        \newtask[$T_4$]{1}{6}{4}
+        \newtask[$T_5$]{1}{7}{4}
 
-        \newhole{1}{1}{3}{$h < \omega / 2$}
-        \newhole{3}{3}{1}{$h \geq \omega / 2$}
-        \newhole{1}{3}{5}{$h < \omega / 2$}
-        \newendhole{3}{1}{5}{$h > \omega / 2$}
+        \newhole[$h < \omega / 2$]{1}{1}{3}
+        \newhole[$h \geq \omega / 2$]{3}{3}{1}
+        \newhole[$h < \omega / 2$]{1}{3}{5}
+        \newendhole[$h > \omega / 2$]{3}{1}{5}
 
         \foreach \x in {2,4}{
             \newbeghole{4}{\x}{$h > \omega / 2$}
-            \newendhole{3}{\x}{5}{$h > \omega / 2$}
+            \newendhole[$h > \omega / 2$]{3}{\x}{5}
         }
     \end{ordo}
     \caption{Cas 3 : $\overline{\mathcal{M}_{t_i}^D} \neq \emptyset$ et $\overline{\mathcal{M}_{t_i}^D} \neq \emptyset$}
@@ -318,22 +318,22 @@ La $2$-dual-approximation est donnée par l'algorithme~\ref{alg:dual_approx}.
 \begin{figure}[]
     \centering
     \begin{ordo}[11]{4}{1}{8}
-        \newtask{1}{1}{0}{$T_1$}
-        \newlabeledresa{1}{3}{6}{$R_1$}
-        \newtask{1}{3}{2}{$T_2$}
+        \newtask[$T_1$]{1}{1}{0}
+        \newresa[$R_1$]{1}{3}{6}
+        \newtask[$T_2$]{1}{3}{2}
         
-        \newtask{1}{1}{4}{$T_3$}
-        \newtask{1}{2}{4}{$T_4$}
-        \newtask{1}{4}{4}{$T_5$}
+        \newtask[$T_3$]{1}{1}{4}
+        \newtask[$T_4$]{1}{2}{4}
+        \newtask[$T_5$]{1}{4}{4}
 
-        \newhole{3}{1}{1}{$h > \omega / 2$}
-        \newbeghole{2}{3}{$h > \omega$}
-        \newhole{3}{3}{3}{$h < \omega $}
-        \newendhole{3}{1}{5}{$h > \omega$}
+        \newhole[$h > \omega / 2$]{3}{1}{1}
+        \newbeghole[$h > \omega$]{2}{3}
+        \newhole[$h < \omega $]{3}{3}{3}
+        \newendhole[$h > \omega$]{3}{1}{5}
 
         \foreach \x in {2,4}{
             \newbeghole{4}{\x}{$h > \omega$}
-            \newendhole{3}{\x}{5}{$h > \omega$}
+            \newendhole[$h > \omega$]{3}{\x}{5}
         }
     \end{ordo}
     \caption{Cas 3 : Optimal}
@@ -342,25 +342,25 @@ La $2$-dual-approximation est donnée par l'algorithme~\ref{alg:dual_approx}.
 \begin{figure}[]
     \centering
     \begin{ordo}[11]{4}{1}{8}
-        \newtask{1}{1}{0}{$T_1$}
-        \newtask{1}{2}{2}{$T_2$}
-        \newtask{1}{3}{2}{$T_3$}
-        \newlabeledresa{1}{1}{6}{$R_1$}
-        \newlabeledresa{1}{2}{6}{$R_2$}
-        \newlabeledresa{1}{3}{8}{$R_3$}
+        \newtask[$T_1$]{1}{1}{0}
+        \newtask[$T_2$]{1}{2}{2}
+        \newtask[$T_3$]{1}{3}{2}
+        \newresa[$R_1$]{1}{1}{6}
+        \newresa[$R_2$]{1}{2}{6}
+        \newresa[$R_3$]{1}{3}{8}
         
-        \newtask{1}{5}{4}{$T_4$}
-        \newtask{1}{6}{4}{$T_5$}
+        \newtask[$T_4$]{1}{5}{4}
+        \newtask[$T_5$]{1}{6}{4}
 
-        \newhole{3}{1}{1}{$h \geq \omega / 2$}
-        \newhole{1}{2}{3}{$ h < \omega / 2$}
-        \newhole{1}{3}{3}{$ h < \omega / 2$}
-        \newbeghole{4}{4}{$h > \omega / 2$}
+        \newhole[$h \geq \omega / 2$]{3}{1}{1}
+        \newhole[$ h < \omega / 2$]{1}{2}{3}
+        \newhole[$ h < \omega / 2$]{1}{3}{3}
+        \newbeghole[$h > \omega / 2$]{4}{4}
 
-        \newhole{1}{1}{5}{$h < \omega / 2$}
-        \newhole{1}{2}{5}{$h < \omega / 2$}
-        \newhole{3}{3}{5}{$h \geq \omega / 2$}
-        \newendhole{3}{4}{5}{$h > \omega / 2$}
+        \newhole[$h < \omega / 2$]{1}{1}{5}
+        \newhole[$h < \omega / 2$]{1}{2}{5}
+        \newhole[$h \geq \omega / 2$]{3}{3}{5}
+        \newendhole[$h > \omega / 2$]{3}{4}{5}
 
     \end{ordo}
     \caption{$\overline{M_{t_i}} \neq \emptyset$}
@@ -371,9 +371,9 @@ La $2$-dual-approximation est donnée par l'algorithme~\ref{alg:dual_approx}.
     Supposons à présent que l'algorihtme échoue. On a donc $|\mathcal{M}_{t_i}| < n_i$, or si l'on
     appelle : 
     \begin{itemize}
-        \item $\overline{\mathcal{M}_{t_i}^G}$, l'ensemble des machines ayant, au temps $t_i$ un
+        \item $\overline{\mathcal{M}_{t_i}^G}$, l'ensemble des machines ayant, à l'instant $t_i$ un
             trou à gauche de taille inférieure à $\omega / 2$,
-        \item $\overline{\mathcal{M}_{t_i}^D}$, l'ensemble des machines ayant, au temps $t_i$ un
+        \item $\overline{\mathcal{M}_{t_i}^D}$, l'ensemble des machines ayant, à l'instant $t_i$ un
             trou à droite de taille inférieure à $\omega / 2$,
         \item et $\overline{\mathcal{M}_{t_i}} = \overline{\mathcal{M}_{t_i}^G} \cap
             \overline{\mathcal{M}_{t_i}^D}$,
@@ -404,7 +404,7 @@ La $2$-dual-approximation est donnée par l'algorithme~\ref{alg:dual_approx}.
                     Supposons un ordonnancement optimal $O^*$ et appelons
                     $\mathcal{M}_{O^*}^i$ l'ensemble des machines auxquelles les tâches de la
                     \tphase{} $i$ sont affectées et $\overline{\mathcal{M}_{O^*}^{iD}}$ les machines
-                    \authmach{\omega / 2} à droite au temps $t_i$. On a alors :
+                    \authmach{\omega / 2} à droite à l'instant $t_i$. On a alors :
                     \begin{displaymath}
                         |\mathcal{M}_{O^*}^i| = n_i \quad \mbox{et} \quad
                         \overline{\mathcal{M}_{O^*}^{iD}} = \overline{\mathcal{M}_{t_i}^D}
@@ -422,7 +422,7 @@ La $2$-dual-approximation est donnée par l'algorithme~\ref{alg:dual_approx}.
                         \end{array}
                     \end{displaymath}
                     Donc l'ordonnancement optimal $O^*$ utilise une machine non disponible et donc
-                    ayant un trou à droite au temps $t_i$ de taille inférieure à $\omega / 2$ et
+                    ayant un trou à droite à l'instant $t_i$ de taille inférieure à $\omega / 2$ et
                     donc la taille maximale du trou minimimum est inférieure à
                     $\omega/2$.
                 \item $\overline{\mathcal{M}_{t_i}^D} = \emptyset$, représenté à la
@@ -435,7 +435,7 @@ La $2$-dual-approximation est donnée par l'algorithme~\ref{alg:dual_approx}.
                     Supposons un ordonnancement optimal $O^*$ tel que la taille du trou minimum est
                     au moins égale à $\omega$, et appelons
                     $\overline{\mathcal{M}_{O^*}^{iG}}$ l'ensemble des machines \authmach{\omega/2}
-                    à gauche au temps $t_i$, on peut alors écrire
+                    à gauche à l'instant $t_i$, on peut alors écrire
                     \begin{displaymath}
                         |\mathcal{M}_{O^*}^i| = n_i \quad \mbox{et} \quad
                         |\overline{\mathcal{M}_{O^*}^{iG}}| = |\overline{\mathcal{M}_{t_i}^{G}}|
@@ -465,7 +465,7 @@ La $2$-dual-approximation est donnée par l'algorithme~\ref{alg:dual_approx}.
                     \end{displaymath}
                     Ce qui implique $\overline{\mathcal{M}_{O^*}^{iD}} \cap
                     \overline{\mathcal{M}_{O^*}^{iG}} \neq 0$. Autrement dit, $O^*$ affecte à au
-                    moins une machine, ayant un trou à droite inférieur à $\omega / 2$ au temps
+                    moins une machine, ayant un trou à droite inférieur à $\omega / 2$ à l'instant
                     $t_i$, une tâche générant un trou à gauche de taille inférieure à $\omega / 2$
                     (comme le décrit la figure\ref{fig:cas3opt})
                     et donc la taille du trou entre cette réservation et cette tâche est inférieure à

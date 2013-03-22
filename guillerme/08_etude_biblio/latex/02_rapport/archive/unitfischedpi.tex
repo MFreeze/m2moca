@@ -1,0 +1,191 @@
+%% {{{ PROBLEME : Flexible Interval Scheduling Decision
+%\dfdec{\unitfischedpi}
+%{Un ensemble de $k$ machines, un ensemble $\mathcal{T}$ de tâches $j = [\st{j}, \ct{j}]$ telles que
+%$\ct{j} = \st{j} + 1$ et $\st{j} \equiv 0 \mod 2$, un ensemble $\mathcal{R}$ de réservations $l =
+%(m_i, [\sres{l}, \cres{l}])$ telles que $\cres{j} = \sres{j} + 1$ et $\sres{j} \equiv 0 \mod 2$, un
+%entier $z$}
+%{Existe-t-il un ordonnancement $\mathcal{O}$ des tâches sur les $k$ machines tel que la taille du
+%trou minimum soit supérieure ou égale à $z$?}
+%% }}}
+
+% {{{ DEF : GRAPHE D'INTERVALLE
+\begin{ndf}[Graphe d'intervalles]
+    Étant donné un ensemble d'intervalles $\mathcal{I} = \{b_1, \dots, b_n\}$ tels que $b_i = [\sint{i},
+    \cint{i}]$, le graphe d'intervalles défini par cet ensemble est un graphe non orienté construit de la
+    manière suivante :
+    \begin{enumerate}
+        \item à chaque intervalle $b_i \in \mathcal{I}$ on associe un sommet $v_i$
+        \item étant donnés deux sommets $v_i,\ v_j \in V$, $(v_iv_j) \in E$ si et seulement si : \[
+                \sint{i} \leq \sint{j} < \cint{i}
+            \]
+            ou \[
+                \sint{j} \leq \sint{i} < \cint{j}
+            \]
+    \end{enumerate}
+
+    Un graphe d'intervalles est dit propre si et seulement si, étant donnés deux intervalles $b_i$
+    et $b_j$ : \[
+        \sint{i} \leq \sint{j} < \cint{i} \Rightarrow \cint{j} > \cint{i}
+    \]
+    %Autrement dit, il n'existe aucune paire d'intervalle $(b_i, b_j) \in \mathcal{I}^2$ telle que $b_i$
+    %contient $b_j$.
+\end{ndf}
+% }}}
+
+% {{{ THRM : PRECOLOR NP-COMPLET
+\begin{nthrm}
+    Le problème \precolor est \npc sur les graphes d'intervalles
+    propre~\cite{marx2006precoloring}.
+\end{nthrm}
+% }}}
+
+% {{{ ISOMOPHISME
+% {{{ LEMME : Dilatation d'un graphe d'intervalle
+\begin{nlemma}
+    Soient un ensemble d'intervalles $\mathcal{I}$ et un entier naturel non nul $h$. Soit $\mathcal{I}$ un second
+    ensemble d'intervalles obtenu à partir de $\mathcal{I}$ de la manière suivante : à tout
+    intervalle $i = [\sint{i}, \cint{i}] \in \mathcal{I}$, on associe un intervalle $i' =
+    [h\sint{i}, h\cint{i}]$.
+
+    Soient $G$ et $G'$ les graphes d'intervalles obtenus respectivement à partir de $\mathcal{I}$ et
+    $\mathcal{I}'$, alors $G$ et $G'$ sont isomorphes.
+\end{nlemma}
+% }}}
+% {{{ Preuve : Isomorphisme par dilatation
+\begin{proof}
+    Soit $G=(V,E)$ le graphe obtenu à partir de $\mathcal{I}$ et soit $G'=(V',E')$ le graphe obtenu
+    à partir de $\mathcal{I}'$. 
+
+    Par construction de l'ensemble $\mathcal{I}'$, à chaque sommet $v \in V$, on peut associer un
+    sommet $v' \in V'$ : si $v$ représente l'intervalle $i = [\sint{i}, \cint{i}]$, on lui associe
+    le sommet $v'$ représentant l'intervalle $i' = [h\sint{i}, h\cint{i}]$.
+    
+    Soient deux sommets quelconques $u,v \in V$ et leur sommet associé $u', v' \in V'$, démontrons
+    qu'il existe une arête $(uv) \in E$ si et seulement si il existe une arête $(u'v)' \in E'$ :
+    \begin{itemize}
+        \item[$\Rightarrow$] supposons l'existence d'une arête $(uv) \in E$. Par définition du
+            graphe d'intervalle, on a $\sint{u} \leq \sint{v} < \cint{u}$\footnote{On se limitera à
+                l'étude de ce cas, l'étude du cas $\sint{v} \leq \sint{u} < \cint{v}$ étant
+            similaire.}. On peut donc écrire : \[
+                \begin{array}{rrcccl}
+                     & \sint{u} & \leq & \sint{v} & < & \cint{u} \\
+                    \Rightarrow & h\sint{u} & \leq & h\sint{v} & < & h\cint{u} \\
+                    \Rightarrow & \sint{u'} & \leq & \sint{v'} & < & \cint{u'} \\
+                \end{array}
+            \]
+            Il existe donc une arête $(u'v') \in E'$.
+        \item[$\Leftarrow$] de la même manière, supposons l'existence d'une arête $(u'v') \in E'$.
+            On peut alors écrire : \[
+                \begin{array}{rrcccl}
+                     & \sint{u'} & \leq & \sint{v'} & < & \cint{u'} \\
+                    \Rightarrow & h\sint{u} & \leq & h\sint{v} & < & h\cint{u} \\
+                    \Rightarrow & \sint{u} & \leq & \sint{v} & < & \cint{u} \\
+                \end{array}
+            \]
+            Et donc il existe une arête $(uv) \in E$.
+    \end{itemize}
+\end{proof}
+% }}}
+% {{{ Corollaire : Isomorphisme par dilatation
+\begin{ncorol}
+    \label{equivprecolor}
+    Étant donnés un ensemble d'intervalles $\mathcal{I}$, un ensemble d'intervalle $\mathcal{I}'$
+    construit à partir de $\mathcal{I}$ de la manière vue précédemment, soient $G$ et $G'$ les
+    graphes d'intervalles obtenus respectivement à partir de $\mathcal{I}$ et $\mathcal{I}'$, $G$
+    admet une $k-$coloration propre si et seulement si $G'$ admet une $k-$coloration propre, de plus
+    le problème \precolor admet une solution pour $G$ si et seulement si il admet une solution pour
+    $G'$.
+\end{ncorol}
+% }}}
+% }}}
+
+% {{{THRM : UNITFISCHEDPI
+\begin{nthrm}
+    Le problème \unitfischedpi est \npc.
+\end{nthrm}
+% }}}
+
+% {{{ PROOF : THM
+\begin{proof}
+    Considérons un ensemble d'intervalles $\mathcal{I}$, le graphe d'intervalles associé
+    $G=(V,E)$ et  une instance du problème \precolor sur $G$ recherchant une $k-$coloration de ce
+    dernier avec une précoloration d'un ensemble de sommet $W \subset V$.
+    
+    On cherche à se ramener à une instance de \unitfischedpi avec $k$ machine et un trou minimum de
+    taille $z$. Pour ce faire, notons $w$, la taille du plus petit des intervalles de $\mathcal{I}$,
+    et $\iota$ le plus petit entier pair tel que $\iota w \geq z + 1$. Construisons l'ensemble des
+    intervalles $\mathcal{I}'$ en multipliant chacun des intervalles par un facteur $\iota$.
+
+    Soit $G'=(V',E')$ le graphe d'intervalles obtenu à partir de $\mathcal{I}'$.
+
+    D'après le corollaire~\ref{equivprecolor}, le problème \precolor sur $G$ possède une solution si
+    et seulement si le problème \precolor sur $G'$ admet une solution.
+
+    À chaque couleur $c$ considérée dans le problème \precolor, on associe une machine $m_c$ du
+    problème \unitfischedpi.
+
+    À chaque sommet non précoloré $v \in V'\backslash W'$, on associe une tâche unitaire $t_v$ dont
+    la date de début est $\st{t_v} = \sint{i'}$. 
+    De la même manière, à chaque sommet précoloré $\upsilon' \in W'$ de couleur $c$ représentant
+    l'intervalle $[\sint{\upsilon'}, \cint{\upsilon'}]$, on associe une réservation unitaire
+    $r_{\upsilon} = (m_c, [\sres{r_{\upsilon'}} = \sint{\upsilon'}, \cres{r_{\upsilon'}} =
+    \sint{\upsilon'} + 1])$.
+
+    Par construction, le temps entre deux évènements\footnote{Une tâche ou une réservation} $e_u$ et
+    $e_v$ associées à deux sommets $u, v \in V'$ tels que $(uv) \not \in E'$ est supérieur ou égal à
+    $z$.
+
+    En effet considérons un intervalle $i \in \mathcal{I}$, si l'on note $\pint{i}$ la durée de
+    l'intervalle $i$, par définition de $w$, on a : 
+    \[
+        \begin{array}{rrcl}
+             & \pint{i} & \geq & w \\
+            \Rightarrow & \iota \pint{i} & \geq & z+1 \\
+            \Rightarrow & \pint{i'} & \geq & z+1 \\
+        \end{array}
+    \]
+    Donc en considérant deux intervalles $i', j' \in V'$ ne s'intersectant pas, on a alors deux
+    événements $e_{i'}$ et $e_{j'}$ séparés par un trou d'une longueur supérieure ou égale à $z$.
+    
+    On en déduit, qu'il existe une solution au problème \precolor sur $G'$ (et donc sur $G$) si et
+    seulement si il existe une solution au problème \unitfischedpi.
+\end{proof}
+
+% {{{ FIGURE : EXEMPLE PREUVE
+%\begin{figure}
+%    \begin{minipage}[c]{0.45\linewidth}
+%        \begin{tikzpicture}[noeud/.style={circle, draw=black, minimum width=7mm}]
+%            \node[noeud] (c) at (3, 0) {$c$};
+%            \node[noeud] (e) at (5, 0) {$e$};
+%            \node[noeud] (b) at (1, 1) {$b$};
+%            \node[noeud] (a) at (2, 3) {$a$};
+%            \node[noeud] (d) at (4, 3) {$d$};
+%            \node[noeud] (f) at (6, 3) {$f$};
+%            \node[noeud] (g) at (7, 1) {$g$};
+%
+%            \draw[-] (a) to (b);
+%            \draw[-] (a) to (c);
+%            \draw[-] (a) to (d);
+%
+%            \draw[-] (b) to (c);
+%
+%            \draw[-] (c) to (d);
+%            \draw[-] (c) to (e);
+%            \draw[-] (c) to (f);
+%
+%            \draw[-] (d) to (e);
+%            \draw[-] (d) to (f);
+%
+%            \draw[-] (f) to (g);
+%        \end{tikzpicture}
+%    \end{minipage}
+%    \hfill
+%    \begin{minipage}[c]{0.05\linewidth}
+%    \end{minipage}
+%    \hfill
+%    \begin{minipage}[c]{0.45\linewidth}
+%    \end{minipage}
+%\end{figure}
+% }}}
+
+% }}}
