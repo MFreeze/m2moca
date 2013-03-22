@@ -145,7 +145,7 @@ notations plus spécifiques au problème considéré.
 D'ordinaire, les problèmes d'ordonnancement sont définis par un ensemble de $n$ tâches $\mathcal{T} =
 \{T_1, T_2, \dots, T_n\}$ et par un ensemble de $m$ processeurs\footnote{On les appelle aussi des
 machines.} $\mathcal{M} = \{M_1, M_2, \dots, M_m\}$. L'ordonnancement consiste à affecter les
-tâches $\mathcal{T}$ aux processeurs $\mathcal{P}$ tout en respectant les contraintes définies par
+tâches $\mathcal{T}$ aux processeurs $\mathcal{M}$ tout en respectant les contraintes définies par
 le problème initial. On peut citer deux contraintes largement répandues dans la théorie de
 l'ordonnancement :
 \begin{enumerate}
@@ -174,14 +174,14 @@ Les processeurs parallèles se décomposent en trois catégories :
     \item généraux : les vitesses de traitement dépendent des tâches à effectuer
 \end{enumerate}
 
-À nouveau nous ne considérerons qu'une seule catégorie, les problèmes nous intéressant ne portent
+À nouveau, nous ne considérerons qu'une seule catégorie, les problèmes nous intéressant ne portent
 que sur des processeurs identiques.
 
 \subsection{Caractérisation des tâches}
 
 Généralement, en ordonnancement, une tâche est définie par cinq paramètres :
 \begin{enumerate}
-    \item un vecteur de temps d'exécution $p_T = ^t(p_{T1}, p_{T2}, \dots, p_{Tm})$ où $p_{Ti}$
+    \item un vecteur de temps d'exécution $p_T =~^t(p_{T1}, p_{T2}, \dots, p_{Tm})$ où $p_{Ti}$
         représente le temps nécessaire à l'exécution de la tâche $T$ sur la machine $i$. Dans le cas
         de machines identiques et uniformes, ce vecteur ne présente qu'une seule composante,
     \item une date de disponibilité $r_T$, désignant la date à partir de laquelle la tâche est prête
@@ -193,7 +193,7 @@ Généralement, en ordonnancement, une tâche est définie par cinq paramètres 
 \end{enumerate}
 
 Les tâches ainsi définies peuvent être soumises à certaines contraintes, telles que des contraintes
-de précédence, imposant que la date d'exécution d'une exécution soit ultérieure à la complétion
+de précédence, imposant que la date d'exécution d'une tâche soit ultérieure à la complétion
 d'un ensemble de tâches tierces.
 
 Si l'on considère le graphe, que nous appellerons le graphe d'exclusion, qui à chaque tâche associe
