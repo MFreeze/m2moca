@@ -208,7 +208,7 @@
     \pgfmathparse{#2*\unitxpas} \let\longx\pgfmathresult
 
     \draw[<-] (\initx, \inity) to node[above] {\tlabel} (\initx + \longx, \inity);
-    \draw[-,dashed] (\initx + \longx, \inity) to (\initx + \longx + 2, \inity);
+    \draw[-,dashed] (\initx + \longx, \inity) to (\initx + \longx + 2*\unitxpas, \inity);
 }
 % >>>
 % <<< \adjust{nbmachine}{debmachine}
@@ -222,11 +222,11 @@
 
 % <<< Taches
 %% Début d'une tâche
-\newcommand{\st}[1]{ r^t_{#1} }
+\newcommand{\st}[1]{ r^{\mathcal{T}}_{#1} }
 %% Fin d'une tâche
-\newcommand{\ct}[1]{ \widetilde{d}^t_{#1} }
+\newcommand{\ct}[1]{ \widetilde{d}^{\mathcal{T}}_{#1} }
 %% Durée d'une tâche
-\newcommand{\pt}[1]{ p^t_{#1} }
+\newcommand{\pt}[1]{ p^{\mathcal{T}}_{#1} }
 % >>>
 % <<< Resa
 %% Début d'une réservation

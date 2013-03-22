@@ -131,7 +131,7 @@ grand nombre de problèmes permettant la modélisation d'applications pratiques.
 problématiques aussi diverses que la planification de prises de photographies par satellite,
 l'agencement spatial de marchandises dans un entrepôt ou la planification d'une chaîne de production
 peuvent être représentées à l'aide de ces problèmes informatiques. Il n'est donc pas étonnant de
-de disposer à ce sujet d'une littérature fournie, détaillant nombre de déclinaisons de problèmes
+disposer à ce sujet d'une littérature fournie, détaillant nombre de déclinaisons de problèmes
 considérés classiques. Cette étude bibliographique, préliminaire au stage, s'inscrit dans cette
 démarche et cherche à définir le contexte et les bases nécessaires à l'introduction d'une variante
 d'un problème d'ordonnancement très étudié que l'on appelle \isched.
@@ -319,11 +319,11 @@ la notion de taches.
     tâches $\mathcal{T}$ et un ordonnancement $\mathcal{O}$ de ces tâches sur $\mathcal{M}$, un trou
     dans l'ordonnancement $\mathcal{O}$ est une plage d'inactivité non nulle de la machine, pendant
     laquelle les ressources de calcul de cette dernière sont disponibles et peuvent être utilisées à
-    la réalisation d'une tâche. Un trou $\eta$ est caractérisé par une date de début $\sho{\eta}$ et
-    une date de fin $\cho{\eta}$ et est relatif à un ordonnancement et à une machine. Il est donc
-    représentable par un triplet composé d'un intervalle de la forme $[\sho{\eta}, \cho{\eta}]$ avec
-    $\sho{\eta} < \cho{\eta}$, d'un ordonnancement et d'une machine. La durée d'un trou est donnée
-    par $\pho{\eta} = \cho{\eta} - \sho{\eta}$.
+    la réalisation d'une tâche. Un trou $h$ est caractérisé par une date de début $\sho{h}$ et
+    une date de fin $\cho{h}$ et est relatif à un ordonnancement et à une machine. Il est donc
+    représentable par un triplet composé d'un intervalle de la forme $[\sho{h}, \cho{h}]$ avec
+    $\sho{h} < \cho{h}$, d'un ordonnancement et d'une machine. La durée d'un trou est donnée
+    par $\pho{h} = \cho{h} - \sho{h}$.
 \end{ndf}
 % }}}
 
@@ -454,23 +454,23 @@ trou minimum soit au moins égale à $z$?}
 \begin{figure}
     \begin{center}
         \begin{ordo}[10]{3}{1}{9}
-            \newtask[1]{2}{1}{1}
-            \newtask[2]{1}{1}{7}
-            \newhole[1]{4}{1}{3}Optimisation
+            \newtask{2}{1}{1}
+            \newtask{1}{1}{7}
+            \newhole{4}{1}{3}
 
-            \newresa[1]{2}{2}{0}
-            \newtask[3]{3}{2}{4}
-            \newhole[2]{2}{2}{2}
+            \newresa{2}{2}{0}
+            \newtask{3}{2}{4}
+            \newhole{2}{2}{2}
 
-            \newresa[2]{3}{3}{2}
-            \newresa[3]{2}{3}{7}
-            \newhole[3]{2}{3}{5}
+            \newresa{3}{3}{2}
+            \newresa{2}{3}{7}
+            \newhole{2}{3}{5}
 
-            \newbeghole[4]{1}{1}
-            \newbeghole[7]{2}{3}
+            \newbeghole{1}{1}
+            \newbeghole{2}{3}
 
-            \newendhole[5]{1}{1}{8}
-            \newendhole[6]{2}{2}{7}
+            \newendhole{1}{1}{8}
+            \newendhole{2}{2}{7}
         \end{ordo}
     \end{center}
     \caption{Illustration des différents cas de figures}
@@ -482,19 +482,19 @@ trou minimum soit au moins égale à $z$?}
 \begin{figure}
     \begin{center}
         \begin{ordo}[10]{3}{1}{10}
-            \newresa[1]{1}{1}{1}
-            \newresa[2]{1}{2}{3}
+            \newresa{1}{1}{1}
+            \newresa{1}{2}{3}
 
-            \newtask[1]{3}{3}{0}
-            \newtask[2]{1}{2}{0}
-            \newtask[3]{3}{1}{4}
-            \newtask[4]{1}{2}{9}
-            \newtask[5]{1}{3}{9}
+            \newtask{3}{3}{0}
+            \newtask{1}{2}{0}
+            \newtask{3}{1}{4}
+            \newtask{1}{2}{9}
+            \newtask{1}{3}{9}
 
-            \newhole[1]{2}{1}{2}
-            \newhole[2]{2}{2}{1}
-            \newhole[3]{5}{2}{4}
-            \newhole[4]{6}{3}{3}
+            \newhole{2}{1}{2}
+            \newhole{2}{2}{1}
+            \newhole{5}{2}{4}
+            \newhole{6}{3}{3}
         \end{ordo}
     \end{center}
     \caption{Un ordonnancement quelconque}
@@ -504,16 +504,16 @@ trou minimum soit au moins égale à $z$?}
 \begin{figure}
     \begin{center}
         \begin{ordo}[10]{3}{1}{10}
-            \newresa[1]{1}{1}{1}
-            \newresa[2]{1}{2}{3}
+            \newresa{1}{1}{1}
+            \newresa{1}{2}{3}
 
-            \newtask[1]{3}{2}{0}
-            \newtask[2]{1}{1}{0}
-            \newtask[3]{3}{2}{4}
-            \newtask[4]{1}{1}{9}
-            \newtask[5]{1}{3}{9}
+            \newtask{3}{2}{0}
+            \newtask{1}{1}{0}
+            \newtask{3}{2}{4}
+            \newtask{1}{1}{9}
+            \newtask{1}{3}{9}
 
-            \newhole[1]{7}{1}{2}
+            \newhole{7}{1}{2}
         \end{ordo}
     \end{center}
     \caption{Un ordonnancement optimal}
@@ -649,7 +649,7 @@ transformation exposée ci-dessus étant polynomiale, \fischedpi{} est alors \np
 
 % {{{ Exemple
 \begin{ex}
-    Considérons l'instance du problème \precolor{} définie à la figure~\ref{instance_precolor}.
+    Considérons l'instance du problème \precolor{} définie à la figure~\ref{inst_precolor}.
     Le principe de la réduction est illustré à la figure~\ref{fig_transpoly}.
 
     On cherche à savoir si le graphe est $4-$colorable, on utilise donc quatre machines, à chaque
@@ -724,7 +724,7 @@ transformation exposée ci-dessus étant polynomiale, \fischedpi{} est alors \np
         \end{tikzpicture}
     \end{center}
     \caption{Une instance de \precolor{} sur un graphe d'intervalles propre}
-    \label{instance_precolor}
+    \label{inst_precolor}
 \end{figure}
 % }}}
 
@@ -795,9 +795,9 @@ transformation exposée ci-dessus étant polynomiale, \fischedpi{} est alors \np
                     \draw[dotted] (0, \y) to (9, \y);
                 }
 
-                \newresa[2]{4}{1}{1}
-                \newresa[3]{4}{2}{2}
-                \newresa[7]{3}{4}{10}
+                \newresa{4}{1}{1}
+                \newresa{4}{2}{2}
+                \newresa{3}{4}{10}
             \end{tikzpicture}
         \end{minipage}
         % }}}
@@ -866,19 +866,19 @@ transformation exposée ci-dessus étant polynomiale, \fischedpi{} est alors \np
                     \draw[dotted] (0, \y) to (9, \y);
                 }
 
-                \newresa[2]{4}{1}{1}
-                \newresa[3]{4}{2}{2}
-                \newresa[7]{3}{4}{10}
+                \newresa{4}{1}{1}
+                \newresa{4}{2}{2}
+                \newresa{3}{4}{10}
 
-                \newtask[1]{4}{4}{0}
-                \newtask[4]{4}{3}{3}
-                \newtask[5]{3}{2}{6}
-                \newtask[6]{4}{3}{8}
-                \newtask[8]{3}{1}{11}
+                \newtask{4}{4}{0}
+                \newtask{4}{3}{3}
+                \newtask{3}{2}{6}
+                \newtask{4}{3}{8}
+                \newtask{3}{1}{11}
 
-                \newhole[1]{6}{1}{5}
-                \newhole[2]{1}{3}{7}
-                \newhole[3]{6}{4}{4}
+                \newhole{6}{1}{5}
+                \newhole{1}{3}{7}
+                \newhole{6}{4}{4}
             \end{tikzpicture}
         \end{minipage}
         % }}}
@@ -1169,9 +1169,9 @@ Le problème \unitfischedpi{} appartenant à \textbf{NP}, la transformation éta
                     \draw[dotted] (0, \y) to (9, \y);
                 }
 
-                \newresa[2]{1}{1}{2}
-                \newresa[3]{1}{2}{4}
-                \newresa[7]{1}{4}{20}
+                \newresa{1}{1}{2}
+                \newresa{1}{2}{4}
+                \newresa{1}{4}{20}
             \end{tikzpicture}
         \end{minipage}
         % }}}
@@ -1240,20 +1240,20 @@ Le problème \unitfischedpi{} appartenant à \textbf{NP}, la transformation éta
                     \draw[dotted] (0, \y) to (9, \y);
                 }
 
-                \newresa[2]{1}{1}{2}
-                \newresa[3]{1}{2}{4}
-                \newresa[7]{1}{4}{20}
+                \newresa{1}{1}{2}
+                \newresa{1}{2}{4}
+                \newresa{1}{4}{20}
 
-                \newtask[1]{1}{4}{0}
-                \newtask[4]{1}{3}{6}
-                \newtask[5]{1}{2}{12}
-                \newtask[6]{1}{3}{16}
-                \newtask[8]{1}{1}{22}
+                \newtask{1}{4}{0}
+                \newtask{1}{3}{6}
+                \newtask{1}{2}{12}
+                \newtask{1}{3}{16}
+                \newtask{1}{1}{22}
 
-                \newhole[1]{19}{1}{3}
-                \newhole[2]{7}{2}{5}
-                \newhole[3]{9}{3}{7}
-                \newhole[4]{19}{4}{1}
+                \newhole{19}{1}{3}
+                \newhole{7}{2}{5}
+                \newhole{9}{3}{7}
+                \newhole{19}{4}{1}
             \end{tikzpicture}
         \end{minipage}
         % }}}
